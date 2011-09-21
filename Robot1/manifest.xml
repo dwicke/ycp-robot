@@ -1,0 +1,22 @@
+<package>
+  <description brief="Robot">
+
+     Robot
+
+  </description>
+  <author>drew</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/Robot</url>
+  <depend package="rosjava" />
+  <depend package="std_msgs" />
+  <depend package="sensor_msgs" />
+  
+  <export>
+  	<rosjava-src location="src"/>
+  	    <rosjava-pathelement location="target/" groupId="org.ros" artifactId="org.ros.rosjava.pubsub" version="0.0.0" built="true" />
+	</export>
+
+</package>
+
+
