@@ -17,7 +17,6 @@
 package main.java.org.ros.pubsub;
 
 import org.apache.commons.logging.Log;
-import org.ros.RosCore;
 import org.ros.message.MessageListener;
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
