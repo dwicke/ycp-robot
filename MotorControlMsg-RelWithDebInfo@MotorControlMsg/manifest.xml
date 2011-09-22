@@ -1,0 +1,17 @@
+<package>
+  <description brief="MotorControlMsg">
+
+     MotorControlMsg
+
+  </description>
+  <author>dwicke</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/MotorControlMsg</url>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+  <depend package="rospy"/>
+
+</package>
+
+
