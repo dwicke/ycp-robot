@@ -23,6 +23,7 @@ import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Subscriber;
+import org.ros.message.robot_msgs.*;
 
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
@@ -44,12 +45,12 @@ public class Listener implements NodeMain {
       node = new DefaultNodeFactory().newNode("listener", configuration);
       
       final Log log = node.getLog();
-      node.newSubscriber("rangeIR", "sensor_msgs/Range",
-          new MessageListener<org.ros.message.sensor_msgs.Range>() {
+      node.newSubscriber("MotorData", "robot_msgs/MotorData",
+          new MessageListener<MotorData>() {
     	  
             @Override
-            public void onNewMessage(org.ros.message.sensor_msgs.Range message) {
-              log.info("I heard: \"" + message.range + "\"");
+            public void onNewMessage(MotorData message) {
+              log.info("I heard: \"" + message.motor_left_velocity + "\"");
             }
           });
     } catch (Exception e) {

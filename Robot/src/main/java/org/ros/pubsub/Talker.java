@@ -23,6 +23,7 @@ import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
+import org.ros.message.robot_msgs.*;
 
 /**
  * This is a simple rosjava {@link Publisher} {@link Node}. It assumes an
@@ -41,19 +42,20 @@ public class Talker implements NodeMain {
     Preconditions.checkState(node == null);
     Preconditions.checkNotNull(configuration);
     try {
+    	
+    	
+    	
+    	
       node = new DefaultNodeFactory().newNode("talker", configuration);
-      Publisher<org.ros.message.sensor_msgs.Range> publisher =
-          node.newPublisher("rangeIR", "sensor_msgs/Range");
+      Publisher<MotorData> publisher =
+          node.newPublisher("MotorData", "robot_msgs/MotorData");
       int seq = 0;
       while (true) {
        // org.ros.message.std_msgs.String str = new org.ros.message.std_msgs.String();
-    	  org.ros.message.sensor_msgs.Range r = new  org.ros.message.sensor_msgs.Range();
-    	  r.max_range = (float) 35.0;
-    	  r.min_range = (float) 2.0;
-    	  r.range = 2 * seq;
-    	  r.radiation_type = org.ros.message.sensor_msgs.Range.INFRARED;
+    	  MotorData motorMessage = new MotorData();
+    	  motorMessage.motor_left_velocity = (float) 3.3;
     	  seq += 1;
-        publisher.publish(r);
+        publisher.publish(motorMessage);
         Thread.sleep(1000);
       }
     } catch (Exception e) {

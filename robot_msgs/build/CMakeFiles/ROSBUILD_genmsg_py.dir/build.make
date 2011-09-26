@@ -32,45 +32,20 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cojabo/ros_workspace/robot_msgs
+CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/robot_msgs
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cojabo/ros_workspace/robot_msgs/build
+CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/robot_msgs/build
 
 # Utility rule file for ROSBUILD_genmsg_py.
 
 CMakeFiles/ROSBUILD_genmsg_py: ../src/robot_msgs/msg/__init__.py
 
-../src/robot_msgs/msg/__init__.py: ../src/robot_msgs/msg/_SensorData.py
 ../src/robot_msgs/msg/__init__.py: ../src/robot_msgs/msg/_MotorData.py
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/cojabo/ros_workspace/robot_msgs/build/CMakeFiles $(CMAKE_PROGRESS_1)
+../src/robot_msgs/msg/__init__.py: ../src/robot_msgs/msg/_SensorData.py
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/drew/git/ycp-robot/robot_msgs/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ../src/robot_msgs/msg/__init__.py"
-	/opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py --initpy /home/cojabo/ros_workspace/robot_msgs/msg/SensorData.msg /home/cojabo/ros_workspace/robot_msgs/msg/MotorData.msg
-
-../src/robot_msgs/msg/_SensorData.py: ../msg/SensorData.msg
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/ros/core/roslib/scripts/gendeps
-../src/robot_msgs/msg/_SensorData.py: ../manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/ros/core/rosbuild/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/ros/core/roslang/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/utilities/cpp_common/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/utilities/rostime/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_serialization/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/ros/tools/rospack/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/ros/core/roslib/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/utilities/xmlrpcpp/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/tools/rosconsole/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/manifest.xml
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/generated
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
-../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/cojabo/ros_workspace/robot_msgs/build/CMakeFiles $(CMAKE_PROGRESS_2)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ../src/robot_msgs/msg/_SensorData.py"
-	/opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py --noinitpy /home/cojabo/ros_workspace/robot_msgs/msg/SensorData.msg
+	/opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py --initpy /home/drew/git/ycp-robot/robot_msgs/msg/MotorData.msg /home/drew/git/ycp-robot/robot_msgs/msg/SensorData.msg
 
 ../src/robot_msgs/msg/_MotorData.py: ../msg/MotorData.msg
 ../src/robot_msgs/msg/_MotorData.py: /opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py
@@ -93,14 +68,39 @@ CMakeFiles/ROSBUILD_genmsg_py: ../src/robot_msgs/msg/__init__.py
 ../src/robot_msgs/msg/_MotorData.py: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
 ../src/robot_msgs/msg/_MotorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
 ../src/robot_msgs/msg/_MotorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/cojabo/ros_workspace/robot_msgs/build/CMakeFiles $(CMAKE_PROGRESS_3)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/drew/git/ycp-robot/robot_msgs/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ../src/robot_msgs/msg/_MotorData.py"
-	/opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py --noinitpy /home/cojabo/ros_workspace/robot_msgs/msg/MotorData.msg
+	/opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py --noinitpy /home/drew/git/ycp-robot/robot_msgs/msg/MotorData.msg
+
+../src/robot_msgs/msg/_SensorData.py: ../msg/SensorData.msg
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/ros/core/roslib/scripts/gendeps
+../src/robot_msgs/msg/_SensorData.py: ../manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/ros/core/rosbuild/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/ros/core/roslang/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/utilities/cpp_common/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/utilities/rostime/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_serialization/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/ros/tools/rospack/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/ros/core/roslib/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/utilities/xmlrpcpp/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/tools/rosconsole/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/manifest.xml
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/generated
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
+../src/robot_msgs/msg/_SensorData.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/drew/git/ycp-robot/robot_msgs/build/CMakeFiles $(CMAKE_PROGRESS_3)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ../src/robot_msgs/msg/_SensorData.py"
+	/opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py --noinitpy /home/drew/git/ycp-robot/robot_msgs/msg/SensorData.msg
 
 ROSBUILD_genmsg_py: CMakeFiles/ROSBUILD_genmsg_py
 ROSBUILD_genmsg_py: ../src/robot_msgs/msg/__init__.py
-ROSBUILD_genmsg_py: ../src/robot_msgs/msg/_SensorData.py
 ROSBUILD_genmsg_py: ../src/robot_msgs/msg/_MotorData.py
+ROSBUILD_genmsg_py: ../src/robot_msgs/msg/_SensorData.py
 ROSBUILD_genmsg_py: CMakeFiles/ROSBUILD_genmsg_py.dir/build.make
 .PHONY : ROSBUILD_genmsg_py
 
@@ -113,6 +113,6 @@ CMakeFiles/ROSBUILD_genmsg_py.dir/clean:
 .PHONY : CMakeFiles/ROSBUILD_genmsg_py.dir/clean
 
 CMakeFiles/ROSBUILD_genmsg_py.dir/depend:
-	cd /home/cojabo/ros_workspace/robot_msgs/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cojabo/ros_workspace/robot_msgs /home/cojabo/ros_workspace/robot_msgs /home/cojabo/ros_workspace/robot_msgs/build /home/cojabo/ros_workspace/robot_msgs/build /home/cojabo/ros_workspace/robot_msgs/build/CMakeFiles/ROSBUILD_genmsg_py.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/drew/git/ycp-robot/robot_msgs/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/robot_msgs /home/drew/git/ycp-robot/robot_msgs /home/drew/git/ycp-robot/robot_msgs/build /home/drew/git/ycp-robot/robot_msgs/build /home/drew/git/ycp-robot/robot_msgs/build/CMakeFiles/ROSBUILD_genmsg_py.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ROSBUILD_genmsg_py.dir/depend
 

@@ -32,19 +32,19 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dwicke/ros_workspace/MotorControlMsg
+CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/MotorControlMsg
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dwicke/ros_workspace/MotorControlMsg/build
+CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/MotorControlMsg/build
 
 # Utility rule file for ROSBUILD_genmsg_py.
 
 CMakeFiles/ROSBUILD_genmsg_py: ../src/MotorControlMsg/msg/__init__.py
 
 ../src/MotorControlMsg/msg/__init__.py: ../src/MotorControlMsg/msg/_motor_cmd.py
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/dwicke/ros_workspace/MotorControlMsg/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/drew/git/ycp-robot/MotorControlMsg/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ../src/MotorControlMsg/msg/__init__.py"
-	/opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py --initpy /home/dwicke/ros_workspace/MotorControlMsg/msg/motor_cmd.msg
+	/opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py --initpy /home/drew/git/ycp-robot/MotorControlMsg/msg/motor_cmd.msg
 
 ../src/MotorControlMsg/msg/_motor_cmd.py: ../msg/motor_cmd.msg
 ../src/MotorControlMsg/msg/_motor_cmd.py: /opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py
@@ -68,9 +68,9 @@ CMakeFiles/ROSBUILD_genmsg_py: ../src/MotorControlMsg/msg/__init__.py
 ../src/MotorControlMsg/msg/_motor_cmd.py: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
 ../src/MotorControlMsg/msg/_motor_cmd.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
 ../src/MotorControlMsg/msg/_motor_cmd.py: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/dwicke/ros_workspace/MotorControlMsg/build/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/drew/git/ycp-robot/MotorControlMsg/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ../src/MotorControlMsg/msg/_motor_cmd.py"
-	/opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py --noinitpy /home/dwicke/ros_workspace/MotorControlMsg/msg/motor_cmd.msg
+	/opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py --noinitpy /home/drew/git/ycp-robot/MotorControlMsg/msg/motor_cmd.msg
 
 ROSBUILD_genmsg_py: CMakeFiles/ROSBUILD_genmsg_py
 ROSBUILD_genmsg_py: ../src/MotorControlMsg/msg/__init__.py
@@ -87,6 +87,6 @@ CMakeFiles/ROSBUILD_genmsg_py.dir/clean:
 .PHONY : CMakeFiles/ROSBUILD_genmsg_py.dir/clean
 
 CMakeFiles/ROSBUILD_genmsg_py.dir/depend:
-	cd /home/dwicke/ros_workspace/MotorControlMsg/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dwicke/ros_workspace/MotorControlMsg /home/dwicke/ros_workspace/MotorControlMsg /home/dwicke/ros_workspace/MotorControlMsg/build /home/dwicke/ros_workspace/MotorControlMsg/build /home/dwicke/ros_workspace/MotorControlMsg/build/CMakeFiles/ROSBUILD_genmsg_py.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/drew/git/ycp-robot/MotorControlMsg/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/MotorControlMsg /home/drew/git/ycp-robot/MotorControlMsg /home/drew/git/ycp-robot/MotorControlMsg/build /home/drew/git/ycp-robot/MotorControlMsg/build /home/drew/git/ycp-robot/MotorControlMsg/build/CMakeFiles/ROSBUILD_genmsg_py.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ROSBUILD_genmsg_py.dir/depend
 

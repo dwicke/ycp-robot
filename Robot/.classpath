@@ -3,11 +3,13 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/home/drew/.m2/repository/com/google/guava/org.ros.rosjava.guava/r07/org.ros.rosjava.guava-r07.jar"/>
+	<classpathentry kind="lib" path="/home/drew/.ros/rosjava/lib/org.ros.rosjava.robot_msgs-0.0.0.jar"/>
 	<classpathentry kind="lib" path="/home/drew/git/ycp-robot/Robot/target/main.java.org.ros.pubsub-0.0.0.jar"/>
 	<classpathentry kind="lib" path="/home/drew/.ros/rosjava/lib/org.ros.rosjava.test_ros-0.0.0.jar"/>
 	<classpathentry kind="lib" path="/home/drew/.m2/repository/dnsjava/org.ros.rosjava.dnsjava/2.1.1/org.ros.rosjava.dnsjava-2.1.1.jar"/>
 	<classpathentry kind="lib" path="/home/drew/ros_workspace/rosjava_core/rosjava_bootstrap/target/org.ros.rosjava.rosjava_bootstrap-0.0.0.jar"/>
 	<classpathentry kind="lib" path="/home/drew/.ros/rosjava/lib/org.ros.rosjava.geometry_msgs-0.0.0.jar"/>
+	<classpathentry kind="lib" path="/home/drew/.ros/rosjava/lib/org.ros.rosjava.MotorControlMsg-0.0.0.jar"/>
 	<classpathentry kind="lib" path="/home/drew/.ros/rosjava/lib/org.ros.rosjava.std_msgs-0.0.0.jar"/>
 	<classpathentry kind="lib" path="/home/drew/.ros/rosjava/lib/org.ros.rosjava.roscpp-0.0.0.jar"/>
 	<classpathentry kind="lib" path="/home/drew/ros_workspace/rosjava_core/apache_commons_util/target/org.ros.rosjava.ws-commons-util-1.0.2.jar"/>

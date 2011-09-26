@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cojabo/ros_workspace/robot_msgs
+CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/robot_msgs
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cojabo/ros_workspace/robot_msgs/build
+CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/robot_msgs/build
 
 # Utility rule file for rosbuild_premsgsrvgen.
 
@@ -54,6 +54,6 @@ CMakeFiles/rosbuild_premsgsrvgen.dir/clean:
 .PHONY : CMakeFiles/rosbuild_premsgsrvgen.dir/clean
 
 CMakeFiles/rosbuild_premsgsrvgen.dir/depend:
-	cd /home/cojabo/ros_workspace/robot_msgs/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cojabo/ros_workspace/robot_msgs /home/cojabo/ros_workspace/robot_msgs /home/cojabo/ros_workspace/robot_msgs/build /home/cojabo/ros_workspace/robot_msgs/build /home/cojabo/ros_workspace/robot_msgs/build/CMakeFiles/rosbuild_premsgsrvgen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/drew/git/ycp-robot/robot_msgs/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/robot_msgs /home/drew/git/ycp-robot/robot_msgs /home/drew/git/ycp-robot/robot_msgs/build /home/drew/git/ycp-robot/robot_msgs/build /home/drew/git/ycp-robot/robot_msgs/build/CMakeFiles/rosbuild_premsgsrvgen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/rosbuild_premsgsrvgen.dir/depend
 

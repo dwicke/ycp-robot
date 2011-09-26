@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dwicke/ros_workspace/MotorControlMsg
+CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/MotorControlMsg
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dwicke/ros_workspace/MotorControlMsg/build
+CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/MotorControlMsg/build
 
 # Utility rule file for ROSBUILD_genmsg_cpp.
 
@@ -63,9 +63,9 @@ CMakeFiles/ROSBUILD_genmsg_cpp: ../msg_gen/cpp/include/MotorControlMsg/motor_cmd
 ../msg_gen/cpp/include/MotorControlMsg/motor_cmd.h: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
 ../msg_gen/cpp/include/MotorControlMsg/motor_cmd.h: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
 ../msg_gen/cpp/include/MotorControlMsg/motor_cmd.h: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/dwicke/ros_workspace/MotorControlMsg/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/drew/git/ycp-robot/MotorControlMsg/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ../msg_gen/cpp/include/MotorControlMsg/motor_cmd.h"
-	/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/scripts/genmsg_cpp.py /home/dwicke/ros_workspace/MotorControlMsg/msg/motor_cmd.msg
+	/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/scripts/genmsg_cpp.py /home/drew/git/ycp-robot/MotorControlMsg/msg/motor_cmd.msg
 
 ROSBUILD_genmsg_cpp: CMakeFiles/ROSBUILD_genmsg_cpp
 ROSBUILD_genmsg_cpp: ../msg_gen/cpp/include/MotorControlMsg/motor_cmd.h
@@ -81,6 +81,6 @@ CMakeFiles/ROSBUILD_genmsg_cpp.dir/clean:
 .PHONY : CMakeFiles/ROSBUILD_genmsg_cpp.dir/clean
 
 CMakeFiles/ROSBUILD_genmsg_cpp.dir/depend:
-	cd /home/dwicke/ros_workspace/MotorControlMsg/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dwicke/ros_workspace/MotorControlMsg /home/dwicke/ros_workspace/MotorControlMsg /home/dwicke/ros_workspace/MotorControlMsg/build /home/dwicke/ros_workspace/MotorControlMsg/build /home/dwicke/ros_workspace/MotorControlMsg/build/CMakeFiles/ROSBUILD_genmsg_cpp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/drew/git/ycp-robot/MotorControlMsg/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/MotorControlMsg /home/drew/git/ycp-robot/MotorControlMsg /home/drew/git/ycp-robot/MotorControlMsg/build /home/drew/git/ycp-robot/MotorControlMsg/build /home/drew/git/ycp-robot/MotorControlMsg/build/CMakeFiles/ROSBUILD_genmsg_cpp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ROSBUILD_genmsg_cpp.dir/depend
 
