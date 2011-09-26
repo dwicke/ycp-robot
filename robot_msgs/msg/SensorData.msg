@@ -1,0 +1,19 @@
+uint8 ultrasonic_frontLeft_distance
+uint8 ultrasonic_frontCenter_distance
+uint8 ultrasonic_frontRight_distance
+uint8 ultrasonic_rearRight_distance
+uint8 ultrasonic_rearCenter_distance
+uint8 ultrasonic_rearLeft_distance
+
+float32 infrared_frontLeftLeft_distance
+float32 infrared_frontLeftCenter_distance
+float32 infrared_frontRightCenter_distance
+float32 infrared_frontRightRight_distance
+float32 infrared_right_distance
+float32 infrared_rear_distance
+float32 infrared_left_distance
+
+uint16 human_left_motion
+uint16 human_left_presence
+uint16 human_right_motion
+uint16 human_right_presence
