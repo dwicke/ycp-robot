@@ -4,7 +4,7 @@ FILE(REMOVE_RECURSE
   "../msg_gen"
   "CMakeFiles/ROSBUILD_genmsg_py"
   "../src/MotorControlMsg/msg/__init__.py"
-  "../src/MotorControlMsg/msg/_motor_cmd.py"
+  "../src/MotorControlMsg/msg/_MotorCommand.py"
 )
 
 # Per-language clean rules from dependency scanning.

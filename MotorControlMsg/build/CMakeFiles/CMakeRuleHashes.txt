@@ -1,7 +1,10 @@
 # Hashes of file build rules.
+8802deacc1ac5532d4eecb8882d0ec48 ../msg_gen/cpp/include/MotorControlMsg/MotorCommand.h
 f72cde3f61ea2b79bed0effd9cbdc4f1 ../msg_gen/cpp/include/MotorControlMsg/motor_cmd.h
+d25d9586c6c9e51f03e456b1cb65d28b ../msg_gen/lisp/MotorCommand.lisp
 4f713d7ca895ed29a95a54705b1d52fa ../msg_gen/lisp/motor_cmd.lisp
-11851d032f60f62d1e7a176c3bc750b7 ../src/MotorControlMsg/msg/__init__.py
+0e19fc3c969a811f6712a5ee0c1d1c0b ../src/MotorControlMsg/msg/_MotorCommand.py
+76796a8b6cfb9be203ab735cd4ced91a ../src/MotorControlMsg/msg/__init__.py
 62a0e3c61a017d0d883420c7fa1d59f2 ../src/MotorControlMsg/msg/_motor_cmd.py
 367fe0ab8d7a187b0c7564fcac3b6769 CMakeFiles/ROSBUILD_genmsg_cpp
 367fe0ab8d7a187b0c7564fcac3b6769 CMakeFiles/ROSBUILD_genmsg_lisp

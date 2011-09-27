@@ -4,6 +4,6 @@
 (defsystem "MotorControlMsg-msg"
   :depends-on (:roslisp-msg-protocol :roslisp-utils )
   :components ((:file "_package")
-    (:file "motor_cmd" :depends-on ("_package_motor_cmd"))
-    (:file "_package_motor_cmd" :depends-on ("_package"))
+    (:file "MotorCommand" :depends-on ("_package_MotorCommand"))
+    (:file "_package_MotorCommand" :depends-on ("_package"))
   ))

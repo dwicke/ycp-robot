@@ -3,9 +3,9 @@ FILE(REMOVE_RECURSE
   "../msg_gen"
   "../msg_gen"
   "CMakeFiles/ROSBUILD_genmsg_lisp"
-  "../msg_gen/lisp/motor_cmd.lisp"
+  "../msg_gen/lisp/MotorCommand.lisp"
   "../msg_gen/lisp/_package.lisp"
-  "../msg_gen/lisp/_package_motor_cmd.lisp"
+  "../msg_gen/lisp/_package_MotorCommand.lisp"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -3,7 +3,7 @@ FILE(REMOVE_RECURSE
   "../msg_gen"
   "../msg_gen"
   "CMakeFiles/ROSBUILD_genmsg_cpp"
-  "../msg_gen/cpp/include/MotorControlMsg/motor_cmd.h"
+  "../msg_gen/cpp/include/MotorControlMsg/MotorCommand.h"
 )
 
 # Per-language clean rules from dependency scanning.

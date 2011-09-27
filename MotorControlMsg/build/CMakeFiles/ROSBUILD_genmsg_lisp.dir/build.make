@@ -39,44 +39,44 @@ CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/MotorControlMsg/build
 
 # Utility rule file for ROSBUILD_genmsg_lisp.
 
-CMakeFiles/ROSBUILD_genmsg_lisp: ../msg_gen/lisp/motor_cmd.lisp
+CMakeFiles/ROSBUILD_genmsg_lisp: ../msg_gen/lisp/MotorCommand.lisp
 CMakeFiles/ROSBUILD_genmsg_lisp: ../msg_gen/lisp/_package.lisp
-CMakeFiles/ROSBUILD_genmsg_lisp: ../msg_gen/lisp/_package_motor_cmd.lisp
+CMakeFiles/ROSBUILD_genmsg_lisp: ../msg_gen/lisp/_package_MotorCommand.lisp
 
-../msg_gen/lisp/motor_cmd.lisp: ../msg/motor_cmd.msg
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/clients/roslisp/scripts/genmsg_lisp.py
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/ros/core/roslib/scripts/gendeps
-../msg_gen/lisp/motor_cmd.lisp: ../manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/ros/core/rosbuild/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/ros/core/roslang/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/utilities/cpp_common/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/utilities/rostime/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_serialization/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/ros/tools/rospack/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/ros/core/roslib/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/utilities/xmlrpcpp/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/tools/rosconsole/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/clients/rospy/manifest.xml
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/generated
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
-../msg_gen/lisp/motor_cmd.lisp: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
+../msg_gen/lisp/MotorCommand.lisp: ../msg/MotorCommand.msg
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/clients/roslisp/scripts/genmsg_lisp.py
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/ros/core/roslib/scripts/gendeps
+../msg_gen/lisp/MotorCommand.lisp: ../manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/ros/core/rosbuild/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/ros/core/roslang/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/utilities/cpp_common/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/utilities/rostime/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_serialization/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/ros/tools/rospack/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/ros/core/roslib/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/utilities/xmlrpcpp/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/tools/rosconsole/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/clients/rospy/manifest.xml
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/generated
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/drew/git/ycp-robot/MotorControlMsg/build/CMakeFiles $(CMAKE_PROGRESS_1)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ../msg_gen/lisp/motor_cmd.lisp, ../msg_gen/lisp/_package.lisp, ../msg_gen/lisp/_package_motor_cmd.lisp"
-	/opt/ros/electric/stacks/ros_comm/clients/roslisp/scripts/genmsg_lisp.py /home/drew/git/ycp-robot/MotorControlMsg/msg/motor_cmd.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ../msg_gen/lisp/MotorCommand.lisp, ../msg_gen/lisp/_package.lisp, ../msg_gen/lisp/_package_MotorCommand.lisp"
+	/opt/ros/electric/stacks/ros_comm/clients/roslisp/scripts/genmsg_lisp.py /home/drew/git/ycp-robot/MotorControlMsg/msg/MotorCommand.msg
 
-../msg_gen/lisp/_package.lisp: ../msg_gen/lisp/motor_cmd.lisp
+../msg_gen/lisp/_package.lisp: ../msg_gen/lisp/MotorCommand.lisp
 
-../msg_gen/lisp/_package_motor_cmd.lisp: ../msg_gen/lisp/motor_cmd.lisp
+../msg_gen/lisp/_package_MotorCommand.lisp: ../msg_gen/lisp/MotorCommand.lisp
 
 ROSBUILD_genmsg_lisp: CMakeFiles/ROSBUILD_genmsg_lisp
-ROSBUILD_genmsg_lisp: ../msg_gen/lisp/motor_cmd.lisp
+ROSBUILD_genmsg_lisp: ../msg_gen/lisp/MotorCommand.lisp
 ROSBUILD_genmsg_lisp: ../msg_gen/lisp/_package.lisp
-ROSBUILD_genmsg_lisp: ../msg_gen/lisp/_package_motor_cmd.lisp
+ROSBUILD_genmsg_lisp: ../msg_gen/lisp/_package_MotorCommand.lisp
 ROSBUILD_genmsg_lisp: CMakeFiles/ROSBUILD_genmsg_lisp.dir/build.make
 .PHONY : ROSBUILD_genmsg_lisp
 

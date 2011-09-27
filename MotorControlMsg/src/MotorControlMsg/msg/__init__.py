@@ -1,1 +1,1 @@
-from ._motor_cmd import *
+from ._MotorCommand import *
