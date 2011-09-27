@@ -1,0 +1,22 @@
+<package>
+  <description brief="Robot">
+
+     Robot
+
+  </description>
+  <author>drew</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/rosjava_pubsub</url>
+  <depend package="rosjava" />
+  <depend package="std_msgs" />
+  <depend package="MotorControlMsg" />
+  <depend package="robot_msgs" />
+  
+  <export>
+  	<rosjava-src location="src"/>
+  	    <rosjava-pathelement location="target/" groupId="org.ros" artifactId="main.java.org.ros.motorcontrol" version="0.0.0" built="true" />
+	</export>
+</package>
+
+
