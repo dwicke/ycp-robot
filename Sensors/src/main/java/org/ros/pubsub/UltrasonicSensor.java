@@ -44,14 +44,16 @@ public class UltrasonicSensor implements NodeMain {
 
 		//ParameterTreenode.newParameterTree();
 		try {
+			// this name will be changed when the node is created.
+			// because multiple UltrasonicSensor nodes will be created
 			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
 			
 			final Log log = node.getLog();
-			node.newSubscriber("SensorData", "robot_msgs/SensorData",
-					new MessageListener<SensorData>() {
+			node.newSubscriber(node.getName(), "sensor_msgs/Range",
+					new MessageListener<Range>() {
 
 				@Override
-				public void onNewMessage(SensorData message) {
+				public void onNewMessage(Range message) {
 					
 					log.info("I heard: \"" + message.infrared_frontLeftLeft_distance + "\"");
 					
