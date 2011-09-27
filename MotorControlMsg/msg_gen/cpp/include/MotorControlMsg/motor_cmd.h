@@ -26,8 +26,8 @@ struct motor_cmd_ {
   , stamp()
   , frame_id()
   , precedence(0)
-  , x_velocity(0.0)
-  , y_velocity(0.0)
+  , linear_velocity(0.0)
+  , angular_velocity(0.0)
   {
   }
 
@@ -36,8 +36,8 @@ struct motor_cmd_ {
   , stamp()
   , frame_id(_alloc)
   , precedence(0)
-  , x_velocity(0.0)
-  , y_velocity(0.0)
+  , linear_velocity(0.0)
+  , angular_velocity(0.0)
   {
   }
 
@@ -53,11 +53,11 @@ struct motor_cmd_ {
   typedef int32_t _precedence_type;
   int32_t precedence;
 
-  typedef float _x_velocity_type;
-  float x_velocity;
+  typedef float _linear_velocity_type;
+  float linear_velocity;
 
-  typedef float _y_velocity_type;
-  float y_velocity;
+  typedef float _angular_velocity_type;
+  float angular_velocity;
 
 
 private:
@@ -68,7 +68,7 @@ public:
   ROS_DEPRECATED const std::string __getDataType() const { return __s_getDataType_(); }
 
 private:
-  static const char* __s_getMD5Sum_() { return "9dc8c565ea1d6aa726eb1232cda46018"; }
+  static const char* __s_getMD5Sum_() { return "184e7774b9da63f4a895f16cb3ea4870"; }
 public:
   ROS_DEPRECATED static const std::string __s_getMD5Sum() { return __s_getMD5Sum_(); }
 
@@ -90,8 +90,8 @@ string frame_id\n\
 \n\
 int32 precedence\n\
 \n\
-float32 x_velocity\n\
-float32 y_velocity\n\
+float32 linear_velocity\n\
+float32 angular_velocity\n\
 \n\
 \n\
 "; }
@@ -107,8 +107,8 @@ public:
     ros::serialization::serialize(stream, stamp);
     ros::serialization::serialize(stream, frame_id);
     ros::serialization::serialize(stream, precedence);
-    ros::serialization::serialize(stream, x_velocity);
-    ros::serialization::serialize(stream, y_velocity);
+    ros::serialization::serialize(stream, linear_velocity);
+    ros::serialization::serialize(stream, angular_velocity);
     return stream.getData();
   }
 
@@ -119,8 +119,8 @@ public:
     ros::serialization::deserialize(stream, stamp);
     ros::serialization::deserialize(stream, frame_id);
     ros::serialization::deserialize(stream, precedence);
-    ros::serialization::deserialize(stream, x_velocity);
-    ros::serialization::deserialize(stream, y_velocity);
+    ros::serialization::deserialize(stream, linear_velocity);
+    ros::serialization::deserialize(stream, angular_velocity);
     return stream.getData();
   }
 
@@ -131,8 +131,8 @@ public:
     size += ros::serialization::serializationLength(stamp);
     size += ros::serialization::serializationLength(frame_id);
     size += ros::serialization::serializationLength(precedence);
-    size += ros::serialization::serializationLength(x_velocity);
-    size += ros::serialization::serializationLength(y_velocity);
+    size += ros::serialization::serializationLength(linear_velocity);
+    size += ros::serialization::serializationLength(angular_velocity);
     return size;
   }
 
@@ -164,12 +164,12 @@ template<class ContainerAllocator>
 struct MD5Sum< ::MotorControlMsg::motor_cmd_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "9dc8c565ea1d6aa726eb1232cda46018";
+    return "184e7774b9da63f4a895f16cb3ea4870";
   }
 
   static const char* value(const  ::MotorControlMsg::motor_cmd_<ContainerAllocator> &) { return value(); } 
-  static const uint64_t static_value1 = 0x9dc8c565ea1d6aa7ULL;
-  static const uint64_t static_value2 = 0x26eb1232cda46018ULL;
+  static const uint64_t static_value1 = 0x184e7774b9da63f4ULL;
+  static const uint64_t static_value2 = 0xa895f16cb3ea4870ULL;
 };
 
 template<class ContainerAllocator>
@@ -201,8 +201,8 @@ string frame_id\n\
 \n\
 int32 precedence\n\
 \n\
-float32 x_velocity\n\
-float32 y_velocity\n\
+float32 linear_velocity\n\
+float32 angular_velocity\n\
 \n\
 \n\
 ";
@@ -227,8 +227,8 @@ template<class ContainerAllocator> struct Serializer< ::MotorControlMsg::motor_c
     stream.next(m.stamp);
     stream.next(m.frame_id);
     stream.next(m.precedence);
-    stream.next(m.x_velocity);
-    stream.next(m.y_velocity);
+    stream.next(m.linear_velocity);
+    stream.next(m.angular_velocity);
   }
 
   ROS_DECLARE_ALLINONE_SERIALIZER;
@@ -254,10 +254,10 @@ struct Printer< ::MotorControlMsg::motor_cmd_<ContainerAllocator> >
     Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.frame_id);
     s << indent << "precedence: ";
     Printer<int32_t>::stream(s, indent + "  ", v.precedence);
-    s << indent << "x_velocity: ";
-    Printer<float>::stream(s, indent + "  ", v.x_velocity);
-    s << indent << "y_velocity: ";
-    Printer<float>::stream(s, indent + "  ", v.y_velocity);
+    s << indent << "linear_velocity: ";
+    Printer<float>::stream(s, indent + "  ", v.linear_velocity);
+    s << indent << "angular_velocity: ";
+    Printer<float>::stream(s, indent + "  ", v.angular_velocity);
   }
 };
 

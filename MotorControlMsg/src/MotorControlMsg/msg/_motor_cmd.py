@@ -5,7 +5,7 @@ import struct
 import roslib.rostime
 
 class motor_cmd(roslib.message.Message):
-  _md5sum = "9dc8c565ea1d6aa726eb1232cda46018"
+  _md5sum = "184e7774b9da63f4a895f16cb3ea4870"
   _type = "MotorControlMsg/motor_cmd"
   _has_header = False #flag to mark the presence of a Header object
   _full_text = """#Standard metadata for higher-level flow data types
@@ -23,12 +23,12 @@ string frame_id
 
 int32 precedence
 
-float32 x_velocity
-float32 y_velocity
+float32 linear_velocity
+float32 angular_velocity
 
 
 """
-  __slots__ = ['seq','stamp','frame_id','precedence','x_velocity','y_velocity']
+  __slots__ = ['seq','stamp','frame_id','precedence','linear_velocity','angular_velocity']
   _slot_types = ['uint32','time','string','int32','float32','float32']
 
   def __init__(self, *args, **kwds):
@@ -39,7 +39,7 @@ float32 y_velocity
     changes.  You cannot mix in-order arguments and keyword arguments.
     
     The available fields are:
-       seq,stamp,frame_id,precedence,x_velocity,y_velocity
+       seq,stamp,frame_id,precedence,linear_velocity,angular_velocity
     
     @param args: complete set of field values, in .msg order
     @param kwds: use keyword arguments corresponding to message field names
@@ -56,17 +56,17 @@ float32 y_velocity
         self.frame_id = ''
       if self.precedence is None:
         self.precedence = 0
-      if self.x_velocity is None:
-        self.x_velocity = 0.
-      if self.y_velocity is None:
-        self.y_velocity = 0.
+      if self.linear_velocity is None:
+        self.linear_velocity = 0.
+      if self.angular_velocity is None:
+        self.angular_velocity = 0.
     else:
       self.seq = 0
       self.stamp = roslib.rostime.Time()
       self.frame_id = ''
       self.precedence = 0
-      self.x_velocity = 0.
-      self.y_velocity = 0.
+      self.linear_velocity = 0.
+      self.angular_velocity = 0.
 
   def _get_types(self):
     """
@@ -87,7 +87,7 @@ float32 y_velocity
       length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x.encode()))
       _x = self
-      buff.write(_struct_i2f.pack(_x.precedence, _x.x_velocity, _x.y_velocity))
+      buff.write(_struct_i2f.pack(_x.precedence, _x.linear_velocity, _x.angular_velocity))
     except struct.error as se: self._check_types(se)
     except TypeError as te: self._check_types(te)
 
@@ -114,7 +114,7 @@ float32 y_velocity
       _x = self
       start = end
       end += 12
-      (_x.precedence, _x.x_velocity, _x.y_velocity,) = _struct_i2f.unpack(str[start:end])
+      (_x.precedence, _x.linear_velocity, _x.angular_velocity,) = _struct_i2f.unpack(str[start:end])
       self.stamp.canon()
       return self
     except struct.error as e:
@@ -136,7 +136,7 @@ float32 y_velocity
       length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x.encode()))
       _x = self
-      buff.write(_struct_i2f.pack(_x.precedence, _x.x_velocity, _x.y_velocity))
+      buff.write(_struct_i2f.pack(_x.precedence, _x.linear_velocity, _x.angular_velocity))
     except struct.error as se: self._check_types(se)
     except TypeError as te: self._check_types(te)
 
@@ -165,7 +165,7 @@ float32 y_velocity
       _x = self
       start = end
       end += 12
-      (_x.precedence, _x.x_velocity, _x.y_velocity,) = _struct_i2f.unpack(str[start:end])
+      (_x.precedence, _x.linear_velocity, _x.angular_velocity,) = _struct_i2f.unpack(str[start:end])
       self.stamp.canon()
       return self
     except struct.error as e:

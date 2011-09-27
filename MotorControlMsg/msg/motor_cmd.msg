@@ -13,6 +13,6 @@ string frame_id
 
 int32 precedence
 
-float32 x_velocity
-float32 y_velocity
+float32 linear_velocity
+float32 angular_velocity
 
