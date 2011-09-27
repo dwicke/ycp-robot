@@ -35,7 +35,7 @@ import org.ros.message.sensor_msgs.Range;
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class MotorListener implements NodeMain {
+public class HeatSearch implements NodeMain {
 
 	private Node node;
 
@@ -44,16 +44,16 @@ public class MotorListener implements NodeMain {
 
 		//ParameterTreenode.newParameterTree();
 		try {
-			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
+			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
 			
 			final Log log = node.getLog();
-			node.newSubscriber("MotorData", "robot_msgs/MotorData",
-					new MessageListener<MotorData>() {
+			node.newSubscriber("SensorData", "robot_msgs/SensorData",
+					new MessageListener<SensorData>() {
 
 				@Override
-				public void onNewMessage(MotorData message) {
+				public void onNewMessage(SensorData message) {
 					
-					log.info("I heard: \"" + message.motor_left_time + "\"");
+					log.info("I heard: \"" + message.infrared_frontLeftLeft_distance + "\"");
 					
 					// Ok so I heard the sensor data so publish the data in ROS format
 					// to the specific topics

@@ -35,7 +35,7 @@ import org.ros.message.sensor_msgs.Range;
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class MotorListener implements NodeMain {
+public class ObstacleAvoidance implements NodeMain {
 
 	private Node node;
 
@@ -100,3 +100,4 @@ public class MotorListener implements NodeMain {
 	}
 
 }
+
