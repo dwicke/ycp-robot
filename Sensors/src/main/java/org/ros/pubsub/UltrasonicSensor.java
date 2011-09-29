@@ -35,10 +35,16 @@ import org.ros.message.sensor_msgs.Range;
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class UltrasonicSensor implements NodeMain {
+public class UltrasonicSensor implements NodeMain, MessageListener<Range> {
 
 	private Node node;
+	private Range prevFilteredRange, curRange;
+	private Publisher<Range> filteredRange;
+	
+	private final float RDelta = (float) .2;// .2 m or 20cm can change if need to just chose this because
+	// this is what they had in paper
 
+	private Log log;
 	@Override
 	public void main(NodeConfiguration configuration) {
 
@@ -46,30 +52,18 @@ public class UltrasonicSensor implements NodeMain {
 		try {
 			// this name will be changed when the node is created.
 			// because multiple UltrasonicSensor nodes will be created
+			// The name will become the name of the topic also this name will
+			// come from the name of the variable from robot_msgs 
 			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
+			log = node.getLog();
+			filteredRange =
+					node.newPublisher(node.getName() + "Filtered", "sensor_msgs/Range");
 			
-			final Log log = node.getLog();
-			node.newSubscriber(node.getName(), "sensor_msgs/Range",
-					new MessageListener<Range>() {
-
-				@Override
-				public void onNewMessage(Range message) {
 					
-					log.info("I heard: \"" + message.infrared_frontLeftLeft_distance + "\"");
-					
-					// Ok so I heard the sensor data so publish the data in ROS format
-					// to the specific topics
-					
-					// first do IR
-					
-					
-					
-					// then do Ultrasonic
-					
-					
-					
-				}
-			});
+			
+			
+			node.newSubscriber(node.getName() + "raw", "sensor_msgs/Range", this);
+			
 		} catch (Exception e) {
 			if (node != null) {
 				node.getLog().fatal(e);
@@ -77,28 +71,55 @@ public class UltrasonicSensor implements NodeMain {
 				e.printStackTrace();
 			}
 		}
-
-
-
-
-
 	}
 	
-	public void publishIR(String topic, float range)
-	{
-		Range leftfrontIR = new Range();
-		leftfrontIR.radiation_type = Range.INFRARED;
-		leftfrontIR.range = range;
-		//String topics = message.infrared_frontLeftLeft_distance;
-		
-		Publisher<Range> publisher =
-		          node.newPublisher("fronLeftLeftIRData", "sensor_msgs/Range");
-		publisher.publish(leftfrontIR);
-	}
+	
 
 	@Override
 	public void shutdown() {
 		node.shutdown();
+	}
+
+	@Override
+	public void onNewMessage(Range message) {
+		// TODO Auto-generated method stub
+		
+		// set the prev to the current and the current to the just received message
+		prevFilteredRange = curRange;
+		curRange = message;
+		
+		// now publish the data
+		
+		
+		
+		if (curRange.range < curRange.max_range)
+		{
+			// if the range received is less than the max range then it is good
+			// don't need to do any filtering
+			
+			filteredRange.publish(curRange);
+			
+		}
+		else
+		{
+			//else if is equal to the max_range so must filter
+			// create a clone of a Range message
+			Range filtered = message.clone();
+			
+			// so I set the filtered range to the smallest value
+			// the previous filtered range plus a delta
+			// or the max range
+			filtered.range = prevFilteredRange.range + RDelta;
+			if (filtered.range > message.max_range)
+			{
+				filtered.range = message.max_range;
+			}
+			prevFilteredRange = filtered;
+			// publish the filtered range
+			filteredRange.publish(filtered);
+		}
+			
+		
 	}
 
 }
