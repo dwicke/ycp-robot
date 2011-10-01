@@ -1,0 +1,27 @@
+<launch>
+	<!-- I can set parameters on the Parameter Sever and they will be stored before the nodes get created.
+		Going to use a Yaml file for that allows  parameters with complex types, nested namespaces of 
+		parameters, and reusing the same parameter values in multiple places.  I am not going to be
+		able to run nodes because the way rosjava runs.
+	-->
+	<rosparam file="test.yaml" command="load"/>
+	<node name="sensor_listener" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.SensorListener" />
+	<node name="ultrasonic_frontLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
+	<node name="ultrasonic_frontCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
+	<node name="ultrasonic_frontRight_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
+	<node name="ultrasonic_rearRight_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
+	<node name="ultrasonic_rearCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
+	<node name="ultrasonic_rearLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
+	
+	
+	<node name="infrared_frontLeftLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+	<node name="infrared_frontLeftCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+	<node name="infrared_frontRightCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+	<node name="infrared_frontRightRight_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+	<node name="infrared_right_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+	<node name="infrared_rear_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+	<node name="infrared_left_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+	
+	
+	
+</launch>	 

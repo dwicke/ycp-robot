@@ -16,6 +16,8 @@
 
 package main.java.org.ros.pubsub;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.ros.message.MessageListener;
 import org.ros.node.DefaultNodeFactory;
@@ -29,9 +31,8 @@ import org.ros.message.sensor_msgs.Range;
 
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of the Robot listener is to
- * listen for messages that have the sensor data in our implementation is from
- * either Converter or from VirtualX80SVP it depends on the startup configuration.
+ * external roscore is already running.  The job of the UltrasonicSensor node
+ * is to filter the raw sensor data and publish it.
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
@@ -56,12 +57,18 @@ public class UltrasonicSensor implements NodeMain, MessageListener<Range> {
 			// come from the name of the variable from robot_msgs 
 			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
 			log = node.getLog();
+			
+			// Print out the name
+			log.info("Sensor name: " + node.getName());
 			filteredRange =
-					node.newPublisher(node.getName() + "Filtered", "sensor_msgs/Range");
-			
-					
+					node.newPublisher(node.getName() + "filtered", "sensor_msgs/Range");
 			
 			
+			// then to get angle info about sensor do 
+			//Integer senseNames = h.getInteger(node.getName() + "theta");
+			
+			// so I am subscribing to the raw sensor data coming from SensorListener
+			// so that I can do some filtering
 			node.newSubscriber(node.getName() + "raw", "sensor_msgs/Range", this);
 			
 		} catch (Exception e) {
@@ -98,6 +105,7 @@ public class UltrasonicSensor implements NodeMain, MessageListener<Range> {
 			// don't need to do any filtering
 			
 			filteredRange.publish(curRange);
+			
 			
 		}
 		else

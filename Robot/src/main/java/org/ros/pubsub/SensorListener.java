@@ -17,9 +17,8 @@
 package main.java.org.ros.pubsub;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -30,6 +29,7 @@ import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
+import org.ros.node.parameter.ParameterTree;
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 import org.ros.message.robot_msgs.*;
@@ -66,6 +66,9 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 			// to use as the name of the topic
 			// NOTE that I may have to add stuff to the name here because of the whole 
 			// namespace thing.  Not sure yet how that works.
+			
+			
+			
 			for (int i = 0; i < fields.length; i++)
 			{
 				log.info("The name of the first field is: " + fields[i].getName());
@@ -73,10 +76,6 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 				
 				publisher.put(fields[i].getName(), pub);
 			}
-			
-			
-			
-			//Modifier.isPublic(fields[0].getModifiers());
 			
 			node.newSubscriber("SensorData", "robot_msgs/SensorData", this);
 			
@@ -94,7 +93,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 
 	}
 	
-	public void publishData(Range message)
+	public void publishData(SensorData message)
 	{
 		// so go through and publish data based on names
 		Class theMessage = message.getClass();
@@ -123,6 +122,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 				}
 				else if (fieldName.contains("ultrasonic"))
 				{
+					// get field data
 					int rangeData = (Integer) messField.get(message);
 					Range USRange = new Range();
 					USRange.max_range = (float) 2.55; // 255cm
@@ -164,29 +164,11 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 
 	@Override
 	public void onNewMessage(SensorData message) {
-		// TODO Auto-generated method stub
-		
-		log.info("I heard: \"" + message.infrared_frontLeftLeft_distance + "\"");
 		
 		// Ok so I heard the sensor data so publish the data in ROS format
 		// to the specific topics
+		publishData(message);
 		
-		// first do IR
-		Range IRRange = new Range();
-		IRRange.max_range = (float) .8; // 80cm
-		IRRange.min_range = (float) .075; // 7.5cm
-		IRRange.radiation_type = Range.INFRARED;
-		
-		// remember I am getting the data in cm need it in meters so *.01
-		IRRange.range = (float) (message.infrared_frontLeftCenter_distance * .01);
-		publisher.get("infrared_frontLeftCenter_distance").publish(IRRange);
-		
-		Class theMessage = message.getClass();
-		
-		
-		
-		
-		// then do Ultrasonic
 	}
 
 }

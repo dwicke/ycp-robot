@@ -16,44 +16,50 @@
 
 package main.java.org.ros.pubsub;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.ros.message.MessageListener;
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
+import org.ros.node.parameter.ParameterTree;
+import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 import org.ros.message.robot_msgs.*;
+import org.ros.message.sensor_msgs.Range;
 
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of the Robot listener is to
- * listen for messages that have the sensor data in our implementation is from
- * either Converter or from VirtualX80SVP it depends on the startup configuration.
+ * external roscore is already running.  The job of this node is to filter the IRSensor
+ * data and publish it.
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class IRSensor implements NodeMain {
+public class IRSensor implements NodeMain, MessageListener<Range> {
 
   private Node node;
-
+  private Publisher<Range> filteredRange;
+  private Log log;
+  
   @Override
   public void main(NodeConfiguration configuration) {
 	  
 	  
     try {
-      node = new DefaultNodeFactory().newNode("listener", configuration);
+    	// the name of the node gets changed when it is created... so not "sensor_listener"
+      node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
       
-      final Log log = node.getLog();
-      node.newSubscriber("MotorData", "robot_msgs/MotorData",
-          new MessageListener<MotorData>() {
-    	  
-            @Override
-            public void onNewMessage(MotorData message) {
-              log.info("I heard: \"" + message.motor_left_velocity + "\"");
-              log.info("I am " + node.getName() + "\n");
-            }
-          });
+      log = node.getLog();
+      // Print out the name
+      log.info("Sensor name: " + node.getName());
+		filteredRange =
+				node.newPublisher(node.getName() + "filtered", "sensor_msgs/Range");
+		// make this node a subscriber to the Range messages that are being published
+		// by SensorListener.
+      node.newSubscriber(node.getName() + "raw", "sensor_msgs/Range", this);
     } catch (Exception e) {
       if (node != null) {
         node.getLog().fatal(e);
@@ -62,15 +68,18 @@ public class IRSensor implements NodeMain {
       }
     }
     
-    
-    
-    
-    
   }
 
   @Override
   public void shutdown() {
     node.shutdown();
   }
+
+@Override
+public void onNewMessage(Range message) {
+	// For now just forward the message along.  Later add a filter
+	filteredRange.publish(message);
+	
+}
 
 }
