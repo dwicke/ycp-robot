@@ -14,6 +14,7 @@
 
 #include "ros/assert.h"
 
+#include "std_msgs/Header.h"
 
 namespace MotorControlMsg
 {
@@ -22,9 +23,7 @@ struct MotorCommand_ {
   typedef MotorCommand_<ContainerAllocator> Type;
 
   MotorCommand_()
-  : seq(0)
-  , stamp()
-  , frame_id()
+  : header()
   , precedence(0)
   , linear_velocity(0.0)
   , angular_velocity(0.0)
@@ -32,23 +31,15 @@ struct MotorCommand_ {
   }
 
   MotorCommand_(const ContainerAllocator& _alloc)
-  : seq(0)
-  , stamp()
-  , frame_id(_alloc)
+  : header(_alloc)
   , precedence(0)
   , linear_velocity(0.0)
   , angular_velocity(0.0)
   {
   }
 
-  typedef uint32_t _seq_type;
-  uint32_t seq;
-
-  typedef ros::Time _stamp_type;
-  ros::Time stamp;
-
-  typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _frame_id_type;
-  std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  frame_id;
+  typedef  ::std_msgs::Header_<ContainerAllocator>  _header_type;
+   ::std_msgs::Header_<ContainerAllocator>  header;
 
   typedef int32_t _precedence_type;
   int32_t precedence;
@@ -68,15 +59,28 @@ public:
   ROS_DEPRECATED const std::string __getDataType() const { return __s_getDataType_(); }
 
 private:
-  static const char* __s_getMD5Sum_() { return "184e7774b9da63f4a895f16cb3ea4870"; }
+  static const char* __s_getMD5Sum_() { return "328e85f5960f8399af83b4d4d167e4a2"; }
 public:
   ROS_DEPRECATED static const std::string __s_getMD5Sum() { return __s_getMD5Sum_(); }
 
   ROS_DEPRECATED const std::string __getMD5Sum() const { return __s_getMD5Sum_(); }
 
 private:
-  static const char* __s_getMessageDefinition_() { return "#Standard metadata for higher-level flow data types\n\
-#sequence ID: consecutively increasing ID\n\
+  static const char* __s_getMessageDefinition_() { return "Header header\n\
+\n\
+int32 precedence\n\
+\n\
+float32 linear_velocity\n\
+float32 angular_velocity\n\
+\n\
+\n\
+================================================================================\n\
+MSG: std_msgs/Header\n\
+# Standard metadata for higher-level stamped data types.\n\
+# This is generally used to communicate timestamped data \n\
+# in a particular coordinate frame.\n\
+# \n\
+# sequence ID: consecutively increasing ID \n\
 uint32 seq\n\
 #Two-integer timestamp that is expressed as:\n\
 # * stamp.secs: seconds (stamp_secs) since epoch\n\
@@ -88,12 +92,6 @@ time stamp\n\
 # 1: global frame\n\
 string frame_id\n\
 \n\
-int32 precedence\n\
-\n\
-float32 linear_velocity\n\
-float32 angular_velocity\n\
-\n\
-\n\
 "; }
 public:
   ROS_DEPRECATED static const std::string __s_getMessageDefinition() { return __s_getMessageDefinition_(); }
@@ -103,9 +101,7 @@ public:
   ROS_DEPRECATED virtual uint8_t *serialize(uint8_t *write_ptr, uint32_t seq) const
   {
     ros::serialization::OStream stream(write_ptr, 1000000000);
-    ros::serialization::serialize(stream, seq);
-    ros::serialization::serialize(stream, stamp);
-    ros::serialization::serialize(stream, frame_id);
+    ros::serialization::serialize(stream, header);
     ros::serialization::serialize(stream, precedence);
     ros::serialization::serialize(stream, linear_velocity);
     ros::serialization::serialize(stream, angular_velocity);
@@ -115,9 +111,7 @@ public:
   ROS_DEPRECATED virtual uint8_t *deserialize(uint8_t *read_ptr)
   {
     ros::serialization::IStream stream(read_ptr, 1000000000);
-    ros::serialization::deserialize(stream, seq);
-    ros::serialization::deserialize(stream, stamp);
-    ros::serialization::deserialize(stream, frame_id);
+    ros::serialization::deserialize(stream, header);
     ros::serialization::deserialize(stream, precedence);
     ros::serialization::deserialize(stream, linear_velocity);
     ros::serialization::deserialize(stream, angular_velocity);
@@ -127,9 +121,7 @@ public:
   ROS_DEPRECATED virtual uint32_t serializationLength() const
   {
     uint32_t size = 0;
-    size += ros::serialization::serializationLength(seq);
-    size += ros::serialization::serializationLength(stamp);
-    size += ros::serialization::serializationLength(frame_id);
+    size += ros::serialization::serializationLength(header);
     size += ros::serialization::serializationLength(precedence);
     size += ros::serialization::serializationLength(linear_velocity);
     size += ros::serialization::serializationLength(angular_velocity);
@@ -164,12 +156,12 @@ template<class ContainerAllocator>
 struct MD5Sum< ::MotorControlMsg::MotorCommand_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "184e7774b9da63f4a895f16cb3ea4870";
+    return "328e85f5960f8399af83b4d4d167e4a2";
   }
 
   static const char* value(const  ::MotorControlMsg::MotorCommand_<ContainerAllocator> &) { return value(); } 
-  static const uint64_t static_value1 = 0x184e7774b9da63f4ULL;
-  static const uint64_t static_value2 = 0xa895f16cb3ea4870ULL;
+  static const uint64_t static_value1 = 0x328e85f5960f8399ULL;
+  static const uint64_t static_value2 = 0xaf83b4d4d167e4a2ULL;
 };
 
 template<class ContainerAllocator>
@@ -186,8 +178,21 @@ template<class ContainerAllocator>
 struct Definition< ::MotorControlMsg::MotorCommand_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "#Standard metadata for higher-level flow data types\n\
-#sequence ID: consecutively increasing ID\n\
+    return "Header header\n\
+\n\
+int32 precedence\n\
+\n\
+float32 linear_velocity\n\
+float32 angular_velocity\n\
+\n\
+\n\
+================================================================================\n\
+MSG: std_msgs/Header\n\
+# Standard metadata for higher-level stamped data types.\n\
+# This is generally used to communicate timestamped data \n\
+# in a particular coordinate frame.\n\
+# \n\
+# sequence ID: consecutively increasing ID \n\
 uint32 seq\n\
 #Two-integer timestamp that is expressed as:\n\
 # * stamp.secs: seconds (stamp_secs) since epoch\n\
@@ -199,18 +204,14 @@ time stamp\n\
 # 1: global frame\n\
 string frame_id\n\
 \n\
-int32 precedence\n\
-\n\
-float32 linear_velocity\n\
-float32 angular_velocity\n\
-\n\
-\n\
 ";
   }
 
   static const char* value(const  ::MotorControlMsg::MotorCommand_<ContainerAllocator> &) { return value(); } 
 };
 
+template<class ContainerAllocator> struct HasHeader< ::MotorControlMsg::MotorCommand_<ContainerAllocator> > : public TrueType {};
+template<class ContainerAllocator> struct HasHeader< const ::MotorControlMsg::MotorCommand_<ContainerAllocator> > : public TrueType {};
 } // namespace message_traits
 } // namespace ros
 
@@ -223,9 +224,7 @@ template<class ContainerAllocator> struct Serializer< ::MotorControlMsg::MotorCo
 {
   template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
   {
-    stream.next(m.seq);
-    stream.next(m.stamp);
-    stream.next(m.frame_id);
+    stream.next(m.header);
     stream.next(m.precedence);
     stream.next(m.linear_velocity);
     stream.next(m.angular_velocity);
@@ -246,12 +245,9 @@ struct Printer< ::MotorControlMsg::MotorCommand_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const  ::MotorControlMsg::MotorCommand_<ContainerAllocator> & v) 
   {
-    s << indent << "seq: ";
-    Printer<uint32_t>::stream(s, indent + "  ", v.seq);
-    s << indent << "stamp: ";
-    Printer<ros::Time>::stream(s, indent + "  ", v.stamp);
-    s << indent << "frame_id: ";
-    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.frame_id);
+    s << indent << "header: ";
+s << std::endl;
+    Printer< ::std_msgs::Header_<ContainerAllocator> >::stream(s, indent + "  ", v.header);
     s << indent << "precedence: ";
     Printer<int32_t>::stream(s, indent + "  ", v.precedence);
     s << indent << "linear_velocity: ";

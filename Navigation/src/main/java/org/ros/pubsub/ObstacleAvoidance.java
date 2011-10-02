@@ -24,6 +24,7 @@ import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
+import org.ros.message.MotorControlMsg.motor_cmd;
 import org.ros.message.robot_msgs.*;
 import org.ros.message.sensor_msgs.Range;
 
@@ -37,7 +38,7 @@ import com.google.common.base.Preconditions;
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class ObstacleAvoidance implements NodeMain {
+public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand>{
 
 	private Node node;
 
@@ -50,27 +51,16 @@ public class ObstacleAvoidance implements NodeMain {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
 			
 			final Log log = node.getLog();
-			node.newSubscriber("MotorData", "robot_msgs/MotorData",
-					new MessageListener<MotorData>() {
+			
+			// The job of this node is to provide to the MotorControler a linear and
+			// angular velocity such that the robot avoids obstacles.  It uses
+			// Braitenberg's agression behavior and motor fusion.
+			
+			
+			
 
-				@Override
-				public void onNewMessage(MotorData message) {
-					
-					log.info("I heard: \"" + message.motor_left_time + "\"");
-					
-					// Ok so I heard the sensor data so publish the data in ROS format
-					// to the specific topics
-					
-					// first do IR
-					
-					
-					
-					// then do Ultrasonic
-					
-					
-					
-				}
-			});
+			
+			
 		} catch (Exception e) {
 			if (node != null) {
 				node.getLog().fatal(e);
@@ -89,6 +79,15 @@ public class ObstacleAvoidance implements NodeMain {
 	@Override
 	public void shutdown() {
 		node.shutdown();
+	}
+
+
+	@Override
+	public void onNewMessage(motor_cmd message) {
+		//combines US and IR into a single motor_cmd message
+		// that is published here
+		
+		
 	}
 
 }

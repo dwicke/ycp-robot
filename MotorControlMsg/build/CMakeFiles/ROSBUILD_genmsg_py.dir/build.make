@@ -49,6 +49,7 @@ CMakeFiles/ROSBUILD_genmsg_py: ../src/MotorControlMsg/msg/__init__.py
 ../src/MotorControlMsg/msg/_MotorCommand.py: ../msg/MotorCommand.msg
 ../src/MotorControlMsg/msg/_MotorCommand.py: /opt/ros/electric/stacks/ros_comm/clients/rospy/scripts/genmsg_py.py
 ../src/MotorControlMsg/msg/_MotorCommand.py: /opt/ros/electric/ros/core/roslib/scripts/gendeps
+../src/MotorControlMsg/msg/_MotorCommand.py: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg/Header.msg
 ../src/MotorControlMsg/msg/_MotorCommand.py: ../manifest.xml
 ../src/MotorControlMsg/msg/_MotorCommand.py: /opt/ros/electric/ros/core/rosbuild/manifest.xml
 ../src/MotorControlMsg/msg/_MotorCommand.py: /opt/ros/electric/ros/core/roslang/manifest.xml

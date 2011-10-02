@@ -25,6 +25,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.ros.message.MessageListener;
+import org.ros.message.Time;
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
@@ -114,7 +115,9 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 			try {
 				// get the field name
 				messField = theMessage.getField(fieldName);
-				
+				// get the current time for the time stamps
+				Time timeStamp = node.getCurrentTime();
+			
 				if (fieldName.contains("infrared"))
 				{
 					// get the field data
@@ -130,7 +133,8 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					IRRange.header.frame_id = fieldName;
 					// this is the angle theta the sensor is located on the bot
 					IRRange.field_of_view = (float) sensorAngles.get(fieldName);
-					
+					// need to set time stamp
+					IRRange.header.stamp = timeStamp;
 					publisher.get(fieldName).publish(IRRange);
 				}
 				else if (fieldName.contains("ultrasonic"))
@@ -146,6 +150,8 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					USRange.header.frame_id = fieldName;
 					// this is the angle theta the sensor is located on the bot
 					USRange.field_of_view = (float) sensorAngles.get(fieldName);
+					// need to set time stamp
+					USRange.header.stamp = timeStamp;
 					publisher.get(fieldName).publish(USRange);
 				}
 				else if (fieldName.contains("human"))

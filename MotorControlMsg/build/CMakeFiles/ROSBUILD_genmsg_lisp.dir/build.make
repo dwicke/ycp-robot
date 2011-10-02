@@ -46,6 +46,7 @@ CMakeFiles/ROSBUILD_genmsg_lisp: ../msg_gen/lisp/_package_MotorCommand.lisp
 ../msg_gen/lisp/MotorCommand.lisp: ../msg/MotorCommand.msg
 ../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/clients/roslisp/scripts/genmsg_lisp.py
 ../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/ros/core/roslib/scripts/gendeps
+../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg/Header.msg
 ../msg_gen/lisp/MotorCommand.lisp: ../manifest.xml
 ../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/ros/core/rosbuild/manifest.xml
 ../msg_gen/lisp/MotorCommand.lisp: /opt/ros/electric/ros/core/roslang/manifest.xml

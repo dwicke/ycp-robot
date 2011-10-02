@@ -1,10 +1,6 @@
 (cl:in-package MotorControlMsg-msg)
-(cl:export '(SEQ-VAL
-          SEQ
-          STAMP-VAL
-          STAMP
-          FRAME_ID-VAL
-          FRAME_ID
+(cl:export '(HEADER-VAL
+          HEADER
           PRECEDENCE-VAL
           PRECEDENCE
           LINEAR_VELOCITY-VAL

@@ -5,7 +5,7 @@
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">Default</pydev_property>
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">python 2.6</pydev_property>
 <pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
-<path>/home/dwicke/ros_workspace/MotorControlMsg/src</path>
+<path>/home/drew/git/ycp-robot/MotorControlMsg/src</path>
 <path>/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/src</path>
 <path>/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/lib</path>
 <path>/opt/ros/electric/stacks/ros_comm/utilities/cpp_common/src</path>
@@ -25,8 +25,9 @@
 <path>/opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/src</path>
 <path>/opt/ros/electric/stacks/ros_comm/clients/rospy/src</path>
 <path>/opt/ros/electric/ros/core/mk</path>
+<path>/usr/local/lib/python2.6/dist-packages/rosinstall-0.5.20-py2.6.egg</path>
 <path>/opt/ros/electric/ros/core/roslib/src</path>
-<path>/home/dwicke/ros_workspace/MotorControlMsg</path>
+<path>/home/drew/git/ycp-robot/MotorControlMsg</path>
 <path>/usr/lib/python2.6</path>
 <path>/usr/lib/python2.6/plat-linux2</path>
 <path>/usr/lib/python2.6/lib-tk</path>
