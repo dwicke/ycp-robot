@@ -16,12 +16,15 @@
 
 package main.java.org.ros.pubsub;
 
+import java.util.TreeMap;
+
 import com.google.common.base.Preconditions;
 
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
+import org.ros.node.parameter.ParameterTree;
 import org.ros.node.topic.Publisher;
 import org.ros.message.robot_msgs.*;
 import org.ros.message.sensor_msgs.Range;
@@ -43,19 +46,40 @@ public class Talker implements NodeMain {
     Preconditions.checkState(node == null);
     Preconditions.checkNotNull(configuration);
     try {
-    	
-    	
-    	
-    	
       node = new DefaultNodeFactory().newNode("talker", configuration);
+      
+      
+      
+      ParameterTree tr = node.newParameterTree();
+      TreeMap<String, Integer> t = new TreeMap<String, Integer>();
+      t.put("Theta1", 3);
+      tr.set("test", t);
+      
+      
+      
+      
+      
+      
+      
+      
       Publisher<MotorData> publisher =
           node.newPublisher("MotorData", "robot_msgs/MotorData");
+      
+      Publisher<SensorData> pubSense = node.newPublisher("SensorData", "robot_msgs/SensorData");
+      
       int seq = 0;
       while (true) {
        // org.ros.message.std_msgs.String str = new org.ros.message.std_msgs.String();
     	  
     	  MotorData motorMessage = new MotorData();
     	  motorMessage.motor_left_velocity = (float) 3.3;
+    	  
+    	  SensorData d = new SensorData();
+    	  d.infrared_frontLeftCenter_distance = (float) 33.43;
+    	  d.ultrasonic_frontRight_distance = (byte) 44;
+    	  pubSense.publish(d);
+    	  
+    	  
     	  seq += 1;
         publisher.publish(motorMessage);
         Thread.sleep(1000);

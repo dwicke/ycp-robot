@@ -35,6 +35,8 @@ import org.ros.node.topic.Subscriber;
 import org.ros.message.robot_msgs.*;
 import org.ros.message.sensor_msgs.Range;
 
+import com.google.common.base.Preconditions;
+
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
  * external roscore is already running.  The job of the Robot listener is to
@@ -49,14 +51,16 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 	private Log log;
 	
 	private Map<String, Publisher<Range> > publisher;
-	
+	private Map<String, Integer> sensorAngles;
 	
 	@Override
 	public void main(NodeConfiguration configuration) {
-
+		Preconditions.checkState(node == null);
+	    Preconditions.checkNotNull(configuration);
 		//ParameterTreenode.newParameterTree();
 		try {
 			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
+			
 			log = node.getLog();
 			publisher = new TreeMap<String, Publisher<Range>>();
 			
@@ -67,11 +71,15 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 			// NOTE that I may have to add stuff to the name here because of the whole 
 			// namespace thing.  Not sure yet how that works.
 			
-			
+			// get the angle measurements of the sensors from the parameter server
+			// in order to put that info into the Range messages
+			ParameterTree paramTree = node.newParameterTree();
+			sensorAngles = (Map<String, Integer>) paramTree.getMap("sensor_angles");
 			
 			for (int i = 0; i < fields.length; i++)
 			{
-				log.info("The name of the first field is: " + fields[i].getName());
+				
+				log.info("The name of the first field is: " + fields[i].getName() + "degree " + sensorAngles.get(fields[i].getName()));
 				Publisher<Range> pub = node.newPublisher(fields[i].getName() + "raw", "sensor_msgs/Range");
 				
 				publisher.put(fields[i].getName(), pub);
@@ -118,17 +126,26 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					IRRange.min_range = (float) .075; // 7.5cm
 					IRRange.radiation_type = Range.INFRARED;
 					IRRange.range = (float) (rangeData * .01);
+					// name it the same as the sensor
+					IRRange.header.frame_id = fieldName;
+					// this is the angle theta the sensor is located on the bot
+					IRRange.field_of_view = (float) sensorAngles.get(fieldName);
+					
 					publisher.get(fieldName).publish(IRRange);
 				}
 				else if (fieldName.contains("ultrasonic"))
 				{
 					// get field data
-					int rangeData = (Integer) messField.get(message);
+					byte rangeData = (Byte) messField.get(message);
 					Range USRange = new Range();
 					USRange.max_range = (float) 2.55; // 255cm
 					USRange.min_range = (float) .04; // 4cm
 					USRange.radiation_type = Range.ULTRASOUND;
 					USRange.range = (float) ((float) rangeData * .01);
+					// name it the same as the sensor
+					USRange.header.frame_id = fieldName;
+					// this is the angle theta the sensor is located on the bot
+					USRange.field_of_view = (float) sensorAngles.get(fieldName);
 					publisher.get(fieldName).publish(USRange);
 				}
 				else if (fieldName.contains("human"))

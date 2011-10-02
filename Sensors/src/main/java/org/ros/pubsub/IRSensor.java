@@ -31,6 +31,8 @@ import org.ros.node.topic.Subscriber;
 import org.ros.message.robot_msgs.*;
 import org.ros.message.sensor_msgs.Range;
 
+import com.google.common.base.Preconditions;
+
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
  * external roscore is already running.  The job of this node is to filter the IRSensor
@@ -46,7 +48,8 @@ public class IRSensor implements NodeMain, MessageListener<Range> {
   
   @Override
   public void main(NodeConfiguration configuration) {
-	  
+	  Preconditions.checkState(node == null);
+	    Preconditions.checkNotNull(configuration);
 	  
     try {
     	// the name of the node gets changed when it is created... so not "sensor_listener"

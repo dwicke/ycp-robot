@@ -27,6 +27,8 @@ import org.ros.node.topic.Subscriber;
 import org.ros.message.robot_msgs.*;
 import org.ros.message.sensor_msgs.Range;
 
+import com.google.common.base.Preconditions;
+
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
  * external roscore is already running.  The job of the Robot listener is to
@@ -41,7 +43,8 @@ public class ObstacleAvoidance implements NodeMain {
 
 	@Override
 	public void main(NodeConfiguration configuration) {
-
+		Preconditions.checkState(node == null);
+	    Preconditions.checkNotNull(configuration);
 		//ParameterTreenode.newParameterTree();
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
@@ -82,17 +85,6 @@ public class ObstacleAvoidance implements NodeMain {
 
 	}
 	
-	public void publishIR(String topic, float range)
-	{
-		Range leftfrontIR = new Range();
-		leftfrontIR.radiation_type = Range.INFRARED;
-		leftfrontIR.range = range;
-		//String topics = message.infrared_frontLeftLeft_distance;
-		
-		Publisher<Range> publisher =
-		          node.newPublisher("fronLeftLeftIRData", "sensor_msgs/Range");
-		publisher.publish(leftfrontIR);
-	}
 
 	@Override
 	public void shutdown() {
