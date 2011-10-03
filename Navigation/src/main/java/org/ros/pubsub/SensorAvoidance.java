@@ -94,8 +94,10 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 	@Override
 	public void onNewMessage(MotorCommand message) {
 		// TODO Auto-generated method stub
-		//combines US and IR into a single motor_cmd message
-		// that is published here
+		
+		// Combine the left and the right sides to get the linear
+		// and the angular normalized velocity for this particular sensor
+		// which is defined by the name given it when created.
 		
 		// if I get two messages with the same time stamp then I can
 		// assume that they are the IR and the US and move on
@@ -107,7 +109,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			// all the input I need so get it and remove the key
 			
 			
-			
+			inputCommands.remove(key);
 		}
 		else if (!inputCommands.containsKey(key))
 		{
@@ -119,6 +121,8 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		else
 		{
 			// has the key but I haven't received enough messages.
+			// so add the message to the list
+			inputCommands.get(key).add(message);
 		}
 		
 		

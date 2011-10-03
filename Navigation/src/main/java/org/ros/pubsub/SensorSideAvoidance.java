@@ -91,20 +91,19 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 	@Override
 	public void onNewMessage(Range message) {
 		// TODO Auto-generated method stub
-		//combines US and IR into a single motor_cmd message
-		// that is published here
+
+		// Gets the range messages from the Left or right depending on name of this node
+		// and when I get all of the messages I do math to get the value for that side.
 		
-		// if I get two messages with the same time stamp then I can
-		// assume that they are the IR and the US and move on
-		// this is not general.
+		
 		int key = message.header.stamp.secs;
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
 		{
 			// Has the key and there are enough keys
 			// all the input I need so get it and remove the key
+			// 
 			
-			
-			
+			inputCommands.remove(key);
 		}
 		else if (!inputCommands.containsKey(key))
 		{
@@ -116,6 +115,8 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 		else
 		{
 			// has the key but I haven't received enough messages.
+			// so add the message to the list
+			inputCommands.get(key).add(message);
 		}
 		
 		

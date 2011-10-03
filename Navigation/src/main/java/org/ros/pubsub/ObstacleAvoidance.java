@@ -108,7 +108,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			// all the input I need so get it and remove the key
 			
 			
-			
+			inputCommands.remove(key);
 		}
 		else if (!inputCommands.containsKey(key))
 		{
@@ -120,6 +120,8 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		else
 		{
 			// has the key but I haven't received enough messages.
+			// so add the message to the list
+			inputCommands.get(key).add(message);
 		}
 		
 		
