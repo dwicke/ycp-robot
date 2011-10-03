@@ -31,14 +31,13 @@ import org.ros.node.topic.Subscriber;
 import com.google.common.base.Preconditions;
 import org.ros.message.MotorControlMsg.MotorCommand;
 /**
- * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of the Robot listener is to
- * listen for messages that have the sensor data in our implementation is from
- * either Converter or from VirtualX80SVP it depends on the startup configuration.
+ * This is a simple rosjava {@link Subscriber} {@link Node}. 
+ * This node is givent the name of the sensor that it is going to 
+ * represent.  Since both IR and US both have the same 
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand> {
+public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> {
 
 	private Node node;
 	// this is the Object that I use to publish my final motor command

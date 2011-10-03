@@ -30,22 +30,22 @@ import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 import com.google.common.base.Preconditions;
 import org.ros.message.MotorControlMsg.MotorCommand;
+import org.ros.message.sensor_msgs.Range;
 /**
- * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of the Robot listener is to
- * listen for messages that have the sensor data in our implementation is from
- * either Converter or from VirtualX80SVP it depends on the startup configuration.
+ * This is a simple rosjava {@link Subscriber} {@link Node}. 
+ * Basically this node is named so that it subscribes to the correct
+ * data ie IRLeft etc and so it will publish that way
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand> {
+public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 	private Node node;
 	// this is the Object that I use to publish my final motor command
 	private Publisher<MotorCommand> pubCmd;
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
-	private Map<Integer, ArrayList<MotorCommand>> inputCommands;
+	private Map<Integer, ArrayList<Range>> inputCommands;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 	
@@ -56,17 +56,13 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		//ParameterTreenode.newParameterTree();
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
-			numberInputs = 2;// IR and US
-			inputCommands = new TreeMap<Integer, ArrayList<MotorCommand>>();
+			numberInputs = 2;// Left and Right
+			inputCommands = new TreeMap<Integer, ArrayList<Range>>();
 			// publish to Motor_Command
 			pubCmd = node.newPublisher("Motor_Command", "MotorControlMsg/MotorCommand");
 			final Log log = node.getLog();
 			
-			// The job of this node is to provide to the MotorControler a linear and
-			// angular velocity such that the robot avoids obstacles.  It uses
-			// Braitenberg's agression behavior and motor fusion.
-			
-			
+			// Subscribe to USLeft and USRight
 			
 
 			
@@ -93,7 +89,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 
 
 	@Override
-	public void onNewMessage(MotorCommand message) {
+	public void onNewMessage(Range message) {
 		// TODO Auto-generated method stub
 		//combines US and IR into a single motor_cmd message
 		// that is published here
@@ -113,7 +109,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		else if (!inputCommands.containsKey(key))
 		{
 			// no key present so add it and the message
-			ArrayList<MotorCommand> newList = new ArrayList<MotorCommand>();
+			ArrayList<Range> newList = new ArrayList<Range>();
 			newList.add(message);
 			inputCommands.put(message.header.stamp.secs, newList);
 		}

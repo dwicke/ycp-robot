@@ -135,6 +135,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					IRRange.field_of_view = (float) sensorAngles.get(fieldName);
 					// need to set time stamp
 					IRRange.header.stamp = timeStamp;
+					
 					publisher.get(fieldName).publish(IRRange);
 				}
 				else if (fieldName.contains("ultrasonic"))
