@@ -111,13 +111,19 @@ public class UltrasonicSensor implements NodeMain, MessageListener<Range> {
 		else
 		{
 			//else if is equal to the max_range so must filter
-			// create a clone of a Range message
-			Range filtered = message.clone();
+			Range filtered = new Range();
+			filtered.header = message.header;
+			filtered.max_range = message.max_range;
+			filtered.min_range = message.min_range;
+			
 			
 			// so I set the filtered range to the smallest value
 			// the previous filtered range plus a delta
 			// or the max range
-			filtered.range = prevFilteredRange.range + RDelta;
+			if (prevFilteredRange != null)
+			{
+				filtered.range = prevFilteredRange.range + RDelta;
+			}
 			if (filtered.range > message.max_range)
 			{
 				filtered.range = message.max_range;

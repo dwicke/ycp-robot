@@ -76,7 +76,7 @@ public class Talker implements NodeMain {
     	  
     	  SensorData d = new SensorData();
     	  d.infrared_frontLeftCenter_distance = (float) 33.43;
-    	  d.ultrasonic_frontRight_distance = (byte) 44;
+    	  d.ultrasonic_frontRight_distance = (byte) 255;
     	  pubSense.publish(d);
     	  
     	  

@@ -17,6 +17,7 @@
 package main.java.org.ros.pubsub;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -47,29 +48,34 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 	private Map<Integer, ArrayList<MotorCommand>> inputCommands;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
-	
+
 	@Override
 	public void main(NodeConfiguration configuration) {
 		Preconditions.checkState(node == null);
-	    Preconditions.checkNotNull(configuration);
+		Preconditions.checkNotNull(configuration);
 		//ParameterTreenode.newParameterTree();
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
 			numberInputs = 2;// Left and right sensor motor control messages
 			inputCommands = new TreeMap<Integer, ArrayList<MotorCommand>>();
 			// TODO decide how I publish...
-			pubCmd = node.newPublisher("Motor_Command", "MotorControlMsg/MotorCommand");
+			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
 			final Log log = node.getLog();
-			
+
 			// The job of this node is to provide to the MotorControler a linear and
 			// angular velocity such that the robot avoids obstacles.  It uses
 			// Braitenberg's agression behavior and motor fusion.
-			
-			
-			// TODO must say who I subscribe to
 
-			
-			
+
+			// must say who I subscribe to.  So get my subscriptions from the Parameter server 
+			@SuppressWarnings("unchecked")
+			List<String> topics = (List<String>) node.newParameterTree().getList(node.getName() + "_subscriptions");
+			for (String topic : topics)
+			{
+				node.newSubscriber(topic, "MotorControlMsg/MotorCommand", this);
+			}
+
+
 		} catch (Exception e) {
 			if (node != null) {
 				node.getLog().fatal(e);
@@ -83,7 +89,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 
 
 	}
-	
+
 
 	@Override
 	public void shutdown() {
@@ -94,25 +100,25 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 	@Override
 	public void onNewMessage(MotorCommand message) {
 		// TODO Auto-generated method stub
-		
+
 		// Combine the left and the right sides to get the linear
 		// and the angular normalized velocity for this particular sensor
 		// which is defined by the name given it when created.
-		
-		
+
+
 		int key = message.header.stamp.secs;
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
 		{
 			// Has the key and there are enough keys
 			// all the input I need so get it and remove the key and publish
-			
+
 			MotorCommand mtrCmd = new MotorCommand();
-			
+
 			// So I need to combine the two sides
 			// add the left side to the right for the linear
 			// and subtract the left side from the right
 			// for the angular
-			
+
 			for (MotorCommand cmd: inputCommands.get(key))
 			{
 				// Might need to multiply by .5 so that I get Sum(w) and Sum(D(theta')*w) = 1
@@ -123,8 +129,8 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 					mtrCmd.angular_velocity -= cmd.angular_velocity;
 				}
 			}
-			
-			
+
+
 			inputCommands.remove(key);
 			// remember to set the FrameID of the header to that of
 			// either "ultrasonic" or "infrared" as in the yaml file
@@ -133,7 +139,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			mtrCmd.header.frame_id = node.getName().toString();
 			mtrCmd.header.stamp = node.getCurrentTime();
 			pubCmd.publish(mtrCmd);
-			
+
 		}
 		else if (!inputCommands.containsKey(key))
 		{
@@ -148,8 +154,8 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			// so add the message to the list
 			inputCommands.get(key).add(message);
 		}
-		
-		
+
+
 	}
 
 

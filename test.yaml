@@ -53,8 +53,18 @@ sigma_squared_linear: 0.5
 sigma_squared_angular: 1.0
 
 
+infrared_avoid_subscriptions:
+- left_IR_Motor_Command
+- right_IR_Motor_Command
 
+ultrasonic_avoid_subscriptions:
+- left_US_Motor_Command
+- right_US_Motor_Command
 
+obstacle_avoidance_subscriptions:
+- ultrasonic_avoid_Motor_Command
+- infrared_avoid_Motor_Command
 
+wheelbase: .08 # in cm
 
 

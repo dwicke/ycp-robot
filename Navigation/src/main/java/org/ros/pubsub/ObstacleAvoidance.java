@@ -17,6 +17,7 @@
 package main.java.org.ros.pubsub;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -54,12 +55,12 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 	private Map<String, Float> constants;
 	// max linear and angular velocities 
 	private double maxLinearVelocity, maxAngularVelocity;
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void main(NodeConfiguration configuration) {
 		Preconditions.checkState(node == null);
-	    Preconditions.checkNotNull(configuration);
+		Preconditions.checkNotNull(configuration);
 		//ParameterTreenode.newParameterTree();
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
@@ -72,15 +73,21 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			// publish to Motor_Command
 			pubCmd = node.newPublisher("Motor_Command", "MotorControlMsg/MotorCommand");
 			final Log log = node.getLog();
-			
+
 			// The job of this node is to provide to the MotorControler a linear and
 			// angular velocity such that the robot avoids obstacles.  It uses
 			// Braitenberg's Aggression behavior and motor fusion.
 			constants = (Map<String, Float>) node.newParameterTree().getMap("comb_const");
-			
-			// TODO must say who I subscribe to
-			
-			
+
+
+			// must say who I subscribe to.  So get my subscriptions from the Parameter server 
+			@SuppressWarnings("unchecked")
+			List<String> topics = (List<String>) node.newParameterTree().getList(node.getName() + "_subscriptions");
+			for (String topic : topics)
+			{
+				node.newSubscriber(topic, "MotorControlMsg/MotorCommand", this);
+			}
+
 		} catch (Exception e) {
 			if (node != null) {
 				node.getLog().fatal(e);
@@ -94,7 +101,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 
 
 	}
-	
+
 
 	@Override
 	public void shutdown() {
@@ -107,7 +114,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		// TODO Auto-generated method stub
 		//combines US and IR into a single motor_cmd message
 		// that is published here
-		
+
 		// if I get two messages with the same time stamp then I can
 		// assume that they are the IR and the US and move on
 		// this is not general.
@@ -116,8 +123,8 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		{
 			// Has the key and there are enough keys
 			// all the input I need so get it and remove the key
-			
-			
+
+
 			ArrayList<MotorCommand> cmds = inputCommands.get(key);
 			MotorCommand mtrCmd = new MotorCommand();
 			for (MotorCommand cmd: cmds)
@@ -131,15 +138,15 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 				mtrCmd.angular_velocity += cmd.angular_velocity * maxAngularVelocity * constants.get(mtrCmd.header.frame_id);
 				mtrCmd.linear_velocity  += cmd.linear_velocity * maxLinearVelocity * constants.get(mtrCmd.header.frame_id);
 			}
-			
-			
+
+
 			// and publish that
 			mtrCmd.precedence = 0;// highest priority
 			mtrCmd.header.frame_id = node.getName().toString();// name
 			mtrCmd.header.stamp = node.getCurrentTime();// time sent
 			// publish the motor command
 			pubCmd.publish(mtrCmd);
-			
+
 			inputCommands.remove(key);
 		}
 		else if (!inputCommands.containsKey(key))
@@ -155,8 +162,8 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			// so add the message to the list
 			inputCommands.get(key).add(message);
 		}
-		
-		
+
+
 	}
 
 

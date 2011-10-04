@@ -23,6 +23,7 @@ import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Subscriber;
+import org.ros.message.MotorControlMsg.MotorCommand;
 import org.ros.message.robot_msgs.*;
 
 /**
@@ -31,35 +32,19 @@ import org.ros.message.robot_msgs.*;
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class MotorControl implements NodeMain {
+public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 
 	private Node node;
-
+	private double wheelbase;
 	@Override
 	public void main(NodeConfiguration configuration) {
 
 
 		try {
 			node = new DefaultNodeFactory().newNode("listener", configuration);
-
+			wheelbase = node.newParameterTree().getDouble("wheelbase");
 			final Log log = node.getLog();
-			node.newSubscriber("MotorData", "robot_msgs/MotorData",
-					new MessageListener<MotorData>() {
-
-				@Override
-				public void onNewMessage(MotorData message) {
-					log.info("I heard: \"" + message.motor_left_velocity + "\"");
-					log.info("I heard: \"" + message.motor_left_velocity + "\"");
-
-					// Convert the message I heard into left and right wheel velocities
-					// VLeft = (2*(LINEAR_VELOCITY) + d(ANGULAR_VELOCITY)) / 2
-					// VRight = VLeft - d(ANGULAR_VELOCITY)
-					// where d is the wheel base of the robot
-
-
-
-				}
-			});
+			node.newSubscriber("MotorCommand", "MotorControlMsg/MotorCommand",this);
 		} catch (Exception e) {
 			if (node != null) {
 				node.getLog().fatal(e);
@@ -77,6 +62,21 @@ public class MotorControl implements NodeMain {
 	@Override
 	public void shutdown() {
 		node.shutdown();
+	}
+	
+	@Override
+	public void onNewMessage(MotorCommand message) {
+		//log.info("I heard: \"" + message.motor_left_velocity + "\"");
+		//log.info("I heard: \"" + message.motor_left_velocity + "\"");
+		MotorData newMsg = new MotorData();
+		// Convert the message I heard into left and right wheel velocities
+		// VLeft = (2*(LINEAR_VELOCITY) + d(ANGULAR_VELOCITY)) / 2
+		// VRight = VLeft - d(ANGULAR_VELOCITY)
+		// where d is the wheel base of the robot
+		newMsg.motor_left_velocity = (float) (2 * message.linear_velocity + (wheelbase * message.angular_velocity) / 2);
+		newMsg.motor_right_velocity = (float) (newMsg.motor_left_velocity - wheelbase * message.angular_velocity);
+
+
 	}
 
 }

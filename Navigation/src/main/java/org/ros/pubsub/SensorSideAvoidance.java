@@ -17,6 +17,7 @@
 package main.java.org.ros.pubsub;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -66,7 +67,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			// based on the name of this node
 			
 			@SuppressWarnings("unchecked")
-			ArrayList<String> topics = (ArrayList<String>) node.newParameterTree().getList(node.getName());
+			List<String> topics = (List<String>) node.newParameterTree().getList(node.getName());
 			numberInputs = topics.size();
 			// get the variance constants
 			linearVariance = node.newParameterTree().getDouble("sigma_squared_linear");
@@ -74,12 +75,16 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			// subscribe to the topics that I am supposed to based on who I am
 			for (String topic: topics)
 			{
-				node.newSubscriber(topic, "sensor_msgs/Range", this);
+				// I need the filtered data
+				node.newSubscriber(topic + "filtered", "sensor_msgs/Range", this);
 			}
+			
+			
+			// Must make the weights
 			
 			inputCommands = new TreeMap<Integer, ArrayList<Range>>();
 			// TODO Say name of topic
-			pubCmd = node.newPublisher(node.getName() + "Motor_Command", "MotorControlMsg/MotorCommand");
+			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
 			final Log log = node.getLog();
 			
 			
@@ -118,7 +123,16 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			// 
 			MotorCommand mtrCmd = new MotorCommand();
 			
-			
+			// get the range data
+			ArrayList<Range> ranges = inputCommands.get(key);
+			for (Range range : ranges)
+			{
+				// so now I can do the math
+				// the normal of the filtered range * linear_weight
+				double normalizedSensor = (range.range / range.max_range);
+			//	mtrCmd.linear_velocity += normalizedSensor * linearWeight
+				//mtrCmd.angular_velocity += (normalizedSensor * angularWeight)
+			}
 			
 			
 			inputCommands.remove(key);
