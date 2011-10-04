@@ -49,22 +49,39 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 	
+	// variance of function
+	private double linearVariance, angularVariance;
+	
+	
+	
 	@Override
 	public void main(NodeConfiguration configuration) {
 		Preconditions.checkState(node == null);
 	    Preconditions.checkNotNull(configuration);
 		//ParameterTreenode.newParameterTree();
 		try {
-			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
-			numberInputs = 2;// Left and Right
+			node = new DefaultNodeFactory().newNode("sensor_side_avoidance", configuration);
+			
+			// get the names of the topics by querying the parameter server
+			// based on the name of this node
+			
+			@SuppressWarnings("unchecked")
+			ArrayList<String> topics = (ArrayList<String>) node.newParameterTree().getList(node.getName());
+			numberInputs = topics.size();
+			// get the variance constants
+			linearVariance = node.newParameterTree().getDouble("sigma_squared_linear");
+			angularVariance = node.newParameterTree().getDouble("sigma_squared_angular");
+			// subscribe to the topics that I am supposed to based on who I am
+			for (String topic: topics)
+			{
+				node.newSubscriber(topic, "sensor_msgs/Range", this);
+			}
+			
 			inputCommands = new TreeMap<Integer, ArrayList<Range>>();
-			// publish to Motor_Command
-			pubCmd = node.newPublisher("Motor_Command", "MotorControlMsg/MotorCommand");
+			// TODO Say name of topic
+			pubCmd = node.newPublisher(node.getName() + "Motor_Command", "MotorControlMsg/MotorCommand");
 			final Log log = node.getLog();
 			
-			// Subscribe to USLeft and USRight
-			
-
 			
 			
 		} catch (Exception e) {
@@ -74,9 +91,6 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 				e.printStackTrace();
 			}
 		}
-
-
-
 
 
 	}
@@ -102,8 +116,13 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			// Has the key and there are enough keys
 			// all the input I need so get it and remove the key
 			// 
+			MotorCommand mtrCmd = new MotorCommand();
+			
+			
+			
 			
 			inputCommands.remove(key);
+			pubCmd.publish(mtrCmd);
 		}
 		else if (!inputCommands.containsKey(key))
 		{

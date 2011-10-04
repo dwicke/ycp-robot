@@ -55,9 +55,9 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		//ParameterTreenode.newParameterTree();
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
-			numberInputs = 2;// IR and US
+			numberInputs = 2;// Left and right sensor motor control messages
 			inputCommands = new TreeMap<Integer, ArrayList<MotorCommand>>();
-			// publish to Motor_Command
+			// TODO decide how I publish...
 			pubCmd = node.newPublisher("Motor_Command", "MotorControlMsg/MotorCommand");
 			final Log log = node.getLog();
 			
@@ -66,7 +66,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			// Braitenberg's agression behavior and motor fusion.
 			
 			
-			
+			// TODO must say who I subscribe to
 
 			
 			
@@ -99,17 +99,41 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		// and the angular normalized velocity for this particular sensor
 		// which is defined by the name given it when created.
 		
-		// if I get two messages with the same time stamp then I can
-		// assume that they are the IR and the US and move on
-		// this is not general.
+		
 		int key = message.header.stamp.secs;
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
 		{
 			// Has the key and there are enough keys
-			// all the input I need so get it and remove the key
+			// all the input I need so get it and remove the key and publish
+			
+			MotorCommand mtrCmd = new MotorCommand();
+			
+			// So I need to combine the two sides
+			// add the left side to the right for the linear
+			// and subtract the left side from the right
+			// for the angular
+			
+			for (MotorCommand cmd: inputCommands.get(key))
+			{
+				// Might need to multiply by .5 so that I get Sum(w) and Sum(D(theta')*w) = 1
+				// since I am going to be doing only the right or left sides...
+				mtrCmd.linear_velocity += cmd.linear_velocity;
+				if (cmd.header.frame_id.contains("left"))
+				{
+					mtrCmd.angular_velocity -= cmd.angular_velocity;
+				}
+			}
 			
 			
 			inputCommands.remove(key);
+			// remember to set the FrameID of the header to that of
+			// either "ultrasonic" or "infrared" as in the yaml file
+			// so that ObstacleAvoidance can get the appropriate constant
+			// to wait that type of info
+			mtrCmd.header.frame_id = node.getName().toString();
+			mtrCmd.header.stamp = node.getCurrentTime();
+			pubCmd.publish(mtrCmd);
+			
 		}
 		else if (!inputCommands.containsKey(key))
 		{

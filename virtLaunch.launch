@@ -25,6 +25,15 @@
 	<node name="infrared_rear_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
 	<node name="infrared_left_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
 	
+	<node name="obstacle_avoidance" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.ObstacleAvoidance" />
+	<node name="infrared_avoid" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.SensorAvoidance" />
+	<node name="ultrasonic_avoid" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.SensorAvoidance" />
+	
+	
+	<node name="left_IR" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.SensorSideAvoidance" />
+	<node name="right_IR" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.SensorSideAvoidance" />
+	<node name="left_US" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.SensorSideAvoidance" />
+	<node name="right_US" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.SensorSideAvoidance" />
 	
 	
 </launch>	 

@@ -42,3 +42,19 @@ left_US:
 right_US:
 - ultrasonic_frontCenter_distance
 - ultrasonic_frontRight_distance
+
+comb_const: {ultrasonic_avoid: 0.6, infrared_avoid: 0.4}
+
+MAX_ANGULAR_VELOCITY: 0.75 # meters per second
+MAX_LINEAR_VELOCITY: 0.75  # meters per second
+
+# variance in the gaussian function used for obstacle avoidance
+sigma_squared_linear: 0.5 
+sigma_squared_angular: 1.0
+
+
+
+
+
+
+

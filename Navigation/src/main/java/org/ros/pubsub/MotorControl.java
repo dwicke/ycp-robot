@@ -26,51 +26,57 @@ import org.ros.node.topic.Subscriber;
 import org.ros.message.robot_msgs.*;
 
 /**
- * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of the Robot listener is to
- * listen for messages that have the sensor data in our implementation is from
- * either Converter or from VirtualX80SVP it depends on the startup configuration.
+ * This is a simple rosjava {@link Subscriber} {@link Node}. 
+ * I accept a 
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
 public class MotorControl implements NodeMain {
 
-  private Node node;
+	private Node node;
 
-  @Override
-  public void main(NodeConfiguration configuration) {
-	  
-	  
-    try {
-      node = new DefaultNodeFactory().newNode("listener", configuration);
-      
-      final Log log = node.getLog();
-      node.newSubscriber("MotorData", "robot_msgs/MotorData",
-          new MessageListener<MotorData>() {
-    	  
-            @Override
-            public void onNewMessage(MotorData message) {
-              log.info("I heard: \"" + message.motor_left_velocity + "\"");
-              log.info("I am " + node.getName() + "\n");
-            }
-          });
-    } catch (Exception e) {
-      if (node != null) {
-        node.getLog().fatal(e);
-      } else {
-        e.printStackTrace();
-      }
-    }
-    
-    
-    
-    
-    
-  }
+	@Override
+	public void main(NodeConfiguration configuration) {
 
-  @Override
-  public void shutdown() {
-    node.shutdown();
-  }
+
+		try {
+			node = new DefaultNodeFactory().newNode("listener", configuration);
+
+			final Log log = node.getLog();
+			node.newSubscriber("MotorData", "robot_msgs/MotorData",
+					new MessageListener<MotorData>() {
+
+				@Override
+				public void onNewMessage(MotorData message) {
+					log.info("I heard: \"" + message.motor_left_velocity + "\"");
+					log.info("I heard: \"" + message.motor_left_velocity + "\"");
+
+					// Convert the message I heard into left and right wheel velocities
+					// VLeft = (2*(LINEAR_VELOCITY) + d(ANGULAR_VELOCITY)) / 2
+					// VRight = VLeft - d(ANGULAR_VELOCITY)
+					// where d is the wheel base of the robot
+
+
+
+				}
+			});
+		} catch (Exception e) {
+			if (node != null) {
+				node.getLog().fatal(e);
+			} else {
+				e.printStackTrace();
+			}
+		}
+
+
+
+
+
+	}
+
+	@Override
+	public void shutdown() {
+		node.shutdown();
+	}
 
 }
