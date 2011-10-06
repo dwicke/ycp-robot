@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cojabo/ros_workspace/nav
+CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/nav
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cojabo/ros_workspace/nav/build
+CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/nav/build
 
 # Utility rule file for tests.
 
@@ -54,6 +54,6 @@ CMakeFiles/tests.dir/clean:
 .PHONY : CMakeFiles/tests.dir/clean
 
 CMakeFiles/tests.dir/depend:
-	cd /home/cojabo/ros_workspace/nav/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cojabo/ros_workspace/nav /home/cojabo/ros_workspace/nav /home/cojabo/ros_workspace/nav/build /home/cojabo/ros_workspace/nav/build /home/cojabo/ros_workspace/nav/build/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/drew/git/ycp-robot/nav/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/nav /home/drew/git/ycp-robot/nav /home/drew/git/ycp-robot/nav/build /home/drew/git/ycp-robot/nav/build /home/drew/git/ycp-robot/nav/build/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/tests.dir/depend
 

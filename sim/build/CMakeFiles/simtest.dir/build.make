@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cojabo/ros_workspace/sim
+CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/sim
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cojabo/ros_workspace/sim/build
+CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/sim/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/simtest.dir/depend.make
@@ -62,23 +62,23 @@ CMakeFiles/simtest.dir/src/simtest.o: /opt/ros/electric/stacks/ros_comm/utilitie
 CMakeFiles/simtest.dir/src/simtest.o: /opt/ros/electric/stacks/ros_comm/tools/rosconsole/manifest.xml
 CMakeFiles/simtest.dir/src/simtest.o: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/manifest.xml
 CMakeFiles/simtest.dir/src/simtest.o: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/manifest.xml
-CMakeFiles/simtest.dir/src/simtest.o: /home/cojabo/ros_workspace/robot_msgs/manifest.xml
+CMakeFiles/simtest.dir/src/simtest.o: /home/drew/git/ycp-robot/robot_msgs/manifest.xml
 CMakeFiles/simtest.dir/src/simtest.o: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/generated
 CMakeFiles/simtest.dir/src/simtest.o: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
 CMakeFiles/simtest.dir/src/simtest.o: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
 CMakeFiles/simtest.dir/src/simtest.o: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
-CMakeFiles/simtest.dir/src/simtest.o: /home/cojabo/ros_workspace/robot_msgs/msg_gen/generated
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/cojabo/ros_workspace/sim/build/CMakeFiles $(CMAKE_PROGRESS_1)
+CMakeFiles/simtest.dir/src/simtest.o: /home/drew/git/ycp-robot/robot_msgs/msg_gen/generated
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/drew/git/ycp-robot/sim/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/simtest.dir/src/simtest.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/simtest.dir/src/simtest.o -c /home/cojabo/ros_workspace/sim/src/simtest.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/simtest.dir/src/simtest.o -c /home/drew/git/ycp-robot/sim/src/simtest.cpp
 
 CMakeFiles/simtest.dir/src/simtest.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/simtest.dir/src/simtest.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/cojabo/ros_workspace/sim/src/simtest.cpp > CMakeFiles/simtest.dir/src/simtest.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/drew/git/ycp-robot/sim/src/simtest.cpp > CMakeFiles/simtest.dir/src/simtest.i
 
 CMakeFiles/simtest.dir/src/simtest.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/simtest.dir/src/simtest.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/cojabo/ros_workspace/sim/src/simtest.cpp -o CMakeFiles/simtest.dir/src/simtest.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/drew/git/ycp-robot/sim/src/simtest.cpp -o CMakeFiles/simtest.dir/src/simtest.s
 
 CMakeFiles/simtest.dir/src/simtest.o.requires:
 .PHONY : CMakeFiles/simtest.dir/src/simtest.o.requires
@@ -115,6 +115,6 @@ CMakeFiles/simtest.dir/clean:
 .PHONY : CMakeFiles/simtest.dir/clean
 
 CMakeFiles/simtest.dir/depend:
-	cd /home/cojabo/ros_workspace/sim/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cojabo/ros_workspace/sim /home/cojabo/ros_workspace/sim /home/cojabo/ros_workspace/sim/build /home/cojabo/ros_workspace/sim/build /home/cojabo/ros_workspace/sim/build/CMakeFiles/simtest.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/drew/git/ycp-robot/sim/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/sim /home/drew/git/ycp-robot/sim /home/drew/git/ycp-robot/sim/build /home/drew/git/ycp-robot/sim/build /home/drew/git/ycp-robot/sim/build/CMakeFiles/simtest.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/simtest.dir/depend
 

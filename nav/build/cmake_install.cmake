@@ -1,4 +1,4 @@
-# Install script for directory: /home/cojabo/ros_workspace/nav
+# Install script for directory: /home/drew/git/ycp-robot/nav
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,7 +38,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/home/cojabo/ros_workspace/nav/build/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/home/drew/git/ycp-robot/nav/build/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/home/cojabo/ros_workspace/nav/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/home/drew/git/ycp-robot/nav/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)

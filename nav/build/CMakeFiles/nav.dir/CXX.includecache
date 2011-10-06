@@ -6,15 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/home/cojabo/ros_workspace/nav/src/nav.cpp
+/home/drew/git/ycp-robot/nav/src/nav.cpp
 ros/ros.h
-/home/cojabo/ros_workspace/nav/src/ros/ros.h
+/home/drew/git/ycp-robot/nav/src/ros/ros.h
 robot_msgs/SensorData.h
-/home/cojabo/ros_workspace/nav/src/robot_msgs/SensorData.h
+/home/drew/git/ycp-robot/nav/src/robot_msgs/SensorData.h
 robot_msgs/MotorData.h
-/home/cojabo/ros_workspace/nav/src/robot_msgs/MotorData.h
+/home/drew/git/ycp-robot/nav/src/robot_msgs/MotorData.h
 
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/MotorData.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/MotorData.h
 string
 -
 vector
@@ -24,19 +24,19 @@ map
 ostream
 -
 ros/serialization.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/serialization.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/serialization.h
 ros/builtin_message_traits.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/builtin_message_traits.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/builtin_message_traits.h
 ros/message_operations.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/message_operations.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/message_operations.h
 ros/time.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/time.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/time.h
 ros/macros.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/macros.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/macros.h
 ros/assert.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/assert.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/assert.h
 
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/SensorData.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/SensorData.h
 string
 -
 vector
@@ -46,17 +46,17 @@ map
 ostream
 -
 ros/serialization.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/serialization.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/serialization.h
 ros/builtin_message_traits.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/builtin_message_traits.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/builtin_message_traits.h
 ros/message_operations.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/message_operations.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/message_operations.h
 ros/time.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/time.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/time.h
 ros/macros.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/macros.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/macros.h
 ros/assert.h
-/home/cojabo/ros_workspace/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/assert.h
+/home/drew/git/ycp-robot/robot_msgs/msg_gen/cpp/include/robot_msgs/ros/assert.h
 
 /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/include/ros/advertise_options.h
 ros/forwards.h

@@ -22,6 +22,7 @@ import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
+import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 import org.ros.message.MotorControlMsg.MotorCommand;
 import org.ros.message.robot_msgs.*;
@@ -36,6 +37,7 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 
 	private Node node;
 	private double wheelbase;
+	private Publisher<MotorData> motorData;
 	@Override
 	public void main(NodeConfiguration configuration) {
 
@@ -44,6 +46,7 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 			node = new DefaultNodeFactory().newNode("listener", configuration);
 			wheelbase = node.newParameterTree().getDouble("wheelbase");
 			final Log log = node.getLog();
+			motorData = node.newPublisher("motordata", "robot_msgs/MotorData");
 			node.newSubscriber("MotorCommand", "MotorControlMsg/MotorCommand",this);
 		} catch (Exception e) {
 			if (node != null) {
@@ -75,8 +78,9 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 		// where d is the wheel base of the robot
 		newMsg.motor_left_velocity = (float) (2 * message.linear_velocity + (wheelbase * message.angular_velocity) / 2);
 		newMsg.motor_right_velocity = (float) (newMsg.motor_left_velocity - wheelbase * message.angular_velocity);
-
-
+		newMsg.motor_left_time = 55;// based on nav.cpp 1100 is one second  so send it for 1/20 s
+		newMsg.motor_right_time = 55;// change later if to slow.
+		motorData.publish(newMsg);
 	}
 
 }

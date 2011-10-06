@@ -53,7 +53,7 @@ void nav(int il,int ir,int &sl,int &sr)
 {
 	st=st+(4-((il+ir)*2))*2;
 	
-	//Object avoidence is repeatedly cycling left/right- most likely stuck in a corner
+	//Object avoidance is repeatedly cycling left/right- most likely stuck in a corner
 	if( st>=STUCK)
 	{
 		ROS_INFO("Stuck! Turning...");
@@ -182,7 +182,7 @@ void sensordataCallback(const robot_msgs::SensorData::ConstPtr& msg)
 	dc++;
 #endif
 	
-	//Determine is there is an object to the left and/or right
+	//Determine if there is an object to the left and/or right
 	int il=(dl/dc)>=SEE_THRESH,
 		ir=(dr/dc)>=SEE_THRESH,
 		sl=0,sr=0;

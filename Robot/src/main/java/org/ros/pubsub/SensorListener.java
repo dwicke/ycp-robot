@@ -86,7 +86,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 				publisher.put(fields[i].getName(), pub);
 			}
 			
-			node.newSubscriber("SensorData", "robot_msgs/SensorData", this);
+			node.newSubscriber("sensordata", "robot_msgs/SensorData", this);
 			
 		} catch (Exception e) {
 			if (node != null) {

@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cojabo/ros_workspace/sim
+CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/sim
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cojabo/ros_workspace/sim/build
+CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/sim/build
 
 # Utility rule file for test-future.
 
@@ -54,6 +54,6 @@ CMakeFiles/test-future.dir/clean:
 .PHONY : CMakeFiles/test-future.dir/clean
 
 CMakeFiles/test-future.dir/depend:
-	cd /home/cojabo/ros_workspace/sim/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cojabo/ros_workspace/sim /home/cojabo/ros_workspace/sim /home/cojabo/ros_workspace/sim/build /home/cojabo/ros_workspace/sim/build /home/cojabo/ros_workspace/sim/build/CMakeFiles/test-future.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/drew/git/ycp-robot/sim/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/sim /home/drew/git/ycp-robot/sim /home/drew/git/ycp-robot/sim/build /home/drew/git/ycp-robot/sim/build /home/drew/git/ycp-robot/sim/build/CMakeFiles/test-future.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/test-future.dir/depend
 
