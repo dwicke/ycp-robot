@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/robot_msgs
+CMAKE_SOURCE_DIR = /home/dwicke/git/ycp-robot/robot_msgs
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/robot_msgs/build
+CMAKE_BINARY_DIR = /home/dwicke/git/ycp-robot/robot_msgs/build
 
 # Utility rule file for rospack_genmsg.
 
@@ -54,6 +54,6 @@ CMakeFiles/rospack_genmsg.dir/clean:
 .PHONY : CMakeFiles/rospack_genmsg.dir/clean
 
 CMakeFiles/rospack_genmsg.dir/depend:
-	cd /home/drew/git/ycp-robot/robot_msgs/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/robot_msgs /home/drew/git/ycp-robot/robot_msgs /home/drew/git/ycp-robot/robot_msgs/build /home/drew/git/ycp-robot/robot_msgs/build /home/drew/git/ycp-robot/robot_msgs/build/CMakeFiles/rospack_genmsg.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/dwicke/git/ycp-robot/robot_msgs/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dwicke/git/ycp-robot/robot_msgs /home/dwicke/git/ycp-robot/robot_msgs /home/dwicke/git/ycp-robot/robot_msgs/build /home/dwicke/git/ycp-robot/robot_msgs/build /home/dwicke/git/ycp-robot/robot_msgs/build/CMakeFiles/rospack_genmsg.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/rospack_genmsg.dir/depend
 

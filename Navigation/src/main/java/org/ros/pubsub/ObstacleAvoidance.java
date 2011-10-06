@@ -52,7 +52,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 	// the incoming data by.
 	// private M These values I can get from the parameter sever
 	// since they are constant.
-	private Map<String, Float> constants;
+	private Map<String, Double> constants;
 	// max linear and angular velocities 
 	private double maxLinearVelocity, maxAngularVelocity;
 
@@ -77,8 +77,14 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			// The job of this node is to provide to the MotorControler a linear and
 			// angular velocity such that the robot avoids obstacles.  It uses
 			// Braitenberg's Aggression behavior and motor fusion.
-			constants = (Map<String, Float>) node.newParameterTree().getMap("comb_const");
-
+			// These constants sum to 1 and provide the percentage that each sensor type contributes to the final
+			// motorcommand
+			constants = (Map<String, Double>) node.newParameterTree().getMap("comb_const");
+			if (constants == null)
+			{
+				log.info("Constants was null");
+				
+			}
 
 			// must say who I subscribe to.  So get my subscriptions from the Parameter server 
 			@SuppressWarnings("unchecked")
@@ -118,7 +124,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		// if I get two messages with the same time stamp then I can
 		// assume that they are the IR and the US and move on
 		// this is not general.
-		int key = message.header.stamp.secs;
+		int key = message.header.stamp.nsecs;
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
 		{
 			// Has the key and there are enough keys
@@ -154,7 +160,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			// no key present so add it and the message
 			ArrayList<MotorCommand> newList = new ArrayList<MotorCommand>();
 			newList.add(message);
-			inputCommands.put(message.header.stamp.secs, newList);
+			inputCommands.put(key, newList);
 		}
 		else
 		{

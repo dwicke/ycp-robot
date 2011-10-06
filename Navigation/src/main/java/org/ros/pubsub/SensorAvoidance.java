@@ -106,7 +106,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		// which is defined by the name given it when created.
 
 
-		int key = message.header.stamp.secs;
+		int key = message.header.stamp.nsecs;
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
 		{
 			// Has the key and there are enough keys
@@ -146,7 +146,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			// no key present so add it and the message
 			ArrayList<MotorCommand> newList = new ArrayList<MotorCommand>();
 			newList.add(message);
-			inputCommands.put(message.header.stamp.secs, newList);
+			inputCommands.put(key, newList);
 		}
 		else
 		{

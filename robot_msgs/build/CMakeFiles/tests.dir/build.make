@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/robot_msgs
+CMAKE_SOURCE_DIR = /home/dwicke/git/ycp-robot/robot_msgs
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/robot_msgs/build
+CMAKE_BINARY_DIR = /home/dwicke/git/ycp-robot/robot_msgs/build
 
 # Utility rule file for tests.
 
@@ -54,6 +54,6 @@ CMakeFiles/tests.dir/clean:
 .PHONY : CMakeFiles/tests.dir/clean
 
 CMakeFiles/tests.dir/depend:
-	cd /home/drew/git/ycp-robot/robot_msgs/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/robot_msgs /home/drew/git/ycp-robot/robot_msgs /home/drew/git/ycp-robot/robot_msgs/build /home/drew/git/ycp-robot/robot_msgs/build /home/drew/git/ycp-robot/robot_msgs/build/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/dwicke/git/ycp-robot/robot_msgs/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dwicke/git/ycp-robot/robot_msgs /home/dwicke/git/ycp-robot/robot_msgs /home/dwicke/git/ycp-robot/robot_msgs/build /home/dwicke/git/ycp-robot/robot_msgs/build /home/dwicke/git/ycp-robot/robot_msgs/build/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/tests.dir/depend
 

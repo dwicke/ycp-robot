@@ -49,46 +49,62 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 	private Map<Integer, ArrayList<Range>> inputCommands;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
-	
+
 	// variance of function
 	private double linearVariance, angularVariance;
-	
-	
-	
+	private Log log;
+
+
 	@Override
 	public void main(NodeConfiguration configuration) {
 		Preconditions.checkState(node == null);
-	    Preconditions.checkNotNull(configuration);
+		Preconditions.checkNotNull(configuration);
 		//ParameterTreenode.newParameterTree();
 		try {
 			node = new DefaultNodeFactory().newNode("sensor_side_avoidance", configuration);
-			
+
 			// get the names of the topics by querying the parameter server
 			// based on the name of this node
-			
+
 			@SuppressWarnings("unchecked")
 			List<String> topics = (List<String>) node.newParameterTree().getList(node.getName());
 			numberInputs = topics.size();
 			// get the variance constants
 			linearVariance = node.newParameterTree().getDouble("sigma_squared_linear");
 			angularVariance = node.newParameterTree().getDouble("sigma_squared_angular");
+
+			// Make the data structure to hold the messages that I recieve.
+			// the key is the time stamp of the message.  For each time stamp
+			// I have a list of Range objects for each of the sensors.
+			inputCommands = new TreeMap<Integer, ArrayList<Range>>();
+
+
+			// Say name of topic ie. left_IR_Motor_Command
+			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
+			log = node.getLog();
+
 			// subscribe to the topics that I am supposed to based on who I am
+			// such as all of the left IR filtered sensor data
 			for (String topic: topics)
 			{
 				// I need the filtered data
 				node.newSubscriber(topic + "filtered", "sensor_msgs/Range", this);
 			}
-			
-			
-			// Must make the weights
-			
-			inputCommands = new TreeMap<Integer, ArrayList<Range>>();
-			// TODO Say name of topic
-			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
-			final Log log = node.getLog();
-			
-			
-			
+
+
+			// Must make the weights for each of the sensors as per the algorithm
+
+
+
+
+
+
+
+
+
+
+
+
 		} catch (Exception e) {
 			if (node != null) {
 				node.getLog().fatal(e);
@@ -99,7 +115,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 
 	}
-	
+
 
 	@Override
 	public void shutdown() {
@@ -109,20 +125,23 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 	@Override
 	public void onNewMessage(Range message) {
-		// TODO Auto-generated method stub
 
 		// Gets the range messages from the Left or right depending on name of this node
-		// and when I get all of the messages I do math to get the value for that side.
+		// and when I get all of the messages I do math based on algorithm to get the value for that side.
+
+
+		int key = message.header.stamp.nsecs;
+		
+		log.info("From: " + message.header.frame_id + " to: " + node.getName() + ":  " + key);
 		
 		
-		int key = message.header.stamp.secs;
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
 		{
 			// Has the key and there are enough keys
 			// all the input I need so get it and remove the key
 			// 
 			MotorCommand mtrCmd = new MotorCommand();
-			
+
 			// get the range data
 			ArrayList<Range> ranges = inputCommands.get(key);
 			for (Range range : ranges)
@@ -130,11 +149,13 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 				// so now I can do the math
 				// the normal of the filtered range * linear_weight
 				double normalizedSensor = (range.range / range.max_range);
-			//	mtrCmd.linear_velocity += normalizedSensor * linearWeight
+				//	mtrCmd.linear_velocity += normalizedSensor * linearWeight
 				//mtrCmd.angular_velocity += (normalizedSensor * angularWeight)
 			}
 			
-			
+			mtrCmd.header.frame_id = node.getName().toString();
+			mtrCmd.header.stamp = node.getCurrentTime();
+
 			inputCommands.remove(key);
 			pubCmd.publish(mtrCmd);
 		}
@@ -143,7 +164,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			// no key present so add it and the message
 			ArrayList<Range> newList = new ArrayList<Range>();
 			newList.add(message);
-			inputCommands.put(message.header.stamp.secs, newList);
+			inputCommands.put(key, newList);
 		}
 		else
 		{
@@ -151,8 +172,8 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			// so add the message to the list
 			inputCommands.get(key).add(message);
 		}
-		
-		
+
+
 	}
 
 

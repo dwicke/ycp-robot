@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/nav
+CMAKE_SOURCE_DIR = /home/dwicke/git/ycp-robot/nav
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/nav/build
+CMAKE_BINARY_DIR = /home/dwicke/git/ycp-robot/nav/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/nav.dir/depend.make
@@ -62,23 +62,23 @@ CMakeFiles/nav.dir/src/nav.o: /opt/ros/electric/stacks/ros_comm/utilities/xmlrpc
 CMakeFiles/nav.dir/src/nav.o: /opt/ros/electric/stacks/ros_comm/tools/rosconsole/manifest.xml
 CMakeFiles/nav.dir/src/nav.o: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/manifest.xml
 CMakeFiles/nav.dir/src/nav.o: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/manifest.xml
-CMakeFiles/nav.dir/src/nav.o: /home/drew/git/ycp-robot/robot_msgs/manifest.xml
+CMakeFiles/nav.dir/src/nav.o: /home/dwicke/git/ycp-robot/robot_msgs/manifest.xml
 CMakeFiles/nav.dir/src/nav.o: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/generated
 CMakeFiles/nav.dir/src/nav.o: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
 CMakeFiles/nav.dir/src/nav.o: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
 CMakeFiles/nav.dir/src/nav.o: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
-CMakeFiles/nav.dir/src/nav.o: /home/drew/git/ycp-robot/robot_msgs/msg_gen/generated
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/drew/git/ycp-robot/nav/build/CMakeFiles $(CMAKE_PROGRESS_1)
+CMakeFiles/nav.dir/src/nav.o: /home/dwicke/git/ycp-robot/robot_msgs/msg_gen/generated
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dwicke/git/ycp-robot/nav/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/nav.dir/src/nav.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/nav.dir/src/nav.o -c /home/drew/git/ycp-robot/nav/src/nav.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/nav.dir/src/nav.o -c /home/dwicke/git/ycp-robot/nav/src/nav.cpp
 
 CMakeFiles/nav.dir/src/nav.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nav.dir/src/nav.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/drew/git/ycp-robot/nav/src/nav.cpp > CMakeFiles/nav.dir/src/nav.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/dwicke/git/ycp-robot/nav/src/nav.cpp > CMakeFiles/nav.dir/src/nav.i
 
 CMakeFiles/nav.dir/src/nav.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nav.dir/src/nav.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/drew/git/ycp-robot/nav/src/nav.cpp -o CMakeFiles/nav.dir/src/nav.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/dwicke/git/ycp-robot/nav/src/nav.cpp -o CMakeFiles/nav.dir/src/nav.s
 
 CMakeFiles/nav.dir/src/nav.o.requires:
 .PHONY : CMakeFiles/nav.dir/src/nav.o.requires
@@ -115,6 +115,6 @@ CMakeFiles/nav.dir/clean:
 .PHONY : CMakeFiles/nav.dir/clean
 
 CMakeFiles/nav.dir/depend:
-	cd /home/drew/git/ycp-robot/nav/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/nav /home/drew/git/ycp-robot/nav /home/drew/git/ycp-robot/nav/build /home/drew/git/ycp-robot/nav/build /home/drew/git/ycp-robot/nav/build/CMakeFiles/nav.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/dwicke/git/ycp-robot/nav/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dwicke/git/ycp-robot/nav /home/dwicke/git/ycp-robot/nav /home/dwicke/git/ycp-robot/nav/build /home/dwicke/git/ycp-robot/nav/build /home/dwicke/git/ycp-robot/nav/build/CMakeFiles/nav.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/nav.dir/depend
 

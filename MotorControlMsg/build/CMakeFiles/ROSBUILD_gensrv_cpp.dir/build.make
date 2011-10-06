@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/drew/git/ycp-robot/MotorControlMsg
+CMAKE_SOURCE_DIR = /home/dwicke/git/ycp-robot/MotorControlMsg
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/drew/git/ycp-robot/MotorControlMsg/build
+CMAKE_BINARY_DIR = /home/dwicke/git/ycp-robot/MotorControlMsg/build
 
 # Utility rule file for ROSBUILD_gensrv_cpp.
 
@@ -54,6 +54,6 @@ CMakeFiles/ROSBUILD_gensrv_cpp.dir/clean:
 .PHONY : CMakeFiles/ROSBUILD_gensrv_cpp.dir/clean
 
 CMakeFiles/ROSBUILD_gensrv_cpp.dir/depend:
-	cd /home/drew/git/ycp-robot/MotorControlMsg/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/drew/git/ycp-robot/MotorControlMsg /home/drew/git/ycp-robot/MotorControlMsg /home/drew/git/ycp-robot/MotorControlMsg/build /home/drew/git/ycp-robot/MotorControlMsg/build /home/drew/git/ycp-robot/MotorControlMsg/build/CMakeFiles/ROSBUILD_gensrv_cpp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/dwicke/git/ycp-robot/MotorControlMsg/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dwicke/git/ycp-robot/MotorControlMsg /home/dwicke/git/ycp-robot/MotorControlMsg /home/dwicke/git/ycp-robot/MotorControlMsg/build /home/dwicke/git/ycp-robot/MotorControlMsg/build /home/dwicke/git/ycp-robot/MotorControlMsg/build/CMakeFiles/ROSBUILD_gensrv_cpp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ROSBUILD_gensrv_cpp.dir/depend
 
