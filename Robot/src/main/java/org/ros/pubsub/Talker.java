@@ -20,6 +20,7 @@ import java.util.TreeMap;
 
 import com.google.common.base.Preconditions;
 
+import org.apache.commons.logging.Log;
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
@@ -39,7 +40,7 @@ import org.ros.message.sensor_msgs.Range;
 public class Talker implements NodeMain {
 
   private Node node;
-  
+	private Log log;
 
   @Override
   public void main(NodeConfiguration configuration) {
@@ -56,16 +57,16 @@ public class Talker implements NodeMain {
       tr.set("test", t);
       
       
+      log = node.getLog();
       
       
       
       
       
+     // Publisher<MotorData> publisher =
+    //      node.newPublisher("MotorData", "robot_msgs/MotorData");
       
-      Publisher<MotorData> publisher =
-          node.newPublisher("MotorData", "robot_msgs/MotorData");
-      
-      Publisher<SensorData> pubSense = node.newPublisher("SensorData", "robot_msgs/SensorData");
+      Publisher<SensorData> pubSense = node.newPublisher("sensordata", "robot_msgs/SensorData");
       
       int seq = 0;
       while (true) {
@@ -75,13 +76,13 @@ public class Talker implements NodeMain {
     	  motorMessage.motor_left_velocity = (float) 3.3;
     	  
     	  SensorData d = new SensorData();
-    	  d.infrared_frontLeftCenter_distance = (float) 33.43;
+    	  d.infrared_frontLeftLeft_distance = (float) 33.43;
     	  d.ultrasonic_frontRight_distance = (byte) 255;
     	  pubSense.publish(d);
-    	  
+    	  log.info("Published SensorData");
     	  
     	  seq += 1;
-        publisher.publish(motorMessage);
+        //publisher.publish(motorMessage);
         Thread.sleep(1000);
       }
     } catch (Exception e) {

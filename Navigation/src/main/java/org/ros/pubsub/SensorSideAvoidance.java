@@ -46,7 +46,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 	private Publisher<MotorCommand> pubCmd;
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
-	private Map<Integer, ArrayList<Range>> inputCommands;
+	private Map<Long, ArrayList<Range>> inputCommands;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 
@@ -76,7 +76,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			// Make the data structure to hold the messages that I recieve.
 			// the key is the time stamp of the message.  For each time stamp
 			// I have a list of Range objects for each of the sensors.
-			inputCommands = new TreeMap<Integer, ArrayList<Range>>();
+			inputCommands = new TreeMap<Long, ArrayList<Range>>();
 
 
 			// Say name of topic ie. left_IR_Motor_Command
@@ -93,13 +93,6 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 
 			// Must make the weights for each of the sensors as per the algorithm
-
-
-
-
-
-
-
 
 
 
@@ -130,9 +123,9 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 		// and when I get all of the messages I do math based on algorithm to get the value for that side.
 
 
-		int key = message.header.stamp.nsecs;
-		
-		log.info("From: " + message.header.frame_id + " to: " + node.getName() + ":  " + key);
+		long key = message.header.seq;
+	//	log.info("Key: " + key);
+		//log.info("From: " + message.header.frame_id + " to: " + node.getName() + ":  " + key);
 		
 		
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
@@ -155,7 +148,8 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			
 			mtrCmd.header.frame_id = node.getName().toString();
 			mtrCmd.header.stamp = node.getCurrentTime();
-
+			mtrCmd.header.seq = key;
+					
 			inputCommands.remove(key);
 			pubCmd.publish(mtrCmd);
 		}

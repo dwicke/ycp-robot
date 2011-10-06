@@ -45,7 +45,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 	private Publisher<MotorCommand> pubCmd;
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
-	private Map<Integer, ArrayList<MotorCommand>> inputCommands;
+	private Map<Long, ArrayList<MotorCommand>> inputCommands;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 	// This Map is the array of K values that I multiply
@@ -65,7 +65,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
 			numberInputs = 2;// IR and US think of moving to parameter server.
-			inputCommands = new TreeMap<Integer, ArrayList<MotorCommand>>();
+			inputCommands = new TreeMap<Long, ArrayList<MotorCommand>>();
 			// get the max linear and angular velocity so that I can later compute the
 			// real velocities from the normalized velocities.
 			maxLinearVelocity = node.newParameterTree().getDouble("MAX_LINEAR_VELOCITY");
@@ -124,7 +124,8 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		// if I get two messages with the same time stamp then I can
 		// assume that they are the IR and the US and move on
 		// this is not general.
-		int key = message.header.stamp.nsecs;
+		//int key = message.header.stamp.nsecs;
+		long key = message.header.seq;
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
 		{
 			// Has the key and there are enough keys

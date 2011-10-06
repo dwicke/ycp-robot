@@ -50,9 +50,12 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 
 	private Node node;
 	private Log log;
+	// this is so I know if I should print debug info
+	private Boolean debug;
 	
 	private Map<String, Publisher<Range> > publisher;
 	private Map<String, Integer> sensorAngles;
+	private long count;
 	
 	@Override
 	public void main(NodeConfiguration configuration) {
@@ -64,7 +67,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 			
 			log = node.getLog();
 			publisher = new TreeMap<String, Publisher<Range>>();
-			
+			count = 0;
 			
 			Field[] fields = SensorData.class.getDeclaredFields();
 			// Loop through all the fields and extract the name of the field
@@ -102,6 +105,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void publishData(SensorData message)
 	{
 		// so go through and publish data based on names
@@ -131,6 +135,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					IRRange.range = (float) (rangeData * .01);
 					// name it the same as the sensor
 					IRRange.header.frame_id = fieldName;
+					IRRange.header.seq = count;
 					// this is the angle theta the sensor is located on the bot
 					IRRange.field_of_view = (float) sensorAngles.get(fieldName);
 					// need to set time stamp
@@ -149,6 +154,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					USRange.range = (float) ((float) rangeData * .01);
 					// name it the same as the sensor
 					USRange.header.frame_id = fieldName;
+					USRange.header.seq = count;
 					// this is the angle theta the sensor is located on the bot
 					USRange.field_of_view = (float) sensorAngles.get(fieldName);
 					// need to set time stamp
@@ -192,6 +198,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 		// Ok so I heard the sensor data so publish the data in ROS format
 		// to the specific topics
 		publishData(message);
+		count++;
 		
 	}
 

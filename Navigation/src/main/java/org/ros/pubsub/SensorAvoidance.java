@@ -45,7 +45,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 	private Publisher<MotorCommand> pubCmd;
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
-	private Map<Integer, ArrayList<MotorCommand>> inputCommands;
+	private Map<Long, ArrayList<MotorCommand>> inputCommands;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 
@@ -57,7 +57,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
 			numberInputs = 2;// Left and right sensor motor control messages
-			inputCommands = new TreeMap<Integer, ArrayList<MotorCommand>>();
+			inputCommands = new TreeMap<Long, ArrayList<MotorCommand>>();
 			// TODO decide how I publish...
 			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
 			final Log log = node.getLog();
@@ -106,7 +106,9 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		// which is defined by the name given it when created.
 
 
-		int key = message.header.stamp.nsecs;
+	//	int key = message.header.stamp.nsecs;
+		long key = message.header.seq;
+		
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
 		{
 			// Has the key and there are enough keys
@@ -133,11 +135,12 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 
 			inputCommands.remove(key);
 			// remember to set the FrameID of the header to that of
-			// either "ultrasonic" or "infrared" as in the yaml file
+			// either "ultrasonic_avoid" or "infrared_avoid" as in the yaml file
 			// so that ObstacleAvoidance can get the appropriate constant
 			// to wait that type of info
 			mtrCmd.header.frame_id = node.getName().toString();
 			mtrCmd.header.stamp = node.getCurrentTime();
+			mtrCmd.header.seq = key;
 			pubCmd.publish(mtrCmd);
 
 		}

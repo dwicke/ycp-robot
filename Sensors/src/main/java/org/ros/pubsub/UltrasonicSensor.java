@@ -112,7 +112,7 @@ public class UltrasonicSensor implements NodeMain, MessageListener<Range> {
 		{
 			//else if is equal to the max_range so must filter
 			Range filtered = new Range();
-			filtered.header = message.header;
+			filtered.header = message.header;// must keep same header.
 			filtered.max_range = message.max_range;
 			filtered.min_range = message.min_range;
 			
