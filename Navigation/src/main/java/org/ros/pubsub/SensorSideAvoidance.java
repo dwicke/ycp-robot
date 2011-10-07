@@ -99,7 +99,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 			// Must make the weights for each of the sensors as per the algorithm
 
-
+			
 
 
 
