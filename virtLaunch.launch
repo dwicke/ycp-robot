@@ -6,7 +6,7 @@
 	<rosparam file="test.yaml" command="load"/>
 	<!-- Robot -->
 	<node name="sensor_listener" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.SensorListener" />
-	<node name="talker" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.Talker" />
+	<!-- <node name="talker" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.Talker" /> -->
 	
 	<!-- Sensors -->
 	<node name="ultrasonic_frontLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />

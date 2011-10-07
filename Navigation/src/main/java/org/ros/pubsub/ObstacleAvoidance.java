@@ -126,7 +126,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		// this is not general.
 		//int key = message.header.stamp.nsecs;
 		long key = message.header.seq;
-		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
+		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs - 1)
 		{
 			// Has the key and there are enough keys
 			// all the input I need so get it and remove the key

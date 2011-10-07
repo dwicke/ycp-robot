@@ -4,7 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/dwicke/git/ycp-robot/nav/src/nav.cpp" "/home/dwicke/git/ycp-robot/nav/build/CMakeFiles/nav.dir/src/nav.o"
+  "/home/drew/git/ycp-robot/nav/src/nav.cpp" "/home/drew/git/ycp-robot/nav/build/CMakeFiles/nav.dir/src/nav.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

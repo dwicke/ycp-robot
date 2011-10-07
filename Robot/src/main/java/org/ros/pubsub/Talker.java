@@ -79,8 +79,8 @@ public class Talker implements NodeMain {
     	  d.infrared_frontLeftLeft_distance = (float) 33.43;
     	  d.ultrasonic_frontRight_distance = (byte) 255;
     	  pubSense.publish(d);
-    	  log.info("Published SensorData");
-    	  
+    	  log.info("Talker Published sensordata");
+    	   
     	  seq += 1;
         //publisher.publish(motorMessage);
         Thread.sleep(1000);

@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.ros.message.MessageListener;
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
@@ -48,6 +49,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 	private Map<Long, ArrayList<MotorCommand>> inputCommands;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
+	private SimpleLog log;
 
 	@Override
 	public void main(NodeConfiguration configuration) {
@@ -60,8 +62,8 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			inputCommands = new TreeMap<Long, ArrayList<MotorCommand>>();
 			// TODO decide how I publish...
 			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
-			final Log log = node.getLog();
-
+			log = new SimpleLog(node.getName().toString());
+			log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 			// The job of this node is to provide to the MotorControler a linear and
 			// angular velocity such that the robot avoids obstacles.  It uses
 			// Braitenberg's agression behavior and motor fusion.
@@ -108,8 +110,9 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 
 	//	int key = message.header.stamp.nsecs;
 		long key = message.header.seq;
+		log.debug("Recieved message with key: " + key);
 		
-		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs)
+		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs - 1)
 		{
 			// Has the key and there are enough keys
 			// all the input I need so get it and remove the key and publish
@@ -132,7 +135,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 				}
 			}
 
-
+			
 			inputCommands.remove(key);
 			// remember to set the FrameID of the header to that of
 			// either "ultrasonic_avoid" or "infrared_avoid" as in the yaml file
