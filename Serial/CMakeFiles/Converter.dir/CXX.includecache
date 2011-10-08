@@ -22,14 +22,6 @@ robot_msgs/MotorData.h
 DrRobotMotionSensorDriver.hpp
 /home/jcluck/ros_workspace/ycp-robot/Serial/src/DrRobotMotionSensorDriver.hpp
 
-/home/jcluck/ros_workspace/ycp-robot/Serial/src/DrRobotCommConst.hpp
-
-/home/jcluck/ros_workspace/ycp-robot/Serial/src/DrRobotMotionSensorDriver.cpp
-DrRobotMotionSensorDriver.hpp
-/home/jcluck/ros_workspace/ycp-robot/Serial/src/DrRobotMotionSensorDriver.hpp
-DrRobotCommConst.hpp
-/home/jcluck/ros_workspace/ycp-robot/Serial/src/DrRobotCommConst.hpp
-
 /home/jcluck/ros_workspace/ycp-robot/Serial/src/DrRobotMotionSensorDriver.hpp
 stdexcept
 -

@@ -145,6 +145,7 @@ Converter_EXTERNAL_OBJECTS =
 bin/Converter: CMakeFiles/Converter.dir/src/Converter.o
 bin/Converter: CMakeFiles/Converter.dir/src/DrRobotMotionSensorDriver.o
 bin/Converter: /usr/local/lib/libboost_thread.so
+bin/Converter: /usr/local/lib/libboost_signals.so
 bin/Converter: CMakeFiles/Converter.dir/build.make
 bin/Converter: CMakeFiles/Converter.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable bin/Converter"
