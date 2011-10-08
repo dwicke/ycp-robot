@@ -25,6 +25,25 @@ sensor_angles: {ultrasonic_frontLeft_distance: 120, ultrasonic_frontCenter_dista
   infrared_left_distance: 180, human_left_motion: 120, human_left_presence: 120, human_right_motion: 60,
   human_right_presence: 60}
   
+
+ultrasonic_topics:
+- ultrasonic_frontLeft_distance
+- ultrasonic_frontCenter_distance
+- ultrasonic_frontRight_distance
+- ultrasonic_rearRight_distance
+- ultrasonic_rearCenter_distance
+- ultrasonic_rearLeft_distance
+
+infrared_topics:
+- infrared_frontLeftLeft_distance
+- infrared_frontLeftCenter_distance
+- infrared_frontRightCenter_distance
+- infrared_frontRightRight_distance
+- infrared_right_distance
+- infrared_rear_distance
+- infrared_left_distance
+ 
+  
 left_IR: 
 - infrared_frontLeftLeft_distance
 - infrared_frontLeftCenter_distance

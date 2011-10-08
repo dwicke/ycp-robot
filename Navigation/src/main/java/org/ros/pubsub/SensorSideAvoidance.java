@@ -47,7 +47,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 	private Publisher<MotorCommand> pubCmd;
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
-	private Map<Long, ArrayList<Range>> inputCommands;
+	private Map<Integer, ArrayList<Range>> inputCommands;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 
@@ -77,7 +77,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			// Make the data structure to hold the messages that I recieve.
 			// the key is the time stamp of the message.  For each time stamp
 			// I have a list of Range objects for each of the sensors.
-			inputCommands = new TreeMap<Long, ArrayList<Range>>();
+			inputCommands = new TreeMap<Integer, ArrayList<Range>>();
 
 
 			// Say name of topic ie. left_IR_Motor_Command
@@ -85,7 +85,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			log = node.getLog();
 
 			l = new SimpleLog(node.getName().toString());
-			l.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
+		//	l.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 
 
 			// subscribe to the topics that I am supposed to based on who I am
@@ -128,8 +128,13 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 		// and when I get all of the messages I do math based on algorithm to get the value for that side.
 
 
-		long key = message.header.seq;
-		if (node.getName().toString().contains("left_US"))
+		// I am using secs in the header to be the key
+		// since timestamp secs couldn't keep up (neither could nsecs)
+		// I define my own secs in terms of when it leaves the sensorListener
+		// in the robot package.
+		int key = message.header.stamp.secs;
+		
+		if (node.getName().toString().contains("left_IR"))
 		{
 			l.debug("Got a message. Key:" + key + " numberInputs: " + numberInputs);
 
@@ -152,6 +157,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 			// get the range data
 			ArrayList<Range> ranges = inputCommands.get(key);
+			ranges.add(message);
 			for (Range range : ranges)
 			{
 				// so now I can do the math
@@ -162,8 +168,8 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			}
 
 			mtrCmd.header.frame_id = node.getName().toString();
-			mtrCmd.header.stamp = node.getCurrentTime();
-			mtrCmd.header.seq = key;
+			mtrCmd.header.stamp.secs = key;
+			//mtrCmd.header.seq = key;
 
 			inputCommands.remove(key);
 			pubCmd.publish(mtrCmd);
@@ -172,6 +178,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 		{
 			// no key present so add it and the message
 			ArrayList<Range> newList = new ArrayList<Range>();
+			l.debug("New List");
 			newList.add(message);
 			inputCommands.put(key, newList);
 		}
@@ -179,7 +186,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 		{
 			// has the key but I haven't received enough messages.
 			// so add the message to the list
-			if (node.getName().toString().contains("left_US"))
+			if (node.getName().toString().contains("left_IR"))
 			{
 				l.debug("Added " + inputCommands.get(key).size() + " message.");
 			}

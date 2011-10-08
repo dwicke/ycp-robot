@@ -40,3 +40,4 @@ dependencies.xml
 CMakeCache.txt
 .classpath
 build/
+cmake_install.cmake

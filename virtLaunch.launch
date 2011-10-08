@@ -8,7 +8,6 @@
 	<node name="sensor_listener" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.SensorListener" />
 	<!-- <node name="talker" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.Talker" /> -->
 	
-	<!-- Sensors -->
 	<node name="ultrasonic_frontLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
 	<node name="ultrasonic_frontCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
 	<node name="ultrasonic_frontRight_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
@@ -17,6 +16,7 @@
 	<node name="ultrasonic_rearLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
 	
 	
+	<!-- Sensors
 	<node name="infrared_frontLeftLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
 	<node name="infrared_frontLeftCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
 	<node name="infrared_frontRightCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
@@ -24,7 +24,17 @@
 	<node name="infrared_right_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
 	<node name="infrared_rear_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
 	<node name="infrared_left_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+	 -->
 	
+	
+	<!-- <node name="ultrasonic_sensor" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" /> -->
+	<node name="infrared_sensor" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+
+	 
+	 
+	 
+	 
+	 
 	
 	<!-- Navigation -->
 	<node name="obstacle_avoidance" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.ObstacleAvoidance" />

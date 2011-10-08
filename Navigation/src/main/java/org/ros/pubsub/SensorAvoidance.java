@@ -46,7 +46,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 	private Publisher<MotorCommand> pubCmd;
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
-	private Map<Long, ArrayList<MotorCommand>> inputCommands;
+	private Map<Integer, ArrayList<MotorCommand>> inputCommands;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 	private SimpleLog log;
@@ -55,13 +55,14 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 	public void main(NodeConfiguration configuration) {
 		Preconditions.checkState(node == null);
 		Preconditions.checkNotNull(configuration);
-		//ParameterTreenode.newParameterTree();
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
 			numberInputs = 2;// Left and right sensor motor control messages
-			inputCommands = new TreeMap<Long, ArrayList<MotorCommand>>();
+			inputCommands = new TreeMap<Integer, ArrayList<MotorCommand>>();
 			// TODO decide how I publish...
 			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
+			
+			// Set up the debug log
 			log = new SimpleLog(node.getName().toString());
 			log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 			// The job of this node is to provide to the MotorControler a linear and
@@ -107,9 +108,12 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		// and the angular normalized velocity for this particular sensor
 		// which is defined by the name given it when created.
 
-
-	//	int key = message.header.stamp.nsecs;
-		long key = message.header.seq;
+		// I am using secs in the header to be the key
+		// since timestamp secs couldn't keep up (neither could nsecs)
+		// I define my own secs in terms of when it leaves the sensorListener
+		// in the robot package.
+		int key = message.header.stamp.secs;
+		//long key = message.header.seq;
 		log.debug("Recieved message with key: " + key);
 		
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs - 1)
@@ -124,7 +128,11 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			// and subtract the left side from the right
 			// for the angular
 
-			for (MotorCommand cmd: inputCommands.get(key))
+			ArrayList<MotorCommand> cmds = inputCommands.get(key);
+			cmds.add(message);
+			
+			
+			for (MotorCommand cmd: cmds)
 			{
 				// Might need to multiply by .5 so that I get Sum(w) and Sum(D(theta')*w) = 1
 				// since I am going to be doing only the right or left sides...
@@ -142,8 +150,9 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			// so that ObstacleAvoidance can get the appropriate constant
 			// to wait that type of info
 			mtrCmd.header.frame_id = node.getName().toString();
-			mtrCmd.header.stamp = node.getCurrentTime();
-			mtrCmd.header.seq = key;
+			//mtrCmd.header.stamp = node.getCurrentTime();
+			mtrCmd.header.stamp.secs = key;
+			//mtrCmd.header.seq = key;
 			pubCmd.publish(mtrCmd);
 
 		}

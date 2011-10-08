@@ -135,11 +135,15 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					IRRange.range = (float) (rangeData * .01);
 					// name it the same as the sensor
 					IRRange.header.frame_id = fieldName;
-					IRRange.header.seq = count;
 					// this is the angle theta the sensor is located on the bot
+					// Not sure that field_of_view means that so I probably won't
+					// use it.
 					IRRange.field_of_view = (float) sensorAngles.get(fieldName);
-					// need to set time stamp
-					IRRange.header.stamp = timeStamp;
+					
+					// I am using secs in the header to be the key
+					// since timestamp secs couldn't keep up (neither could nsecs)
+					// I define my own secs in terms of when it leaves here
+					IRRange.header.stamp.secs = (int) count;
 					
 					publisher.get(fieldName).publish(IRRange);
 				}
@@ -154,11 +158,15 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					USRange.range = (float) ((float) rangeData * .01);
 					// name it the same as the sensor
 					USRange.header.frame_id = fieldName;
-					USRange.header.seq = count;
 					// this is the angle theta the sensor is located on the bot
+					// Not sure that field_of_view means that so I probably won't
+					// use it.
 					USRange.field_of_view = (float) sensorAngles.get(fieldName);
-					// need to set time stamp
-					USRange.header.stamp = timeStamp;
+					
+					// I am using secs in the header to be the key
+					// since timestamp secs couldn't keep up (neither could nsecs)
+					// I define my own secs in terms of when it leaves here
+					USRange.header.stamp.secs = (int) count;
 					publisher.get(fieldName).publish(USRange);
 				}
 				else if (fieldName.contains("human"))
