@@ -38,7 +38,7 @@ void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
 	//send left/right values to the robot
 	int motorLPASS = driver->sendMotorCtrlCmd(Velocity, 0, msg->motor_left_velocity, msg->motor_left_time);
 	if(motorLPASS < 0) ROS_INFO("Left motor value was not sent to the robot!");
-	int motorRPASS = driver->sendMotorCtrlCmd(Velocity, 1, msg->motor_right_velocity, msg->motor_right_time);
+	int motorRPASS = driver->sendMotorCtrlCmd(Velocity, 1, msg->motor_right_velocity*-1, msg->motor_right_time);
 	if(motorRPASS < 0) ROS_INFO("Right motor value was not sent to the robot!");
 
 }
