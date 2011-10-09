@@ -44,9 +44,15 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 	private Node node;
 	// this is the Object that I use to publish my final motor command
 	private Publisher<MotorCommand> pubCmd;
+
+
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
-	private Map<Integer, ArrayList<MotorCommand>> inputCommands;
+	private MessageCollection<MotorCommand> mesCollector;
+	
+	// this is the list of motorcommands
+	private ArrayList<MotorCommand> cmds;
+	
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 	private SimpleLog log;
@@ -58,10 +64,11 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
 			numberInputs = 2;// Left and right sensor motor control messages
-			inputCommands = new TreeMap<Integer, ArrayList<MotorCommand>>();
-			// TODO decide how I publish...
-			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
+			mesCollector = new MessageCollection<MotorCommand>(numberInputs);
 			
+
+			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
+
 			// Set up the debug log
 			log = new SimpleLog(node.getName().toString());
 			//log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
@@ -115,8 +122,8 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		int key = message.header.stamp.secs;
 		//long key = message.header.seq;
 		log.debug("Recieved message with key: " + key);
-		
-		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs - 1)
+
+		if ((cmds = this.mesCollector.recieveMessage(message, key)) != null)
 		{
 			// Has the key and there are enough keys
 			// all the input I need so get it and remove the key and publish
@@ -127,10 +134,6 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			// add the left side to the right for the linear
 			// and subtract the left side from the right
 			// for the angular
-
-			ArrayList<MotorCommand> cmds = inputCommands.get(key);
-			cmds.add(message);
-			
 			
 			for (MotorCommand cmd: cmds)
 			{
@@ -143,33 +146,19 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 				}
 			}
 
+
 			
-			inputCommands.remove(key);
 			// remember to set the FrameID of the header to that of
 			// either "ultrasonic_avoid" or "infrared_avoid" as in the yaml file
 			// so that ObstacleAvoidance can get the appropriate constant
 			// to wait that type of info
 			// don't want the / in front of the name
 			mtrCmd.header.frame_id = node.getName().toString().replace("/", "");
-			//mtrCmd.header.stamp = node.getCurrentTime();
+			// set the key
 			mtrCmd.header.stamp.secs = key;
-			//mtrCmd.header.seq = key;
+			// publish
 			pubCmd.publish(mtrCmd);
 
-		}
-		else if (!inputCommands.containsKey(key))
-		{
-			inputCommands.clear();
-			// no key present so add it and the message
-			ArrayList<MotorCommand> newList = new ArrayList<MotorCommand>();
-			newList.add(message);
-			inputCommands.put(key, newList);
-		}
-		else
-		{
-			// has the key but I haven't received enough messages.
-			// so add the message to the list
-			inputCommands.get(key).add(message);
 		}
 
 

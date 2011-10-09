@@ -45,9 +45,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 	private Node node;
 	// this is the Object that I use to publish my final motor command
 	private Publisher<MotorCommand> pubCmd;
-	// this stores the incoming messages until I have all the data
-	// needed to compute final MotorCommand to publish
-	private Map<Integer, ArrayList<MotorCommand>> inputCommands;
+	
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 	// This Map is the array of K values that I multiply
@@ -59,6 +57,11 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 	private double maxLinearVelocity, maxAngularVelocity;
 
 	private SimpleLog log;
+	// this stores the incoming messages until I have all the data
+	// needed to compute final MotorCommand to publish
+	private MessageCollection<MotorCommand> mesCollector;
+	// this is the list of motorcommands
+	private ArrayList<MotorCommand> cmds;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -68,7 +71,11 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
 			numberInputs = 2;// IR and US think of moving to parameter server.
-			inputCommands = new TreeMap<Integer, ArrayList<MotorCommand>>();
+			
+			mesCollector = new MessageCollection<MotorCommand>(numberInputs);
+			
+			
+			
 			// get the max linear and angular velocity so that I can later compute the
 			// real velocities from the normalized velocities.
 			maxLinearVelocity = node.newParameterTree().getDouble("MAX_LINEAR_VELOCITY");
@@ -120,21 +127,9 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		// TODO Auto-generated method stub
 		//combines US and IR into a single motor_cmd message
 		// that is published here
-
-		// if I get two messages with the same time stamp then I can
-		// assume that they are the IR and the US and move on
-		// this is not general.
-		int key = message.header.stamp.secs;
 		
-		//long key = message.header.seq;
-		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs - 1)
+		if ((cmds = this.mesCollector.recieveMessage(message, message.header.stamp.secs)) != null)
 		{
-			// Has the key and there are enough keys
-			// all the input I need so get it and remove the key
-
-
-			ArrayList<MotorCommand> cmds = inputCommands.get(key);
-			cmds.add(message);
 			MotorCommand mtrCmd = new MotorCommand();
 			for (MotorCommand cmd: cmds)
 			{
@@ -149,31 +144,15 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 				mtrCmd.linear_velocity  += cmd.linear_velocity * maxLinearVelocity * constants.get(cmd.header.frame_id);
 			}
 
-			log.debug("Received both IR and US key: " + key);
+			log.debug("Received both IR and US key: " + message.header.stamp.secs + " Size of cmds = " + cmds.size());
 			// and publish that
 			mtrCmd.precedence = 0;// highest priority
 			mtrCmd.header.frame_id = node.getName().toString();// name
 			mtrCmd.header.stamp = node.getCurrentTime();// time sent
 			// publish the motor command
 			pubCmd.publish(mtrCmd);
-
-			inputCommands.remove(key);
 		}
-		else if (!inputCommands.containsKey(key))
-		{
-			inputCommands.clear();
-			// no key present so add it and the message
-			ArrayList<MotorCommand> newList = new ArrayList<MotorCommand>();
-			newList.add(message);
-			inputCommands.put(key, newList);
-		}
-		else
-		{
-			// has the key but I haven't received enough messages.
-			// so add the message to the list
-			inputCommands.get(key).add(message);
-		}
-
+		
 
 	}
 

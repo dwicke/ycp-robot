@@ -47,7 +47,9 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 	private Publisher<MotorCommand> pubCmd;
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
-	private Map<Integer, ArrayList<Range>> inputCommands;
+	private MessageCollection<Range> mesCollector;
+	// these are the received ranges
+	private ArrayList<Range> ranges;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 
@@ -60,7 +62,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 	public void main(NodeConfiguration configuration) {
 		Preconditions.checkState(node == null);
 		Preconditions.checkNotNull(configuration);
-		//ParameterTreenode.newParameterTree();
+		
 		try {
 			node = new DefaultNodeFactory().newNode("sensor_side_avoidance", configuration);
 
@@ -74,22 +76,28 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			linearVariance = node.newParameterTree().getDouble("sigma_squared_linear");
 			angularVariance = node.newParameterTree().getDouble("sigma_squared_angular");
 
-			// Make the data structure to hold the messages that I recieve.
+			// Make the data structure to hold the messages that I receive.
 			// the key is the time stamp of the message.  For each time stamp
 			// I have a list of Range objects for each of the sensors.
-			inputCommands = new TreeMap<Integer, ArrayList<Range> >();
-
+			mesCollector = new MessageCollection<Range>(numberInputs);
 
 			// Say name of topic ie. left_IR_Motor_Command
 			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
 			
 
 			log = new SimpleLog(node.getName().toString());
-			
-			
 			//log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 
 
+			
+			// Must make the weights for each of the sensors as per the algorithm
+
+			
+			
+			
+			
+			
+			
 			// subscribe to the topics that I am supposed to based on who I am
 			// such as all of the left IR filtered sensor data
 			for (String topic: topics)
@@ -99,8 +107,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			}
 
 
-			// Must make the weights for each of the sensors as per the algorithm
-
+			
 
 
 		} catch (Exception e) {
@@ -127,36 +134,11 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 		int key = message.header.stamp.secs;
 		log.debug(key);
 		
-		if (inputCommands.containsKey(key) == false)
-		{
-			// no key present so add it and the message
-			inputCommands.clear();// discard anything that may be 
-			// useless now.
-			ArrayList<Range> newList = new ArrayList<Range>();
-			log.debug("New List");
-			newList.add(message);
-			inputCommands.put(key, newList);
-		}
-		else if (inputCommands.get(key).size() < (numberInputs - 1))
-		{
-			
-			// has the key but I haven't received enough messages.
-			// so add the message to the list
-			if (node.getName().toString().contains("left_IR"))
-			{
-				log.debug("Added " + inputCommands.get(key).size() + " message.");
-			}
-			inputCommands.get(key).add(message);
-			
-		}
-		else
+		
+		if ((ranges = this.mesCollector.recieveMessage(message, message.header.stamp.secs)) != null)
 		{
 			
 			MotorCommand mtrCmd = new MotorCommand();
-
-			// get the range data
-			ArrayList<Range> ranges = inputCommands.get(key);
-			ranges.add(message);
 			
 			log.debug("Number of messages= " + ranges.size());
 			
@@ -171,9 +153,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 			mtrCmd.header.frame_id = node.getName().toString();
 			mtrCmd.header.stamp.secs = key;
-			//mtrCmd.header.seq = key;
-
-			inputCommands.remove(key);
+			
 			pubCmd.publish(mtrCmd);
 			
 		}
