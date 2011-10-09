@@ -19,6 +19,7 @@ package main.java.org.ros.pubsub;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
@@ -83,11 +84,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			// These constants sum to 1 and provide the percentage that each sensor type contributes to the final
 			// motorcommand
 			constants = (Map<String, Double>) node.newParameterTree().getMap("comb_const");
-			if (constants == null)
-			{
-				log.debug("Constants was null");
-				
-			}
+			
 
 			// must say who I subscribe to.  So get my subscriptions from the Parameter server 
 			@SuppressWarnings("unchecked")
@@ -128,6 +125,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		// assume that they are the IR and the US and move on
 		// this is not general.
 		int key = message.header.stamp.secs;
+		
 		//long key = message.header.seq;
 		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs - 1)
 		{
@@ -146,8 +144,6 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 				// by doing alpha * MAX_LINEAR_VELOCITY = linear velocity
 				// beta * MAX_ANGULAR_VELOCITY = angular velocity.
 				// and then also multiply that by the normalizing constant
-				log.debug(constants.get("ultrasonic_avoid"));
-				log.debug("The message header frameID = " + constants.get(cmd.header.frame_id));
 				
 				mtrCmd.angular_velocity += cmd.angular_velocity * maxAngularVelocity * constants.get(cmd.header.frame_id);
 				mtrCmd.linear_velocity  += cmd.linear_velocity * maxLinearVelocity * constants.get(cmd.header.frame_id);

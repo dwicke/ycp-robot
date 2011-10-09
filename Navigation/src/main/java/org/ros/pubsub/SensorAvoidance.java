@@ -149,7 +149,8 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			// either "ultrasonic_avoid" or "infrared_avoid" as in the yaml file
 			// so that ObstacleAvoidance can get the appropriate constant
 			// to wait that type of info
-			mtrCmd.header.frame_id = node.getName().toString();
+			// don't want the / in front of the name
+			mtrCmd.header.frame_id = node.getName().toString().replace("/", "");
 			//mtrCmd.header.stamp = node.getCurrentTime();
 			mtrCmd.header.stamp.secs = key;
 			//mtrCmd.header.seq = key;
