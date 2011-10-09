@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.ros.message.MessageListener;
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
@@ -47,7 +48,7 @@ public class IRSensor implements NodeMain, MessageListener<Range> {
 
 	private Node node;
 	private TreeMap<String, Publisher<Range> > filteredRangeMap;
-	private Log log;
+	private SimpleLog log;
 
 	@Override
 	public void main(NodeConfiguration configuration) {
@@ -58,7 +59,7 @@ public class IRSensor implements NodeMain, MessageListener<Range> {
 			// the name of the node gets changed when it is created... so not "sensor_listener"
 			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
 
-			log = node.getLog();
+			log = new SimpleLog(node.getName().toString());
 			// Print out the name
 			log.info("Sensor name: " + node.getName());
 
@@ -109,6 +110,7 @@ public class IRSensor implements NodeMain, MessageListener<Range> {
 		//Range newMess = message.clone();
 		///newMess.header = message.header;
 		//log.info(newMess.header.seq + "  " + message.header.seq);
+		
 		filteredRangeMap.get(message.header.frame_id).publish(message);
 
 	}

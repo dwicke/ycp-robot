@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.ros.message.MessageListener;
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
@@ -56,6 +57,8 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 	// max linear and angular velocities 
 	private double maxLinearVelocity, maxAngularVelocity;
 
+	private SimpleLog log;
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void main(NodeConfiguration configuration) {
@@ -71,7 +74,8 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			maxAngularVelocity = node.newParameterTree().getDouble("MAX_ANGULAR_VELOCITY");
 			// publish to Motor_Command
 			pubCmd = node.newPublisher("Motor_Command", "MotorControlMsg/MotorCommand");
-			final Log log = node.getLog();
+			log = new SimpleLog(node.getName().toString());
+			log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 
 			// The job of this node is to provide to the MotorControler a linear and
 			// angular velocity such that the robot avoids obstacles.  It uses
@@ -81,7 +85,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			constants = (Map<String, Double>) node.newParameterTree().getMap("comb_const");
 			if (constants == null)
 			{
-				log.info("Constants was null");
+				log.debug("Constants was null");
 				
 			}
 
@@ -142,11 +146,14 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 				// by doing alpha * MAX_LINEAR_VELOCITY = linear velocity
 				// beta * MAX_ANGULAR_VELOCITY = angular velocity.
 				// and then also multiply that by the normalizing constant
-				mtrCmd.angular_velocity += cmd.angular_velocity * maxAngularVelocity * constants.get(mtrCmd.header.frame_id);
-				mtrCmd.linear_velocity  += cmd.linear_velocity * maxLinearVelocity * constants.get(mtrCmd.header.frame_id);
+				log.debug(constants.get("ultrasonic_avoid"));
+				log.debug("The message header frameID = " + constants.get(cmd.header.frame_id));
+				
+				mtrCmd.angular_velocity += cmd.angular_velocity * maxAngularVelocity * constants.get(cmd.header.frame_id);
+				mtrCmd.linear_velocity  += cmd.linear_velocity * maxLinearVelocity * constants.get(cmd.header.frame_id);
 			}
 
-
+			log.debug("Received both IR and US key: " + key);
 			// and publish that
 			mtrCmd.precedence = 0;// highest priority
 			mtrCmd.header.frame_id = node.getName().toString();// name
@@ -158,6 +165,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		}
 		else if (!inputCommands.containsKey(key))
 		{
+			inputCommands.clear();
 			// no key present so add it and the message
 			ArrayList<MotorCommand> newList = new ArrayList<MotorCommand>();
 			newList.add(message);

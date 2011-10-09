@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.ros.message.MessageListener;
 import org.ros.message.Time;
 import org.ros.node.DefaultNodeFactory;
@@ -49,9 +50,8 @@ import com.google.common.base.Preconditions;
 public class SensorListener implements NodeMain, MessageListener<SensorData> {
 
 	private Node node;
-	private Log log;
-	// this is so I know if I should print debug info
-	private Boolean debug;
+	private SimpleLog log;
+	
 	
 	private Map<String, Publisher<Range> > publisher;
 	private Map<String, Integer> sensorAngles;
@@ -65,7 +65,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 		try {
 			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
 			
-			log = node.getLog();
+			log = new SimpleLog(node.getName().toString());
 			publisher = new TreeMap<String, Publisher<Range>>();
 			count = 0;
 			

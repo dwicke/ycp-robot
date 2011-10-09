@@ -53,8 +53,8 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 	// variance of function
 	private double linearVariance, angularVariance;
-	private Log log;
-	private SimpleLog l;
+
+	private SimpleLog log;
 
 	@Override
 	public void main(NodeConfiguration configuration) {
@@ -77,15 +77,17 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			// Make the data structure to hold the messages that I recieve.
 			// the key is the time stamp of the message.  For each time stamp
 			// I have a list of Range objects for each of the sensors.
-			inputCommands = new TreeMap<Integer, ArrayList<Range>>();
+			inputCommands = new TreeMap<Integer, ArrayList<Range> >();
 
 
 			// Say name of topic ie. left_IR_Motor_Command
 			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
-			log = node.getLog();
+			
 
-			l = new SimpleLog(node.getName().toString());
-		//	l.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
+			log = new SimpleLog(node.getName().toString());
+			
+			
+			//log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 
 
 			// subscribe to the topics that I am supposed to based on who I am
@@ -98,8 +100,6 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 
 			// Must make the weights for each of the sensors as per the algorithm
-
-			
 
 
 
@@ -124,40 +124,42 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 	@Override
 	public void onNewMessage(Range message) {
 
-		// Gets the range messages from the Left or right depending on name of this node
-		// and when I get all of the messages I do math based on algorithm to get the value for that side.
-
-
-		// I am using secs in the header to be the key
-		// since timestamp secs couldn't keep up (neither could nsecs)
-		// I define my own secs in terms of when it leaves the sensorListener
-		// in the robot package.
 		int key = message.header.stamp.secs;
+		log.debug(key);
 		
-		if (node.getName().toString().contains("left_IR"))
+		if (inputCommands.containsKey(key) == false)
 		{
-			l.debug("Got a message. Key:" + key + " numberInputs: " + numberInputs);
-
-
-			//	log.info("Key: " + key);
-			//log.info("From: " + message.header.frame_id + " to: " + node.getName() + ":  " + key);
-
-			l.debug("inputCommands contains the key " + inputCommands.containsKey(key) + "  And the number of " +
-					"messages in the array is " + ((inputCommands.containsKey(key)) ? inputCommands.get(key).size() : 0));
+			// no key present so add it and the message
+			inputCommands.clear();// discard anything that may be 
+			// useless now.
+			ArrayList<Range> newList = new ArrayList<Range>();
+			log.debug("New List");
+			newList.add(message);
+			inputCommands.put(key, newList);
 		}
-		if(inputCommands.containsKey(key) && inputCommands.get(key).size() == numberInputs - 1)
+		else if (inputCommands.get(key).size() < (numberInputs - 1))
 		{
-			// Has the key and there are enough keys
-			// all the input I need so get it and remove the key
-			// 
-
-
-			l.debug("Got enough messages publishing\n\n\n\n\n\n");
+			
+			// has the key but I haven't received enough messages.
+			// so add the message to the list
+			if (node.getName().toString().contains("left_IR"))
+			{
+				log.debug("Added " + inputCommands.get(key).size() + " message.");
+			}
+			inputCommands.get(key).add(message);
+			
+		}
+		else
+		{
+			
 			MotorCommand mtrCmd = new MotorCommand();
 
 			// get the range data
 			ArrayList<Range> ranges = inputCommands.get(key);
 			ranges.add(message);
+			
+			log.debug("Number of messages= " + ranges.size());
+			
 			for (Range range : ranges)
 			{
 				// so now I can do the math
@@ -173,26 +175,8 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 			inputCommands.remove(key);
 			pubCmd.publish(mtrCmd);
+			
 		}
-		else if (!inputCommands.containsKey(key))
-		{
-			// no key present so add it and the message
-			ArrayList<Range> newList = new ArrayList<Range>();
-			l.debug("New List");
-			newList.add(message);
-			inputCommands.put(key, newList);
-		}
-		else
-		{
-			// has the key but I haven't received enough messages.
-			// so add the message to the list
-			if (node.getName().toString().contains("left_IR"))
-			{
-				l.debug("Added " + inputCommands.get(key).size() + " message.");
-			}
-			inputCommands.get(key).add(message);
-		}
-
 
 	}
 

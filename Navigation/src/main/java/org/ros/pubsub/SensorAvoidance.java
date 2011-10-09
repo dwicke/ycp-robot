@@ -64,7 +64,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			
 			// Set up the debug log
 			log = new SimpleLog(node.getName().toString());
-			log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
+			//log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 			// The job of this node is to provide to the MotorControler a linear and
 			// angular velocity such that the robot avoids obstacles.  It uses
 			// Braitenberg's agression behavior and motor fusion.
@@ -158,6 +158,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		}
 		else if (!inputCommands.containsKey(key))
 		{
+			inputCommands.clear();
 			// no key present so add it and the message
 			ArrayList<MotorCommand> newList = new ArrayList<MotorCommand>();
 			newList.add(message);

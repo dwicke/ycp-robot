@@ -16,8 +16,9 @@
 
 package main.java.org.ros.pubsub;
 
+import java.awt.image.FilteredImageSource;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
@@ -27,60 +28,52 @@ import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
+import org.ros.node.parameter.ParameterTree;
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 import org.ros.message.robot_msgs.*;
 import org.ros.message.sensor_msgs.Range;
 
 import com.google.common.base.Preconditions;
+import com.sun.net.httpserver.Filter;
 
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of the UltrasonicSensor node
- * is to filter the raw sensor data and publish it.
+ * external roscore is already running.  The job of this node is to filter the IRSensor
+ * data and publish it.
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class UltrasonicSensor implements NodeMain, MessageListener<Range> {
+public class SensorSideAvoidanceTestPublisher implements NodeMain {
 
 	private Node node;
-	// there will be a prev... and cur... for each of the US
-	private Map<String, Range> prevFilteredRange;
-	// there will be a topic to publish to for each of the sensors
-	private Map<String, Publisher<Range> > filteredRangeMap;
-
-	private final float RDelta = (float) .2;// .2 m or 20cm can change if need to just chose this because
-	// this is what they had in paper
-
+	private TreeMap<String, Publisher<Range> > filteredRangeMap;
 	private SimpleLog log;
+
 	@Override
 	public void main(NodeConfiguration configuration) {
-
 		Preconditions.checkState(node == null);
 		Preconditions.checkNotNull(configuration);
 
 		try {
-			// this name will be changed when the node is created.
+			// the name of the node gets changed when it is created... so not "sensor_listener"
 			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
-			// create a log.
-			log = new SimpleLog(node.getName().toString());
 
+			log = new SimpleLog(node.getName().toString());
 			// Print out the name
 			log.info("Sensor name: " + node.getName());
-
-
-
+			log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 			filteredRangeMap = new TreeMap<String, Publisher<Range>>();
-			prevFilteredRange = new TreeMap<String, Range>();
-			
+
 
 			// get the names of the sensors for the IR sensors so I can make
 			// the name of the topic I am going to publish to 
-			List<String> topics = (List<String>) node.newParameterTree().getList("ultrasonic_topics");
+			List<String> topics = (List<String>) node.newParameterTree().getList("left_IR");
 			for (String topic : topics)
 			{
 				Publisher<Range> filteredRange =
 						node.newPublisher(topic + "filtered", "sensor_msgs/Range");
+				log.debug("Publishing to: " + topic + "filtered");
 				// make the new publisher and add it to the map
 				filteredRangeMap.put(topic, filteredRange);
 			}
@@ -91,10 +84,38 @@ public class UltrasonicSensor implements NodeMain, MessageListener<Range> {
 			// by SensorListener.
 			// must do this after I create the publishers because I start recieving messages
 			// as soon as I subscribe.
-			for (String topic : topics)
+			int count = 0;
+			boolean allSub = false;
+			while(allSub == false)
 			{
-				// subscribe to the topic that sensorListener is publishing to
-				node.newSubscriber(topic + "raw", "sensor_msgs/Range", this);
+				allSub = true;
+				for (String topic : topics)
+				{
+					if (filteredRangeMap.get(topic).hasSubscribers() == false)
+					{
+						allSub = false;
+					}
+				}
+			}
+			
+			
+			while(true){
+
+				for (String topic : topics)
+				{
+					
+						// subscribe to the topic that sensorListener is publishing to
+						Range message = new Range();
+						message.header.frame_id = topic;
+						message.header.stamp.secs = count;
+
+						filteredRangeMap.get(topic).publish(message);
+						log.debug(count);
+						Thread.sleep(200);
+					
+				}
+
+				count++;
 			}
 
 		} catch (Exception e) {
@@ -104,53 +125,12 @@ public class UltrasonicSensor implements NodeMain, MessageListener<Range> {
 				e.printStackTrace();
 			}
 		}
+
 	}
-
-
 
 	@Override
 	public void shutdown() {
 		node.shutdown();
-	}
-
-	@Override
-	public void onNewMessage(Range message) {
-
-		String key = message.header.frame_id;
-
-
-
-
-
-		if (message.range < message.max_range)
-		{
-			// if the range received is less than the max range then it is good
-			// don't need to do any filtering
-
-			filteredRangeMap.get(key).publish(message);
-			prevFilteredRange.put(key, message);
-
-		}
-		else
-		{
-			//else if is equal to the max_range so must filter
-
-			// so I set the filtered range to the smallest value
-			// the previous filtered range plus a delta
-			// or the max range
-			if (prevFilteredRange.get(key) != null)
-			{
-				message.range = prevFilteredRange.get(key).range + RDelta;
-			}
-			if (message.range > message.max_range)
-			{
-				message.range = message.max_range;
-			}
-			prevFilteredRange.put(key, message);
-			// publish the filtered range
-			filteredRangeMap.get(key).publish(message);
-		}
-
 	}
 
 }
