@@ -21,7 +21,7 @@ public class MessageCollection <MessageType> {
 		curIndex = 0;
 	}
 	
-	public ArrayList<MessageType> recieveMessage(MessageType newMessage, int key)
+	public ArrayList<MessageType> receiveMessage(MessageType newMessage, int key)
 	{
 		// First check if we are too slow and we are now on a different key
 		// or just on a new key because we have finished the previous key

@@ -128,7 +128,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		//combines US and IR into a single motor_cmd message
 		// that is published here
 		
-		if ((cmds = this.mesCollector.recieveMessage(message, message.header.stamp.secs)) != null)
+		if ((cmds = this.mesCollector.receiveMessage(message, message.header.stamp.secs)) != null)
 		{
 			MotorCommand mtrCmd = new MotorCommand();
 			for (MotorCommand cmd: cmds)

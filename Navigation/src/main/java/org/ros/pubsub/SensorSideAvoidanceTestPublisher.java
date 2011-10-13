@@ -39,8 +39,9 @@ import com.sun.net.httpserver.Filter;
 
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of this node is to filter the IRSensor
- * data and publish it.
+ * external roscore is already running.  This sensor publishes bogus Range
+ * messages to test that SensorSideAvoidance gets these use in conjunction with
+ * the TestSubscriber.
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
@@ -108,7 +109,7 @@ public class SensorSideAvoidanceTestPublisher implements NodeMain {
 						Range message = new Range();
 						message.header.frame_id = topic;
 						message.header.stamp.secs = count;
-
+						
 						filteredRangeMap.get(topic).publish(message);
 						log.debug(count);
 						Thread.sleep(200);

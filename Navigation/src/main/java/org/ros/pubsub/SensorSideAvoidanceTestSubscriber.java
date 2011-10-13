@@ -34,8 +34,8 @@ import com.google.common.base.Preconditions;
 import org.ros.message.MotorControlMsg.MotorCommand;
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. 
- * This node is givent the name of the sensor that it is going to 
- * represent.  Since both IR and US both have the same 
+ * This node tests to make sure I get a message from the SensorSideAvoidance
+ * This is used with the TestPublisher
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */

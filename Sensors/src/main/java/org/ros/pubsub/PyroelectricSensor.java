@@ -23,7 +23,6 @@ import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
-import org.ros.message.robot_msgs.*;
 import org.ros.message.sensor_msgs.Range;
 
 /**
@@ -48,16 +47,12 @@ public class PyroelectricSensor implements NodeMain {
     	
     	
       node = new DefaultNodeFactory().newNode("talker", configuration);
-      Publisher<MotorData> publisher =
-          node.newPublisher("MotorData", "robot_msgs/MotorData");
+     
       int seq = 0;
       while (true) {
        // org.ros.message.std_msgs.String str = new org.ros.message.std_msgs.String();
     	  
-    	  MotorData motorMessage = new MotorData();
-    	  motorMessage.motor_left_velocity = (float) 3.3;
-    	  seq += 1;
-        publisher.publish(motorMessage);
+    	 
         Thread.sleep(1000);
       }
     } catch (Exception e) {

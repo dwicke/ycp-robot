@@ -67,6 +67,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 	private SimpleLog log;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void main(NodeConfiguration configuration) {
 		Preconditions.checkState(node == null);
@@ -105,7 +106,13 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 			
 			
-
+			// Right now I am doing the simple approach and saying that
+			// the normalizing constant k in the paper is the same for all 
+			// the sensors.  Since the equation is w = 1 = k*sum(e^-(theta^2/(2*sigma^2)) (w = 1 since want normal)
+			// I find k by dividing 1 / sum(e^-(theta^2/(2*sigma^2)) = k
+			// the same is true for the angular velocity k
+			// however later we could weight the center sensor with a higher value and
+			// side sensors with lower values...
 
 
 			// Must make the weights for each of the sensors as per the algorithm
@@ -120,8 +127,12 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 				linearConst += Math.exp(-1.0 * ( thetaSquared) / (2.0 * linearVariance));
 				angularConst += Math.exp(-1.0 * ( thetaSquared) / (2.0 * angularVariance)) * (90.0 - Math.abs(theta.get(key)));
 			}
+			
+			// 1 / sum(e^-(theta^2/(2*sigma^2)) ...
 			linearConst = 1.0 / linearConst; 
 			angularConst = 1.0 / angularConst;
+			
+			double sum = 0.0;
 			
 			// Now I can make the linear and angular weights
 			for (String key: topics)
@@ -129,11 +140,12 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 				double thetaSquared = theta.get(key) * theta.get(key);
 				double linearPsi = Math.exp(-1.0 * ( thetaSquared) / (2.0 * linearVariance));
 				double angularPsi = Math.exp(-1.0 * ( thetaSquared) / (2.0 * angularVariance)) * (90.0 - Math.abs(theta.get(key)));
+				sum += linearConst * linearPsi + angularConst * angularPsi;
 				linearWeight.put(key, linearConst * linearPsi);
 				angularWeight.put(key, angularConst * angularPsi);
 			}
 
-
+			log.info("The sum of the sensors is: " + sum);//should be two
 
 			// subscribe to the topics that I am supposed to based on who I am
 			// such as all of the left IR filtered sensor data
@@ -171,8 +183,8 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 		int key = message.header.stamp.secs;
 		log.debug(key);
 
-
-		if ((ranges = this.mesCollector.recieveMessage(message, message.header.stamp.secs)) != null)
+		// Once I receive all the messages I can then process them
+		if ((ranges = this.mesCollector.receiveMessage(message, message.header.stamp.secs)) != null)
 		{
 
 			MotorCommand mtrCmd = new MotorCommand();
@@ -183,6 +195,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			{
 				// so now I can do the math
 				// the normal of the filtered range * linear_weight
+				log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
 				double normalizedSensor = (range.range / range.max_range);
 				mtrCmd.linear_velocity += normalizedSensor * linearWeight.get(range.header.frame_id);
 				mtrCmd.angular_velocity += (normalizedSensor * angularWeight.get(range.header.frame_id));

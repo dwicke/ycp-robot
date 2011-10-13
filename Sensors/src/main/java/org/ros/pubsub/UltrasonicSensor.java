@@ -29,7 +29,6 @@ import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
-import org.ros.message.robot_msgs.*;
 import org.ros.message.sensor_msgs.Range;
 
 import com.google.common.base.Preconditions;

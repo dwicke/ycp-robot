@@ -47,16 +47,10 @@ infrared_topics:
 left_IR: 
 - infrared_frontLeftLeft_distance
 - infrared_frontLeftCenter_distance
-- infrared_left_distance
-
-
-
-
 
 right_IR:
 - infrared_frontRightCenter_distance
 - infrared_frontRightRight_distance
-- infrared_right_distance
 
 left_US:
 - ultrasonic_frontLeft_distance
@@ -70,8 +64,8 @@ right_US:
 # Angle measures for Obstacle Avoidance
 right_US_theta: {ultrasonic_frontCenter_distance: 0.0, ultrasonic_frontRight_distance: 45.0}
 left_US_theta: {ultrasonic_frontCenter_distance: 0.0, ultrasonic_frontLeft_distance: -45.0 }
-right_IR_theta: {infrared_frontRightCenter_distance: 11.25, infrared_frontRightRight_distance: 33.75, infrared_right_distance: 90.0}
-left_IR_theta: {infrared_frontLeftCenter_distance: -11.25, infrared_frontLeftLeft_distance: -33.75, infrared_left_distance: -90.0}
+right_IR_theta: {infrared_frontRightCenter_distance: 11.25, infrared_frontRightRight_distance: 33.75}
+left_IR_theta: {infrared_frontLeftCenter_distance: -11.25, infrared_frontLeftLeft_distance: -33.75}
 
 comb_const: {ultrasonic_avoid: 0.6, infrared_avoid: 0.4}
 

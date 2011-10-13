@@ -34,8 +34,8 @@ import com.google.common.base.Preconditions;
 import org.ros.message.MotorControlMsg.MotorCommand;
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. 
- * This node is givent the name of the sensor that it is going to 
- * represent.  Since both IR and US both have the same 
+ * the purpose of this node is to combine the two sides of the sensor
+ * arrays from SensorSideAvoidance and publish a motor command to ObstacleAvoidance
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
@@ -49,13 +49,16 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
 	private MessageCollection<MotorCommand> mesCollector;
-	
+
 	// this is the list of motorcommands
 	private ArrayList<MotorCommand> cmds;
-	
+
 	// This is the number of inputs I expect to receive before publishing
-	private int numberInputs;
-	private SimpleLog log;
+	private int numberInputs;// the number of topics i am going to subscribe to
+	private SimpleLog log;// log for debugging
+	private MotorCommand mtrCmd;// message to send to ObstacleAvoidance
+	private int key;// the key of the received message
+
 
 	@Override
 	public void main(NodeConfiguration configuration) {
@@ -63,11 +66,19 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		Preconditions.checkNotNull(configuration);
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
-			numberInputs = 2;// Left and right sensor motor control messages
+
+			mtrCmd = new MotorCommand();
+			// must say who I subscribe to.  So get my subscriptions from the Parameter server 
+			@SuppressWarnings("unchecked")
+			List<String> topics = (List<String>) node.newParameterTree().getList(node.getName() + "_subscriptions");
+
+			numberInputs = topics.size();// Left and right sensor motor control messages should be two one left and one right
+
 			mesCollector = new MessageCollection<MotorCommand>(numberInputs);
-			
+
 
 			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
+
 
 			// Set up the debug log
 			log = new SimpleLog(node.getName().toString());
@@ -77,9 +88,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			// Braitenberg's agression behavior and motor fusion.
 
 
-			// must say who I subscribe to.  So get my subscriptions from the Parameter server 
-			@SuppressWarnings("unchecked")
-			List<String> topics = (List<String>) node.newParameterTree().getList(node.getName() + "_subscriptions");
+
 			for (String topic : topics)
 			{
 				node.newSubscriber(topic, "MotorControlMsg/MotorCommand", this);
@@ -119,35 +128,46 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		// since timestamp secs couldn't keep up (neither could nsecs)
 		// I define my own secs in terms of when it leaves the sensorListener
 		// in the robot package.
-		int key = message.header.stamp.secs;
+		key = message.header.stamp.secs;
 		//long key = message.header.seq;
-		log.debug("Recieved message with key: " + key);
+		log.debug("Received message with key: " + key);
 
-		if ((cmds = this.mesCollector.recieveMessage(message, key)) != null)
+		// Receive the message and check if 
+		if ((cmds = this.mesCollector.receiveMessage(message, key)) != null)
 		{
 			// Has the key and there are enough keys
 			// all the input I need so get it and remove the key and publish
 
-			MotorCommand mtrCmd = new MotorCommand();
 
+			mtrCmd.linear_velocity = (float) 0.0;
+			mtrCmd.angular_velocity = (float) 0.0;
 			// So I need to combine the two sides
 			// add the left side to the right for the linear
 			// and subtract the left side from the right
 			// for the angular
-			
+
 			for (MotorCommand cmd: cmds)
 			{
 				// Might need to multiply by .5 so that I get Sum(w) and Sum(D(theta')*w) = 1
 				// since I am going to be doing only the right or left sides...
 				mtrCmd.linear_velocity += cmd.linear_velocity;
+				// the precondition is that the frame_id states in it somewhere that it is the left
+				// side.
 				if (cmd.header.frame_id.contains("left"))
-				{
+				{// if left I subtract
 					mtrCmd.angular_velocity -= cmd.angular_velocity;
+				}
+				else
+				{// if right i add
+					mtrCmd.angular_velocity += cmd.angular_velocity;
 				}
 			}
 
+			// Normalize the values
+			mtrCmd.linear_velocity /= (numberInputs * cmds.size());
+			mtrCmd.angular_velocity /= (numberInputs * cmds.size());
 
-			
+
 			// remember to set the FrameID of the header to that of
 			// either "ultrasonic_avoid" or "infrared_avoid" as in the yaml file
 			// so that ObstacleAvoidance can get the appropriate constant

@@ -150,7 +150,15 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 				else if (fieldName.contains("ultrasonic"))
 				{
 					// get field data
-					byte rangeData = (Byte) messField.get(message);
+					// must do this because java doesn't have unsigned bytes...
+					int rangeData = ((Byte) messField.get(message)) & 0xff;
+					
+					
+					
+					log.debug(rangeData);
+					
+					
+					
 					Range USRange = new Range();
 					USRange.max_range = (float) 2.55; // 255cm
 					USRange.min_range = (float) .04; // 4cm
