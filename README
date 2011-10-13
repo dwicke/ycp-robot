@@ -1,0 +1,2 @@
+if you run rosmake Robot
+rosmake will make the dependancies as well as Robot.

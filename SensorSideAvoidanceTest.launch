@@ -1,0 +1,13 @@
+<launch>
+	<!-- I can set parameters on the Parameter Sever and they will be stored before the nodes get created.
+		Going to use a Yaml file for that allows  parameters with complex types, nested namespaces of 
+		parameters, and reusing the same parameter values in multiple places.  
+	-->
+	<rosparam file="test.yaml" command="load"/>
+	<node name="left_IR" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidance" />
+	
+	<node name="left_IR_pub" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidanceTestPublisher" />
+	
+	<node name="left_IR_sub" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidanceTestSubscriber" />
+	
+</launch>	 

@@ -1,0 +1,24 @@
+<launch>
+	<!-- this tests SensorSideAvoidance
+	-->
+	<rosparam file="sensorSideAvoidance.yaml" command="load"/>
+	
+	
+	
+	# sends fake data
+	<node name="talker" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.Talker" /> 
+	
+	# converts to raw Range from talker
+	<node name="sensor_listener" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.SensorListener" /> 
+	
+	# converts to filtered from raw
+	<node name="infrared_frontLeftLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+	
+	# subscribes to filtered data
+	<node name="left_IR" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidance" />
+	
+	# subscribes to the MotorCommand messages from SensorSideAvoidance
+	<node name="left_IR_test" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidanceTest" />
+
+	
+</launch>	 
