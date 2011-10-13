@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/537/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph_optimizer
+END
+graph_optimizer2d.h
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/537/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph_optimizer/graph_optimizer2d.h
+END
+graph_optimizer3d.h
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/537/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph_optimizer/graph_optimizer3d.h
+END
+graph_optimizer.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph_optimizer/graph_optimizer.hpp
+END
+graph_optimizer.h
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/536/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph_optimizer/graph_optimizer.h
+END
+graph_optimizer2d_aux.h
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/537/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph_optimizer/graph_optimizer2d_aux.h
+END

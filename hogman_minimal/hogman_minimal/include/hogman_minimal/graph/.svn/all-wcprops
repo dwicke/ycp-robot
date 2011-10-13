@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/537/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph
+END
+dijkstra.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph/dijkstra.h
+END
+posegraph3d_gradient.h
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/537/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph/posegraph3d_gradient.h
+END
+posegraph2d.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/537/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph/posegraph2d.h
+END
+loadEdges3d.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/537/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph/loadEdges3d.h
+END
+posegraph3d.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/537/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph/posegraph3d.h
+END
+graph.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph/graph.h
+END
+posegraph.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph/posegraph.h
+END
+posegraph.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/graph/posegraph.hpp
+END

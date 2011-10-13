@@ -1,0 +1,49 @@
+10
+
+dir
+2067
+http://alufr-ros-pkg.googlecode.com/svn/trunk/freiburg_tools/hogman_minimal/src
+http://alufr-ros-pkg.googlecode.com/svn
+
+
+
+2010-11-11T20:52:33.675384Z
+539
+jurgodam
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+50323fd8-bfc5-11de-ac5a-05e7513655e2
+
+csparse
+dir
+
+graph
+dir
+
+graph_viewer
+dir
+
+graph_optimizer
+dir
+
+stuff
+dir
+
+math
+dir
+
+graph_optimizer_hogman
+dir
+

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/data/svn/rgbdslam/!svn/ver/12/trunk
+END
+manifest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/data/svn/rgbdslam/!svn/ver/12/trunk/manifest.xml
+END
+COPYING
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/data/svn/rgbdslam/!svn/ver/1/trunk/COPYING
+END
+mainpage.dox
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/data/svn/rgbdslam/!svn/ver/1/trunk/mainpage.dox
+END
+rosdoc.yaml
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/data/svn/rgbdslam/!svn/ver/1/trunk/rosdoc.yaml
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/data/svn/rgbdslam/!svn/ver/12/trunk/CMakeLists.txt
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/data/svn/rgbdslam/!svn/ver/1/trunk/Makefile
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/data/svn/rgbdslam/!svn/ver/5/trunk/README
+END

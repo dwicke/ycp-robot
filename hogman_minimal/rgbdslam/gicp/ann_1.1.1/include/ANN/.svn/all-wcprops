@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/ann_1.1.1/include/ANN
+END
+ANNperf.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/ann_1.1.1/include/ANN/ANNperf.h
+END
+ANN.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/ann_1.1.1/include/ANN/ANN.h
+END
+ANNx.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/ann_1.1.1/include/ANN/ANNx.h
+END

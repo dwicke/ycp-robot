@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp
+END
+bfgs_funcs.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/bfgs_funcs.cpp
+END
+scan2ascii.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/scan2ascii.cpp
+END
+optimize.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/optimize.cpp
+END
+transform.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/transform.h
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/LICENSE
+END
+test_gicp.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/test_gicp.cpp
+END
+gicp.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/gicp.cpp
+END
+scan.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/scan.cpp
+END
+optimize.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/optimize.h
+END
+gicp.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/gicp.h
+END
+scan.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/scan.h
+END
+transform.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/transform.cpp
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/data/svn/rgbdslam/!svn/ver/1/trunk/gicp/README
+END

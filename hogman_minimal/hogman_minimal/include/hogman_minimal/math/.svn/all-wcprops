@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/535/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math
+END
+axis_angle.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/axis_angle.h
+END
+axis_angle.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/axis_angle.hpp
+END
+vector_n.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/vector_n.hpp
+END
+vector_n.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/535/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/vector_n.h
+END
+matrix_n.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/matrix_n.h
+END
+matrix_n.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/matrix_n.hpp
+END
+rotation_matrix.h
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/rotation_matrix.h
+END
+rotation_matrix.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/rotation_matrix.hpp
+END
+quaternion.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/quaternion.hpp
+END
+quaternion.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/quaternion.h
+END
+angle.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/angle.h
+END
+transformation.h
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/math/transformation.h
+END

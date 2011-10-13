@@ -1,0 +1,341 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse
+END
+cs_counts.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_counts.c
+END
+cs_dfs.c
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_dfs.c
+END
+cs_updown.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_updown.c
+END
+cs_usolve.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_usolve.c
+END
+cs_transpose.c
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_transpose.c
+END
+cs_lu.c
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_lu.c
+END
+cs_permute.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_permute.c
+END
+cs_reach.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_reach.c
+END
+cs_chol.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_chol.c
+END
+cs_post.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_post.c
+END
+cs.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs.h
+END
+cs_gaxpy.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_gaxpy.c
+END
+cs_fkeep.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_fkeep.c
+END
+cs_tdfs.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_tdfs.c
+END
+cs_qrsol.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_qrsol.c
+END
+cs_amd.c
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_amd.c
+END
+cs_cholsol.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_cholsol.c
+END
+cs_dupl.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_dupl.c
+END
+cs_lsolve.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_lsolve.c
+END
+lesser.txt
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/lesser.txt
+END
+cs_malloc.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_malloc.c
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/Makefile
+END
+cs_leaf.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_leaf.c
+END
+cs_scc.c
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_scc.c
+END
+cs_schol.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_schol.c
+END
+cs_cumsum.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_cumsum.c
+END
+cs_norm.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_norm.c
+END
+cs_pinv.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_pinv.c
+END
+cs_util.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_util.c
+END
+cs_load.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_load.c
+END
+cs_multiply.c
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_multiply.c
+END
+cs_qr.c
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_qr.c
+END
+cs_house.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_house.c
+END
+cs_droptol.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_droptol.c
+END
+cs_dmperm.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_dmperm.c
+END
+cs_ereach.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_ereach.c
+END
+cs_dropzeros.c
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_dropzeros.c
+END
+cs_add.c
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_add.c
+END
+cs_ltsolve.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_ltsolve.c
+END
+License.txt
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/License.txt
+END
+cs_spsolve.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_spsolve.c
+END
+cs_compress.c
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_compress.c
+END
+cs_symperm.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_symperm.c
+END
+cs_print.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_print.c
+END
+cs_maxtrans.c
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_maxtrans.c
+END
+cs_pvec.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_pvec.c
+END
+cs_happly.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_happly.c
+END
+cs_lusol.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_lusol.c
+END
+cs_entry.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_entry.c
+END
+cs_utsolve.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_utsolve.c
+END
+cs_etree.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_etree.c
+END
+cs_scatter.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_scatter.c
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/README.txt
+END
+cs_sqr.c
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_sqr.c
+END
+cs_ipvec.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_ipvec.c
+END
+cs_randperm.c
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/539/trunk/freiburg_tools/hogman_minimal/src/csparse/cs_randperm.c
+END

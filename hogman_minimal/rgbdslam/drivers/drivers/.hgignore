@@ -1,0 +1,10 @@
+/build/
+/ros-
+
+/openni/include/
+/openni/bin/
+/openni/lib/
+
+/ps_engine/include/
+/ps_engine/bin/
+/ps_engine/lib/

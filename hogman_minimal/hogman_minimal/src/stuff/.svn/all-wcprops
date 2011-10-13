@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff
+END
+filesys_tools.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/filesys_tools.cpp
+END
+runtime_error.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/runtime_error.h
+END
+array_allocator.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/array_allocator.h
+END
+filesys_tools.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/filesys_tools.h
+END
+os_specific.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/os_specific.c
+END
+string_tools.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/string_tools.cpp
+END
+color_macros.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/color_macros.h
+END
+macros.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/macros.h
+END
+string_tools.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/string_tools.h
+END
+os_specific.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/os_specific.h
+END
+runtime_error.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/runtime_error.cpp
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/stuff/Makefile
+END

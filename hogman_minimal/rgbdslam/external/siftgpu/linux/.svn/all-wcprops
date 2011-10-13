@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/data/svn/rgbdslam/!svn/ver/1/trunk/external/siftgpu/linux
+END
+Instruction.txt
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/data/svn/rgbdslam/!svn/ver/1/trunk/external/siftgpu/linux/Instruction.txt
+END
+data
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/data/svn/rgbdslam/!svn/ver/1/trunk/external/siftgpu/linux/data
+END
+makefile
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/data/svn/rgbdslam/!svn/ver/1/trunk/external/siftgpu/linux/makefile
+END

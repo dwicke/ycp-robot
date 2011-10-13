@@ -1,0 +1,22 @@
+--- a/Platform/Linux-x86/Build/EngineLibMakefile
++++ b/Platform/Linux-x86/Build/EngineLibMakefile
+@@ -14,7 +14,7 @@
+ #############################################################################
+ 
+ INC_DIRS += \
+-	/usr/include/openni \
++	../../../../../../../openni/build/openni/Platform/Linux-x86/Redist/Include \
+ 	../../../../Include \
+ 	../../../../Source \
+ 	../../../../Source/XnCommon
+--- a/Platform/Linux-x86/Build/Utils/EngineUtilMakefile
++++ b/Platform/Linux-x86/Build/Utils/EngineUtilMakefile
+@@ -14,7 +14,7 @@
+ #############################################################################
+ 
+ INC_DIRS += \
+-	/usr/include/openni \
++	../../../../../../../../openni/build/openni/Platform/Linux-x86/Redist/Include \
+ 	../../../../../Include \
+ 	../../../../../Source \
+ 	../../../../../Source/XnCommon

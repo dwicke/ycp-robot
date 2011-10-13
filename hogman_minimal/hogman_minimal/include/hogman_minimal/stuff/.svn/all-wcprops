@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/stuff
+END
+runtime_error.h
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/stuff/runtime_error.h
+END
+array_allocator.h
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/stuff/array_allocator.h
+END
+filesys_tools.h
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/stuff/filesys_tools.h
+END
+color_macros.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/stuff/color_macros.h
+END
+macros.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/stuff/macros.h
+END
+string_tools.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/stuff/string_tools.h
+END
+os_specific.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/include/hogman_minimal/stuff/os_specific.h
+END

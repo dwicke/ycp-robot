@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/536/trunk/freiburg_tools/hogman_minimal/src/graph
+END
+posegraph2d.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/graph/posegraph2d.cpp
+END
+loadEdges3d.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/graph/loadEdges3d.cpp
+END
+posegraph3d.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/536/trunk/freiburg_tools/hogman_minimal/src/graph/posegraph3d.cpp
+END
+dijkstra.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/graph/dijkstra.h
+END
+graph.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/graph/graph.cpp
+END
+posegraph3d_gradient.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/536/trunk/freiburg_tools/hogman_minimal/src/graph/posegraph3d_gradient.h
+END
+posegraph2d.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/536/trunk/freiburg_tools/hogman_minimal/src/graph/posegraph2d.h
+END
+loadEdges3d.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/536/trunk/freiburg_tools/hogman_minimal/src/graph/loadEdges3d.h
+END
+posegraph3d.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/536/trunk/freiburg_tools/hogman_minimal/src/graph/posegraph3d.h
+END
+graph.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/graph/graph.h
+END
+dijkstra.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/graph/dijkstra.cpp
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/graph/Makefile
+END
+posegraph.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/graph/posegraph.h
+END
+posegraph.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/534/trunk/freiburg_tools/hogman_minimal/src/graph/posegraph.hpp
+END

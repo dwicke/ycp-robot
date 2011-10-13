@@ -1,0 +1,18 @@
+<package>
+  <description brief="hogman">
+	Wrapper package for HOGMAN (hierarchical graph optimization), only minimal set of files
+  </description>
+  <author>Maintained by Juergen Sturm</author>
+  <license>BSD (hogman wrapper), GPL (hogman itself)</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/hogman_minimal</url>
+  <depend package="roscpp"/>
+
+  <export>
+    <cpp cflags="-I${prefix}/include" lflags="-L${prefix}/lib -lhogman_csparse.so -lhogman_graph_optimizer_hogman.so -lhogman_graph_optimizer.so -lhogman_graph.so -lhogman_stuff.so -Wl,-rpath,${prefix}/lib"/>
+  </export>
+
+
+</package>
+
+
