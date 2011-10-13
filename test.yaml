@@ -67,7 +67,7 @@ left_US_theta: {ultrasonic_frontCenter_distance: 0.0, ultrasonic_frontLeft_dista
 right_IR_theta: {infrared_frontRightCenter_distance: 11.25, infrared_frontRightRight_distance: 33.75}
 left_IR_theta: {infrared_frontLeftCenter_distance: -11.25, infrared_frontLeftLeft_distance: -33.75}
 
-comb_const: {ultrasonic_avoid: 1.0, infrared_avoid: 0.0}
+comb_const: {ultrasonic_avoid: 0.6, infrared_avoid: 0.4}
 
 MAX_ANGULAR_VELOCITY: 500.0 # meters per second
 MAX_LINEAR_VELOCITY: 500.0  # meters per second

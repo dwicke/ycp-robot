@@ -43,6 +43,11 @@ void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
 
 }
 
+
+int IR_Convert(int value){
+	return 739.38*pow(value,-.8105);
+}
+
 void serialInit(){
 	//initialize internal vars to default - constructor
 	driver = new DrRobotMotionSensorDriver();
@@ -102,13 +107,13 @@ int main(int argc, char**argv){
 		SensorMsg.ultrasonic_rearLeft_distance = rangeSensorData->usRangeSensor[5];
 		
 		//Infrared: data is floats
-		SensorMsg.infrared_frontLeftLeft_distance = rangeSensorData->irRangeSensor[0];
-		SensorMsg.infrared_frontLeftCenter_distance = rangeSensorData->irRangeSensor[1];
-		SensorMsg.infrared_frontRightCenter_distance = rangeSensorData->irRangeSensor[2];
-		SensorMsg.infrared_frontRightRight_distance = rangeSensorData->irRangeSensor[3];
-		SensorMsg.infrared_right_distance = rangeSensorData->irRangeSensor[4];
-		SensorMsg.infrared_rear_distance = rangeSensorData->irRangeSensor[5];
-		SensorMsg.infrared_left_distance = rangeSensorData->irRangeSensor[6];
+		SensorMsg.infrared_frontLeftLeft_distance = IR_Convert(rangeSensorData->irRangeSensor[0]);
+		SensorMsg.infrared_frontLeftCenter_distance = IR_Convert(rangeSensorData->irRangeSensor[1]);
+		SensorMsg.infrared_frontRightCenter_distance = IR_Convert(rangeSensorData->irRangeSensor[2]);
+		SensorMsg.infrared_frontRightRight_distance = IR_Convert(rangeSensorData->irRangeSensor[3]);
+		SensorMsg.infrared_right_distance = IR_Convert(rangeSensorData->irRangeSensor[4]);
+		SensorMsg.infrared_rear_distance = IR_Convert(rangeSensorData->irRangeSensor[5]);
+		SensorMsg.infrared_left_distance = IR_Convert(rangeSensorData->irRangeSensor[6]);
 
 		//human sensor, returned from robot in a different message
 		SensorMsg.human_left_motion = standardSensorData->humanSensorData[0];
@@ -118,12 +123,13 @@ int main(int argc, char**argv){
 			
 
 		//print out the sensor data messages for testing purposes
- 		ROS_INFO("Infrared range sensor frontLeft = %d\n", rangeSensorData->irRangeSensor[0]);
-		ROS_INFO("Infrared range sensor frontCenter = %d\n", rangeSensorData->irRangeSensor[1]);
-		ROS_INFO("Infrared range sensor frontRight = %d\n", rangeSensorData->irRangeSensor[2]);
-		ROS_INFO("Infrared range sensor rearRight = %d\n", rangeSensorData->irRangeSensor[3]);
-		ROS_INFO("Infrared range sensor rearCenter = %d\n", rangeSensorData->irRangeSensor[4]);
-		ROS_INFO("Infrared range sensor rearLeft = %d\n", rangeSensorData->irRangeSensor[5]);
+ 		ROS_INFO("Infrasonic range sensor 1 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[0]));
+		ROS_INFO("Infrasonic range sensor 2 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[1]));
+		ROS_INFO("Infrasonic range sensor 3 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[2]));
+		ROS_INFO("Infrasonic range sensor 4 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[3]));
+		ROS_INFO("Infrasonic range sensor 5 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[4]));
+		ROS_INFO("Infrasonic range sensor 6 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[5]));
+		ROS_INFO("Infrasonic range sensor 7 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[6]));
 
 		//now publish the sensor data
 		sensordata_pub.publish(SensorMsg);
@@ -134,38 +140,6 @@ int main(int argc, char**argv){
 		++count;
 	
 	}
-	
-
-	//ports are configure, robot is ready to receieve packets
-	//note:sensor update rate is around 10 Hz (firmware specified) so don't go faster than that
-	
-	
-	//MotorSensorData *motorSensorData = new MotorSensorData();
-	//driver->getDrRobotMotionDriverConfig(config);
-	
-	//for(;;){
-		
-		//Use the subscribed data to write the correct values to the motors
-		//move forward
-		//int error = driver->sendMotorCtrlAllCmd(PWM, 32767-5000, 5000,16384,16384,16384,16384,100);
-		//if(error = -1) fprintf(stderr, "An error has occured while trying to move");
-		
-
-
-		//read some sensors	
-		//driver->readStandardSensorData(sensorData);
-		//driver->readMotorSensorData(motorSensorData);
-		//driver->getDrRobotMotionDriverConfig(config);
-		
-		//print out some values
-		//fprintf(stdout, "Human Sensor Data 1: %d\n", sensorData->humanSensorData[1]);
-		//fprintf(stdout, "Human Sensor Data 2: %d\n", sensorData->humanSensorData[1]);
-		//fprintf(stdout, "Human Sensor Data 3: %d\n", sensorData->humanSensorData[3]);	
-		//fprintf(stdout, "Human Sensor Data 4: %d\n", sensorData->humanSensorData[3]);
-		
-		//save the sensordata into the sensorData struct to be published
-		
-	//}
 	
 	return 0;
 }
