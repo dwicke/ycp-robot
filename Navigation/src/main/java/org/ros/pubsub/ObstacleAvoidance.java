@@ -134,7 +134,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			for (MotorCommand cmd: cmds)
 			{
 				// calculate the angular and the linear velocity
-				// convert alpha(normalized linear velocity) and beta(normailzied angular velocity)
+				// convert alpha(normalized linear velocity) and beta(normalized angular velocity)
 				// into V and W (linear velocity and angular velocity)
 				// by doing alpha * MAX_LINEAR_VELOCITY = linear velocity
 				// beta * MAX_ANGULAR_VELOCITY = angular velocity.
