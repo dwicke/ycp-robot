@@ -79,9 +79,9 @@ int main(int argc, char**argv){
 			
 	int count = 0; //count of how many messages were sent
 	
-	//make a sensor data struct
+	//make a range sensor data object and a standard sensor object
 	RangeSensorData *rangeSensorData = new RangeSensorData();
-	
+	StandardSensorData *standardSensorData = new StandardSensorData();
 	while(ros::ok())
 	{
 		//This is a message object, it is stuffed with the datas and then can be published
@@ -89,24 +89,41 @@ int main(int argc, char**argv){
 		
 		//get the sensor data, return values are 6 Ultrasonic sensors and 10 IRs, X80SVP does not require all of these.
 		driver->readRangeSensorData(rangeSensorData);
-		
+		driver->readStandardSensorData(standardSensorData);
+
 		//set the sensor data
-		//data is 8 bit unsigned, in cm's
+
+		//Ultrasonic: data is 8 bit unsigned, in cm's
 		SensorMsg.ultrasonic_frontLeft_distance = rangeSensorData->usRangeSensor[0];
 		SensorMsg.ultrasonic_frontCenter_distance = rangeSensorData->usRangeSensor[1];
 		SensorMsg.ultrasonic_frontRight_distance = rangeSensorData->usRangeSensor[2];
 		SensorMsg.ultrasonic_rearRight_distance = rangeSensorData->usRangeSensor[3];
 		SensorMsg.ultrasonic_rearCenter_distance = rangeSensorData->usRangeSensor[4];
-		SensorMsg.ultrasonic_rearLeft_distance = rangeSensorData->usRangeSensor[5];		
+		SensorMsg.ultrasonic_rearLeft_distance = rangeSensorData->usRangeSensor[5];
+		
+		//Infrared: data is floats
+		SensorMsg.infrared_frontLeftLeft_distance = rangeSensorData->irRangeSensor[0];
+		SensorMsg.infrared_frontLeftCenter_distance = rangeSensorData->irRangeSensor[1];
+		SensorMsg.infrared_frontRightCenter_distance = rangeSensorData->irRangeSensor[2];
+		SensorMsg.infrared_frontRightRight_distance = rangeSensorData->irRangeSensor[3];
+		SensorMsg.infrared_right_distance = rangeSensorData->irRangeSensor[4];
+		SensorMsg.infrared_rear_distance = rangeSensorData->irRangeSensor[5];
+		SensorMsg.infrared_left_distance = rangeSensorData->irRangeSensor[6];
+
+		//human sensor, returned from robot in a different message
+		SensorMsg.human_left_motion = standardSensorData->humanSensorData[0];
+		SensorMsg.human_left_presence = standardSensorData->humanSensorData[1];
+		SensorMsg.human_right_motion = standardSensorData->humanSensorData[2];
+		SensorMsg.human_right_presence = standardSensorData->humanSensorData[3];
 			
 
 		//print out the sensor data messages for testing purposes
- 		ROS_INFO("Ultrasonic range sensor frontLeft = %d\n", rangeSensorData->usRangeSensor[0]);
-		ROS_INFO("Ultrasonic range sensor frontCenter = %d\n", rangeSensorData->usRangeSensor[1]);
-		ROS_INFO("Ultrasonic range sensor frontRight = %d\n", rangeSensorData->usRangeSensor[2]);
-		ROS_INFO("Ultrasonic range sensor rearRight = %d\n", rangeSensorData->usRangeSensor[3]);
-		ROS_INFO("Ultrasonic range sensor rearCenter = %d\n", rangeSensorData->usRangeSensor[4]);
-		ROS_INFO("Ultrasonic range sensor rearLeft = %d\n", rangeSensorData->usRangeSensor[5]);
+ 		ROS_INFO("Infrared range sensor frontLeft = %d\n", rangeSensorData->irRangeSensor[0]);
+		ROS_INFO("Infrared range sensor frontCenter = %d\n", rangeSensorData->irRangeSensor[1]);
+		ROS_INFO("Infrared range sensor frontRight = %d\n", rangeSensorData->irRangeSensor[2]);
+		ROS_INFO("Infrared range sensor rearRight = %d\n", rangeSensorData->irRangeSensor[3]);
+		ROS_INFO("Infrared range sensor rearCenter = %d\n", rangeSensorData->irRangeSensor[4]);
+		ROS_INFO("Infrared range sensor rearLeft = %d\n", rangeSensorData->irRangeSensor[5]);
 
 		//now publish the sensor data
 		sensordata_pub.publish(SensorMsg);
