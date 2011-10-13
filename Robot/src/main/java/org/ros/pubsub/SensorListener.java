@@ -157,8 +157,6 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					
 					log.debug(rangeData);
 					
-					
-					
 					Range USRange = new Range();
 					USRange.max_range = (float) 2.55; // 255cm
 					USRange.min_range = (float) .04; // 4cm

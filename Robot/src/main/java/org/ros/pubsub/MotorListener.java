@@ -29,9 +29,8 @@ import org.ros.message.sensor_msgs.Range;
 
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of the Robot listener is to
- * listen for messages that have the motor data and convert them to the virtual
- * robot's units.
+ * external roscore is already running.  The job of MotorListener is to 
+ * listen for odometry data and publish in ros format.
  * 
  * Not sure we really need this yet.  Will see as we make the rest...
  * @author drewwicke@google.com (Drew Wicke)
