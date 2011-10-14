@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 	//Subscribe this program to motor data
 	ros::Subscriber motordata_sub = n.subscribe("motordata", 10, motordataCallback);
 	
-	//Send message every 10hz (sim.cpp shows how to do this reading on demand/from a blocking device)
+	//Send message every 10hz (note: sim.cpp shows how to do this reading on demand/from a blocking device)
 	ros::Rate loop_rate(10);
 	
 	//ros:ok() will return false if the ROS core node is shut down

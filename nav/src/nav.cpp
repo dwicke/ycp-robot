@@ -8,10 +8,10 @@
 #define USE_ULTRASONIC			1
 
 //Use infrared sensors frontLeftLeft and frontRightRight.
-//#define USE_INFRARED_WIDE		1
+#define USE_INFRARED_WIDE		1
 
 //Use infrared sensors frontLeftCenter and frontRightCenter.
-//#define USE_INFRARED_NARROW	1
+#define USE_INFRARED_NARROW	1
 
 
 ///Parameters
@@ -23,13 +23,14 @@
 #define ERR_THRESH	10
 
 //Top speed, in cm/sec
-#define SPEED		3
+#define SPEED		30
+#define STUCK_TURN	15
 
 //Time interval the motor commands should be valid for
 #define TIME		200
 
 //If robot encounters a corner, it will get stuck- this controls how likely it is to turn around to get out of that situation (lower=more likely, higher=less likely)
-#define STUCK	100
+#define STUCK	200
 
 
 
@@ -53,23 +54,23 @@ void nav(int il,int ir,int &sl,int &sr)
 {
 	st=st+(4-((il+ir)*2))*2;
 	
-	//Object avoidance is repeatedly cycling left/right- most likely stuck in a corner
+	//Object avoidence is repeatedly cycling left/right- most likely stuck in a corner
 	if( st>=STUCK)
 	{
 		ROS_INFO("Stuck! Turning...");
 		robot_msgs::MotorData motordata_msg;
 		
 		//Turn for one second, this should result in a ~90-180deg turn or at least enough to get the object avoidence to stop cycling. 
-		motordata_msg.motor_left_velocity	=-SPEED;
+		motordata_msg.motor_left_velocity	=-STUCK_TURN;
 		motordata_msg.motor_left_time		=1100;
-		motordata_msg.motor_right_velocity	=+SPEED;
+		motordata_msg.motor_right_velocity	=+STUCK_TURN;
 		motordata_msg.motor_right_time		=1100;
 		motordata_pub.publish(motordata_msg);
 		
 		ros::spinOnce();
 		sleep(1);
 		
-		st=0;
+		st=-STUCK;
 		return;
 	}
 	
@@ -159,7 +160,7 @@ void sensordataCallback(const robot_msgs::SensorData::ConstPtr& msg)
 		motordata_msg.motor_right_time		=1000;
 		motordata_pub.publish(motordata_msg);
 		
-		exit(1);
+		return;//exit(1);
 	}
 	
 	//Gather sensor distance(s)
@@ -182,7 +183,7 @@ void sensordataCallback(const robot_msgs::SensorData::ConstPtr& msg)
 	dc++;
 #endif
 	
-	//Determine if there is an object to the left and/or right
+	//Determine is there is an object to the left and/or right
 	int il=(dl/dc)>=SEE_THRESH,
 		ir=(dr/dc)>=SEE_THRESH,
 		sl=0,sr=0;
@@ -206,10 +207,10 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;
 	
 	//topic, buffer
-	motordata_pub = n.advertise<robot_msgs::MotorData>("motordata", 10);
+	motordata_pub = n.advertise<robot_msgs::MotorData>("motordata", 1);
 	
 	//topic, buffer, callback
-	ros::Subscriber sensordata_sub = n.subscribe("sensordata", 10, sensordataCallback);
+	ros::Subscriber sensordata_sub = n.subscribe("sensordata", 1, sensordataCallback);
 	
 	ROS_INFO("Nav started.");
 	

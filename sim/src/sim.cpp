@@ -107,10 +107,10 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;
 	
 	//Advertise this program provides sensor data
-	ros::Publisher sensor_pub = n.advertise<robot_msgs::SensorData>("sensordata", 10);
+	ros::Publisher sensor_pub = n.advertise<robot_msgs::SensorData>("sensordata", 1);
 	
 	//Subscribe this program to motor data
-	ros::Subscriber motordata_sub = n.subscribe("motordata", 10, motordataCallback);
+	ros::Subscriber motordata_sub = n.subscribe("motordata", 1, motordataCallback);
 	
 	
 	ROS_INFO("Started sim comm.");
