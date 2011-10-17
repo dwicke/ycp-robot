@@ -1,2 +1,2 @@
-from ._SensorData import *
-from ._MotorData import *
+from _SensorData import *
+from _MotorData import *

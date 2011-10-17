@@ -1,13 +1,13 @@
 <package>
-  <description brief="robot_msgs">
+  <description brief="tests">
 
-     robot_msgs
+     tests
 
   </description>
   <author>Jason Cluck</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
-  <url>http://ros.org/wiki/robot_msgs</url>
+  <url>http://ros.org/wiki/tests</url>
 
 </package>
 

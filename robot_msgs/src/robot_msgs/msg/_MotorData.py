@@ -61,8 +61,8 @@ uint16 motor_right_time
     try:
       _x = self
       buff.write(_struct_fHfH.pack(_x.motor_left_velocity, _x.motor_left_time, _x.motor_right_velocity, _x.motor_right_time))
-    except struct.error as se: self._check_types(se)
-    except TypeError as te: self._check_types(te)
+    except struct.error, se: self._check_types(se)
+    except TypeError, te: self._check_types(te)
 
   def deserialize(self, str):
     """
@@ -77,7 +77,7 @@ uint16 motor_right_time
       end += 12
       (_x.motor_left_velocity, _x.motor_left_time, _x.motor_right_velocity, _x.motor_right_time,) = _struct_fHfH.unpack(str[start:end])
       return self
-    except struct.error as e:
+    except struct.error, e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
 
 
@@ -92,8 +92,8 @@ uint16 motor_right_time
     try:
       _x = self
       buff.write(_struct_fHfH.pack(_x.motor_left_velocity, _x.motor_left_time, _x.motor_right_velocity, _x.motor_right_time))
-    except struct.error as se: self._check_types(se)
-    except TypeError as te: self._check_types(te)
+    except struct.error, se: self._check_types(se)
+    except TypeError, te: self._check_types(te)
 
   def deserialize_numpy(self, str, numpy):
     """
@@ -110,7 +110,7 @@ uint16 motor_right_time
       end += 12
       (_x.motor_left_velocity, _x.motor_left_time, _x.motor_right_velocity, _x.motor_right_time,) = _struct_fHfH.unpack(str[start:end])
       return self
-    except struct.error as e:
+    except struct.error, e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
 
 _struct_I = roslib.message.struct_I

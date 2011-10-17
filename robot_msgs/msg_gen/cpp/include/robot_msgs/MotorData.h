@@ -3,22 +3,19 @@
 #define ROBOT_MSGS_MESSAGE_MOTORDATA_H
 #include <string>
 #include <vector>
-#include <map>
 #include <ostream>
 #include "ros/serialization.h"
 #include "ros/builtin_message_traits.h"
 #include "ros/message_operations.h"
+#include "ros/message.h"
 #include "ros/time.h"
-
-#include "ros/macros.h"
-
-#include "ros/assert.h"
 
 
 namespace robot_msgs
 {
 template <class ContainerAllocator>
-struct MotorData_ {
+struct MotorData_ : public ros::Message
+{
   typedef MotorData_<ContainerAllocator> Type;
 
   MotorData_()
@@ -107,7 +104,6 @@ public:
 
   typedef boost::shared_ptr< ::robot_msgs::MotorData_<ContainerAllocator> > Ptr;
   typedef boost::shared_ptr< ::robot_msgs::MotorData_<ContainerAllocator>  const> ConstPtr;
-  boost::shared_ptr<std::map<std::string, std::string> > __connection_header;
 }; // struct MotorData
 typedef  ::robot_msgs::MotorData_<std::allocator<void> > MotorData;
 
@@ -127,8 +123,6 @@ namespace ros
 {
 namespace message_traits
 {
-template<class ContainerAllocator> struct IsMessage< ::robot_msgs::MotorData_<ContainerAllocator> > : public TrueType {};
-template<class ContainerAllocator> struct IsMessage< ::robot_msgs::MotorData_<ContainerAllocator>  const> : public TrueType {};
 template<class ContainerAllocator>
 struct MD5Sum< ::robot_msgs::MotorData_<ContainerAllocator> > {
   static const char* value() 
