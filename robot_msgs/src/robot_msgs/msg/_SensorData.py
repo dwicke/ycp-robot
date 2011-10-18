@@ -115,8 +115,8 @@ uint16 human_right_presence
     try:
       _x = self
       buff.write(_struct_6B7f4H.pack(_x.ultrasonic_frontLeft_distance, _x.ultrasonic_frontCenter_distance, _x.ultrasonic_frontRight_distance, _x.ultrasonic_rearRight_distance, _x.ultrasonic_rearCenter_distance, _x.ultrasonic_rearLeft_distance, _x.infrared_frontLeftLeft_distance, _x.infrared_frontLeftCenter_distance, _x.infrared_frontRightCenter_distance, _x.infrared_frontRightRight_distance, _x.infrared_right_distance, _x.infrared_rear_distance, _x.infrared_left_distance, _x.human_left_motion, _x.human_left_presence, _x.human_right_motion, _x.human_right_presence))
-    except struct.error as se: self._check_types(se)
-    except TypeError as te: self._check_types(te)
+    except struct.error, se: self._check_types(se)
+    except TypeError, te: self._check_types(te)
 
   def deserialize(self, str):
     """
@@ -131,7 +131,7 @@ uint16 human_right_presence
       end += 42
       (_x.ultrasonic_frontLeft_distance, _x.ultrasonic_frontCenter_distance, _x.ultrasonic_frontRight_distance, _x.ultrasonic_rearRight_distance, _x.ultrasonic_rearCenter_distance, _x.ultrasonic_rearLeft_distance, _x.infrared_frontLeftLeft_distance, _x.infrared_frontLeftCenter_distance, _x.infrared_frontRightCenter_distance, _x.infrared_frontRightRight_distance, _x.infrared_right_distance, _x.infrared_rear_distance, _x.infrared_left_distance, _x.human_left_motion, _x.human_left_presence, _x.human_right_motion, _x.human_right_presence,) = _struct_6B7f4H.unpack(str[start:end])
       return self
-    except struct.error as e:
+    except struct.error, e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
 
 
@@ -146,8 +146,8 @@ uint16 human_right_presence
     try:
       _x = self
       buff.write(_struct_6B7f4H.pack(_x.ultrasonic_frontLeft_distance, _x.ultrasonic_frontCenter_distance, _x.ultrasonic_frontRight_distance, _x.ultrasonic_rearRight_distance, _x.ultrasonic_rearCenter_distance, _x.ultrasonic_rearLeft_distance, _x.infrared_frontLeftLeft_distance, _x.infrared_frontLeftCenter_distance, _x.infrared_frontRightCenter_distance, _x.infrared_frontRightRight_distance, _x.infrared_right_distance, _x.infrared_rear_distance, _x.infrared_left_distance, _x.human_left_motion, _x.human_left_presence, _x.human_right_motion, _x.human_right_presence))
-    except struct.error as se: self._check_types(se)
-    except TypeError as te: self._check_types(te)
+    except struct.error, se: self._check_types(se)
+    except TypeError, te: self._check_types(te)
 
   def deserialize_numpy(self, str, numpy):
     """
@@ -164,7 +164,7 @@ uint16 human_right_presence
       end += 42
       (_x.ultrasonic_frontLeft_distance, _x.ultrasonic_frontCenter_distance, _x.ultrasonic_frontRight_distance, _x.ultrasonic_rearRight_distance, _x.ultrasonic_rearCenter_distance, _x.ultrasonic_rearLeft_distance, _x.infrared_frontLeftLeft_distance, _x.infrared_frontLeftCenter_distance, _x.infrared_frontRightCenter_distance, _x.infrared_frontRightRight_distance, _x.infrared_right_distance, _x.infrared_rear_distance, _x.infrared_left_distance, _x.human_left_motion, _x.human_left_presence, _x.human_right_motion, _x.human_right_presence,) = _struct_6B7f4H.unpack(str[start:end])
       return self
-    except struct.error as e:
+    except struct.error, e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
 
 _struct_I = roslib.message.struct_I
