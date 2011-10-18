@@ -3,32 +3,23 @@
 		Going to use a Yaml file for that allows  parameters with complex types, nested namespaces of 
 		parameters, and reusing the same parameter values in multiple places.  
 	-->
-	<rosparam file="test.yaml" command="load"/>
+	
+	<!-- Namespace should be set by arg space:=<namespace> when calling this file other wise in root space-->
+	<arg name="space" default="/" />
+	
+	
+	<!-- Params -->
+	<rosparam file="test.yaml" ns="$(arg space)" command="load"/>
 	<!-- Robot -->
-	<node name="sensor_listener" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.SensorListener" />
+	<node name="sensor_listener" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.SensorListener" />
+	
+	
 	<!-- <node name="talker" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.Talker" /> -->
-	<!-- Sensors
-	<node name="ultrasonic_frontLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
-	<node name="ultrasonic_frontCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
-	<node name="ultrasonic_frontRight_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
-	<node name="ultrasonic_rearRight_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
-	<node name="ultrasonic_rearCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
-	<node name="ultrasonic_rearLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" />
 	
 	
-	
-	<node name="infrared_frontLeftLeft_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
-	<node name="infrared_frontLeftCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
-	<node name="infrared_frontRightCenter_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
-	<node name="infrared_frontRightRight_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
-	<node name="infrared_right_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
-	<node name="infrared_rear_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
-	<node name="infrared_left_distance" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
-	 -->
-	
-	
-	 <node name="ultrasonic_sensor" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" /> 
-	<node name="infrared_sensor" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
+	<!-- Sensors -->
+	 <node name="ultrasonic_sensor" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.UltrasonicSensor" /> 
+	<node name="infrared_sensor" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Sensors main.java.org.ros.pubsub.IRSensor" />
 
 	 
 	 
@@ -37,19 +28,19 @@
 	 
 	
 	<!-- Navigation -->
-	<node name="obstacle_avoidance" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.ObstacleAvoidance" />
+	<node name="obstacle_avoidance" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.ObstacleAvoidance" />
 	
-	<node name="motor_control" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.MotorControl" />
-	
-	
-	<node name="infrared_avoid" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorAvoidance" />
-	<node name="ultrasonic_avoid" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorAvoidance" />
+	<node name="motor_control" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.MotorControl" />
 	
 	
-	<node name="left_IR" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidance" />
-	<node name="right_IR" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidance" />
-	<node name="left_US" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidance" />
-	<node name="right_US" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidance" />
+	<node name="infrared_avoid" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorAvoidance" />
+	<node name="ultrasonic_avoid" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorAvoidance" />
+	
+	
+	<node name="left_IR" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidance" />
+	<node name="right_IR" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidance" />
+	<node name="left_US" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidance" />
+	<node name="right_US" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.SensorSideAvoidance" />
 	
 	
 </launch>	 
