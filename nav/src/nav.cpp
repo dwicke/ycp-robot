@@ -54,7 +54,7 @@ void nav(int il,int ir,int &sl,int &sr)
 {
 	st=st+(4-((il+ir)*2))*2;
 	
-	//Object avoidence is repeatedly cycling left/right- most likely stuck in a corner
+	//Object avoidance is repeatedly cycling left/right- most likely stuck in a corner
 	if( st>=STUCK)
 	{
 		ROS_INFO("Stuck! Turning...");

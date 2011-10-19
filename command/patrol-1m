@@ -1,0 +1,7 @@
+cd "$( dirname "$0" )"
+while true; do
+	./forward-1m
+	sleep 2.5s
+	./set-motors 47.1238898038 -47.1238898038 500
+	sleep 2s
+done
