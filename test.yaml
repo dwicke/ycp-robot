@@ -69,8 +69,8 @@ left_IR_theta: {infrared_frontLeftCenter_distance: -11.25, infrared_frontLeftLef
 
 comb_const: {ultrasonic_avoid: 0.6, infrared_avoid: 0.4}
 
-MAX_ANGULAR_VELOCITY: 500.0 # meters per second
-MAX_LINEAR_VELOCITY: 500.0  # meters per second
+MAX_ANGULAR_VELOCITY: 0.75 # meters per second
+MAX_LINEAR_VELOCITY: 0.75  # meters per second
 
 # variance in the gaussian function used for obstacle avoidance
 # change these to effect things...  Can always make seperate
