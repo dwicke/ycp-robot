@@ -1,0 +1,2 @@
+cd "$( dirname "$0" )"
+./set-motors 0 1000
