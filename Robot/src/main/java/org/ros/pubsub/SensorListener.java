@@ -83,7 +83,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 			for (int i = 0; i < fields.length; i++)
 			{
 				
-				log.info("The name of the first field is: " + fields[i].getName() + "degree " + sensorAngles.get(fields[i].getName()));
+			//	log.info("The name of the first field is: " + fields[i].getName() + "degree " + sensorAngles.get(fields[i].getName()));
 				Publisher<Range> pub = node.newPublisher(fields[i].getName() + "raw", "sensor_msgs/Range");
 				
 				publisher.put(fields[i].getName(), pub);
@@ -177,9 +177,27 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 				}
 				else if (fieldName.contains("human"))
 				{
-					// I will need to come back to this
-					// because I need to make a new message
-					// type for this sensor
+					// this outputs the human data as range messages
+					
+					// get the range
+					int rangeData = (Integer) messField.get(message);
+					
+					// put in the data
+					Range humanRange = new Range();
+					humanRange.max_range = 4095;
+					humanRange.min_range = 0;
+					humanRange.range = (float) rangeData;
+					// I am using secs in the header to be the key
+					// since timestamp secs couldn't keep up (neither could nsecs)
+					// I define my own secs in terms of when it leaves here
+					humanRange.header.stamp.secs = (int) count;
+					humanRange.header.frame_id = fieldName;
+					
+					log.info("Recieved Message from " + fieldName + " range is " + humanRange.range);
+					
+					publisher.get(fieldName).publish(humanRange);
+					
+					
 				}
 				
 				

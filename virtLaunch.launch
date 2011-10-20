@@ -10,6 +10,8 @@
 	
 	<!-- Params -->
 	<rosparam file="test.yaml" ns="$(arg space)" command="load"/>
+
+
 	<!-- Robot -->
 	<node name="sensor_listener" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Robot main.java.org.ros.pubsub.SensorListener" />
 	

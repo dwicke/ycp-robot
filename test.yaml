@@ -42,6 +42,13 @@ infrared_topics:
 - infrared_right_distance
 - infrared_rear_distance
 - infrared_left_distance
+
+
+human_topics:
+- human_left_motion
+- human_left_presence
+- human_right_motion
+- human_right_presence
  
   
 left_IR: 
@@ -92,5 +99,8 @@ obstacle_avoidance_subscriptions:
 - infrared_avoid_Motor_Command
 
 wheelbase: .08 # in cm
+
+
+
 
 

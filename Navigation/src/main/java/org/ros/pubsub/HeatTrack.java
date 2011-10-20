@@ -23,56 +23,58 @@ import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
+import org.ros.message.MessageListener;
 import org.ros.message.robot_msgs.*;
 import org.ros.message.sensor_msgs.Range;
 
 /**
  * This is a simple rosjava {@link Publisher} {@link Node}. It assumes an
- * external roscore is already running.
+ * external roscore is already running. Takes the left and right
+ * human sensor data and converts it to left and right wheel velocities.
+ * It will orient the robot to face the human target and steer towards it
+ * slowing down and speeding up until obstacle avoidance must be engaged 
+ * so that the robot won't hit the human.  
  * 
  * @author ethan.rublee@gmail.com (Ethan Rublee)
  * @author damonkohler@google.com (Damon Kohler)
  */
-public class HeatTrack implements NodeMain {
+public class HeatTrack implements NodeMain, MessageListener<Range> {
 
-  private Node node;
-  
+	private Node node;
 
-  @Override
-  public void main(NodeConfiguration configuration) {
-    Preconditions.checkState(node == null);
-    Preconditions.checkNotNull(configuration);
-    try {
-    	
-    	
-    	
-    	
-      node = new DefaultNodeFactory().newNode("talker", configuration);
-      Publisher<MotorData> publisher =
-          node.newPublisher("MotorData", "robot_msgs/MotorData");
-      int seq = 0;
-      while (true) {
-       // org.ros.message.std_msgs.String str = new org.ros.message.std_msgs.String();
-    	  
-    	  MotorData motorMessage = new MotorData();
-    	  motorMessage.motor_left_velocity = (float) 3.3;
-    	  seq += 1;
-        publisher.publish(motorMessage);
-        Thread.sleep(1000);
-      }
-    } catch (Exception e) {
-      if (node != null) {
-        node.getLog().fatal(e);
-      } else {
-        e.printStackTrace();
-      }
-    }
-  }
 
-  @Override
-  public void shutdown() {
-    node.shutdown();
-    node = null;
-  }
+	@Override
+	public void main(NodeConfiguration configuration) {
+		Preconditions.checkState(node == null);
+		Preconditions.checkNotNull(configuration);
+
+
+		try {
+
+
+
+
+
+		} catch (Exception e) {
+			if (node != null) {
+				node.getLog().fatal(e);
+			} else {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	@Override
+	public void shutdown() {
+		node.shutdown();
+		node = null;
+	}
+
+	@Override
+	public void onNewMessage(Range arg0) {
+		// TODO Auto-generated method stub
+
+	}
 
 }

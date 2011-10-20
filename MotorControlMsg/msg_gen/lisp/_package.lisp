@@ -3,5 +3,7 @@
   (:export
    "<MOTORCOMMAND>"
    "MOTORCOMMAND"
+   "<WHEELVELOCITIES>"
+   "WHEELVELOCITIES"
   ))
 

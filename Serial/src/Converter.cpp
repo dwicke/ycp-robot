@@ -120,8 +120,12 @@ int main(int argc, char**argv){
 		SensorMsg.human_left_presence = standardSensorData->humanSensorData[1];
 		SensorMsg.human_right_motion = standardSensorData->humanSensorData[2];
 		SensorMsg.human_right_presence = standardSensorData->humanSensorData[3];
-			
 
+		ROS_INFO("Human left presence = %d", standardSensorData->humanSensorData[1]);
+		ROS_INFO("Human right presence = %d", standardSensorData->humanSensorData[3]);
+		
+			
+/*
 		//print out the sensor data messages for testing purposes
  		ROS_INFO("Infrasonic range sensor 1 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[0]));
 		ROS_INFO("Infrasonic range sensor 2 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[1]));
@@ -130,7 +134,7 @@ int main(int argc, char**argv){
 		ROS_INFO("Infrasonic range sensor 5 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[4]));
 		ROS_INFO("Infrasonic range sensor 6 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[5]));
 		ROS_INFO("Infrasonic range sensor 7 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[6]));
-
+*/
 		//now publish the sensor data
 		sensordata_pub.publish(SensorMsg);
 	
