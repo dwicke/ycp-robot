@@ -17,6 +17,11 @@
     :initarg :precedence
     :type cl:integer
     :initform 0)
+   (isLeftRightVel
+    :reader isLeftRightVel
+    :initarg :isLeftRightVel
+    :type cl:boolean
+    :initform cl:nil)
    (linear_velocity
     :reader linear_velocity
     :initarg :linear_velocity
@@ -47,6 +52,11 @@
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader MotorControlMsg-msg:precedence-val is deprecated.  Use MotorControlMsg-msg:precedence instead.")
   (precedence m))
 
+(cl:ensure-generic-function 'isLeftRightVel-val :lambda-list '(m))
+(cl:defmethod isLeftRightVel-val ((m <MotorCommand>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader MotorControlMsg-msg:isLeftRightVel-val is deprecated.  Use MotorControlMsg-msg:isLeftRightVel instead.")
+  (isLeftRightVel m))
+
 (cl:ensure-generic-function 'linear_velocity-val :lambda-list '(m))
 (cl:defmethod linear_velocity-val ((m <MotorCommand>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader MotorControlMsg-msg:linear_velocity-val is deprecated.  Use MotorControlMsg-msg:linear_velocity instead.")
@@ -65,6 +75,7 @@
     (cl:write-byte (cl:ldb (cl:byte 8 16) unsigned) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 24) unsigned) ostream)
     )
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:if (cl:slot-value msg 'isLeftRightVel) 1 0)) ostream)
   (cl:let ((bits (roslisp-utils:encode-single-float-bits (cl:slot-value msg 'linear_velocity))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
@@ -85,6 +96,7 @@
       (cl:setf (cl:ldb (cl:byte 8 16) unsigned) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 24) unsigned) (cl:read-byte istream))
       (cl:setf (cl:slot-value msg 'precedence) (cl:if (cl:< unsigned 2147483648) unsigned (cl:- unsigned 4294967296))))
+    (cl:setf (cl:slot-value msg 'isLeftRightVel) (cl:not (cl:zerop (cl:read-byte istream))))
     (cl:let ((bits 0))
       (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
@@ -107,20 +119,21 @@
   "MotorControlMsg/MotorCommand")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<MotorCommand>)))
   "Returns md5sum for a message object of type '<MotorCommand>"
-  "328e85f5960f8399af83b4d4d167e4a2")
+  "435226135b8d7ba320f037f1609e6fc6")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'MotorCommand)))
   "Returns md5sum for a message object of type 'MotorCommand"
-  "328e85f5960f8399af83b4d4d167e4a2")
+  "435226135b8d7ba320f037f1609e6fc6")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<MotorCommand>)))
   "Returns full string definition for message of type '<MotorCommand>"
-  (cl:format cl:nil "Header header~%~%int32 precedence~%~%float32 linear_velocity~%float32 angular_velocity~%~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.secs: seconds (stamp_secs) since epoch~%# * stamp.nsecs: nanoseconds since stamp_secs~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%# 0: no frame~%# 1: global frame~%string frame_id~%~%~%"))
+  (cl:format cl:nil "Header header~%~%int32 precedence~%bool isLeftRightVel~%float32 linear_velocity~%float32 angular_velocity~%~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.secs: seconds (stamp_secs) since epoch~%# * stamp.nsecs: nanoseconds since stamp_secs~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%# 0: no frame~%# 1: global frame~%string frame_id~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'MotorCommand)))
   "Returns full string definition for message of type 'MotorCommand"
-  (cl:format cl:nil "Header header~%~%int32 precedence~%~%float32 linear_velocity~%float32 angular_velocity~%~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.secs: seconds (stamp_secs) since epoch~%# * stamp.nsecs: nanoseconds since stamp_secs~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%# 0: no frame~%# 1: global frame~%string frame_id~%~%~%"))
+  (cl:format cl:nil "Header header~%~%int32 precedence~%bool isLeftRightVel~%float32 linear_velocity~%float32 angular_velocity~%~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.secs: seconds (stamp_secs) since epoch~%# * stamp.nsecs: nanoseconds since stamp_secs~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%# 0: no frame~%# 1: global frame~%string frame_id~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <MotorCommand>))
   (cl:+ 0
      (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'header))
      4
+     1
      4
      4
 ))
@@ -129,6 +142,7 @@
   (cl:list 'MotorCommand
     (cl:cons ':header (header msg))
     (cl:cons ':precedence (precedence msg))
+    (cl:cons ':isLeftRightVel (isLeftRightVel msg))
     (cl:cons ':linear_velocity (linear_velocity msg))
     (cl:cons ':angular_velocity (angular_velocity msg))
 ))

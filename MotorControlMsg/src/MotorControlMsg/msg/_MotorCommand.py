@@ -5,13 +5,13 @@ import struct
 import std_msgs.msg
 
 class MotorCommand(roslib.message.Message):
-  _md5sum = "328e85f5960f8399af83b4d4d167e4a2"
+  _md5sum = "435226135b8d7ba320f037f1609e6fc6"
   _type = "MotorControlMsg/MotorCommand"
   _has_header = True #flag to mark the presence of a Header object
   _full_text = """Header header
 
 int32 precedence
-
+bool isLeftRightVel
 float32 linear_velocity
 float32 angular_velocity
 
@@ -35,8 +35,8 @@ time stamp
 string frame_id
 
 """
-  __slots__ = ['header','precedence','linear_velocity','angular_velocity']
-  _slot_types = ['Header','int32','float32','float32']
+  __slots__ = ['header','precedence','isLeftRightVel','linear_velocity','angular_velocity']
+  _slot_types = ['Header','int32','bool','float32','float32']
 
   def __init__(self, *args, **kwds):
     """
@@ -46,7 +46,7 @@ string frame_id
     changes.  You cannot mix in-order arguments and keyword arguments.
     
     The available fields are:
-       header,precedence,linear_velocity,angular_velocity
+       header,precedence,isLeftRightVel,linear_velocity,angular_velocity
     
     @param args: complete set of field values, in .msg order
     @param kwds: use keyword arguments corresponding to message field names
@@ -59,6 +59,8 @@ string frame_id
         self.header = std_msgs.msg._Header.Header()
       if self.precedence is None:
         self.precedence = 0
+      if self.isLeftRightVel is None:
+        self.isLeftRightVel = False
       if self.linear_velocity is None:
         self.linear_velocity = 0.
       if self.angular_velocity is None:
@@ -66,6 +68,7 @@ string frame_id
     else:
       self.header = std_msgs.msg._Header.Header()
       self.precedence = 0
+      self.isLeftRightVel = False
       self.linear_velocity = 0.
       self.angular_velocity = 0.
 
@@ -88,7 +91,7 @@ string frame_id
       length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self
-      buff.write(_struct_i2f.pack(_x.precedence, _x.linear_velocity, _x.angular_velocity))
+      buff.write(_struct_iB2f.pack(_x.precedence, _x.isLeftRightVel, _x.linear_velocity, _x.angular_velocity))
     except struct.error, se: self._check_types(se)
     except TypeError, te: self._check_types(te)
 
@@ -114,8 +117,9 @@ string frame_id
       self.header.frame_id = str[start:end]
       _x = self
       start = end
-      end += 12
-      (_x.precedence, _x.linear_velocity, _x.angular_velocity,) = _struct_i2f.unpack(str[start:end])
+      end += 13
+      (_x.precedence, _x.isLeftRightVel, _x.linear_velocity, _x.angular_velocity,) = _struct_iB2f.unpack(str[start:end])
+      self.isLeftRightVel = bool(self.isLeftRightVel)
       return self
     except struct.error, e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
@@ -136,7 +140,7 @@ string frame_id
       length = len(_x)
       buff.write(struct.pack('<I%ss'%length, length, _x))
       _x = self
-      buff.write(_struct_i2f.pack(_x.precedence, _x.linear_velocity, _x.angular_velocity))
+      buff.write(_struct_iB2f.pack(_x.precedence, _x.isLeftRightVel, _x.linear_velocity, _x.angular_velocity))
     except struct.error, se: self._check_types(se)
     except TypeError, te: self._check_types(te)
 
@@ -164,12 +168,13 @@ string frame_id
       self.header.frame_id = str[start:end]
       _x = self
       start = end
-      end += 12
-      (_x.precedence, _x.linear_velocity, _x.angular_velocity,) = _struct_i2f.unpack(str[start:end])
+      end += 13
+      (_x.precedence, _x.isLeftRightVel, _x.linear_velocity, _x.angular_velocity,) = _struct_iB2f.unpack(str[start:end])
+      self.isLeftRightVel = bool(self.isLeftRightVel)
       return self
     except struct.error, e:
       raise roslib.message.DeserializationError(e) #most likely buffer underfill
 
 _struct_I = roslib.message.struct_I
+_struct_iB2f = struct.Struct("<iB2f")
 _struct_3I = struct.Struct("<3I")
-_struct_i2f = struct.Struct("<i2f")

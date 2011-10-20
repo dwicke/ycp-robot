@@ -22,6 +22,7 @@ struct MotorCommand_ : public ros::Message
   MotorCommand_()
   : header()
   , precedence(0)
+  , isLeftRightVel(false)
   , linear_velocity(0.0)
   , angular_velocity(0.0)
   {
@@ -30,6 +31,7 @@ struct MotorCommand_ : public ros::Message
   MotorCommand_(const ContainerAllocator& _alloc)
   : header(_alloc)
   , precedence(0)
+  , isLeftRightVel(false)
   , linear_velocity(0.0)
   , angular_velocity(0.0)
   {
@@ -40,6 +42,9 @@ struct MotorCommand_ : public ros::Message
 
   typedef int32_t _precedence_type;
   int32_t precedence;
+
+  typedef uint8_t _isLeftRightVel_type;
+  uint8_t isLeftRightVel;
 
   typedef float _linear_velocity_type;
   float linear_velocity;
@@ -56,7 +61,7 @@ public:
   ROS_DEPRECATED const std::string __getDataType() const { return __s_getDataType_(); }
 
 private:
-  static const char* __s_getMD5Sum_() { return "328e85f5960f8399af83b4d4d167e4a2"; }
+  static const char* __s_getMD5Sum_() { return "435226135b8d7ba320f037f1609e6fc6"; }
 public:
   ROS_DEPRECATED static const std::string __s_getMD5Sum() { return __s_getMD5Sum_(); }
 
@@ -66,7 +71,7 @@ private:
   static const char* __s_getMessageDefinition_() { return "Header header\n\
 \n\
 int32 precedence\n\
-\n\
+bool isLeftRightVel\n\
 float32 linear_velocity\n\
 float32 angular_velocity\n\
 \n\
@@ -100,6 +105,7 @@ public:
     ros::serialization::OStream stream(write_ptr, 1000000000);
     ros::serialization::serialize(stream, header);
     ros::serialization::serialize(stream, precedence);
+    ros::serialization::serialize(stream, isLeftRightVel);
     ros::serialization::serialize(stream, linear_velocity);
     ros::serialization::serialize(stream, angular_velocity);
     return stream.getData();
@@ -110,6 +116,7 @@ public:
     ros::serialization::IStream stream(read_ptr, 1000000000);
     ros::serialization::deserialize(stream, header);
     ros::serialization::deserialize(stream, precedence);
+    ros::serialization::deserialize(stream, isLeftRightVel);
     ros::serialization::deserialize(stream, linear_velocity);
     ros::serialization::deserialize(stream, angular_velocity);
     return stream.getData();
@@ -120,6 +127,7 @@ public:
     uint32_t size = 0;
     size += ros::serialization::serializationLength(header);
     size += ros::serialization::serializationLength(precedence);
+    size += ros::serialization::serializationLength(isLeftRightVel);
     size += ros::serialization::serializationLength(linear_velocity);
     size += ros::serialization::serializationLength(angular_velocity);
     return size;
@@ -150,12 +158,12 @@ template<class ContainerAllocator>
 struct MD5Sum< ::MotorControlMsg::MotorCommand_<ContainerAllocator> > {
   static const char* value() 
   {
-    return "328e85f5960f8399af83b4d4d167e4a2";
+    return "435226135b8d7ba320f037f1609e6fc6";
   }
 
   static const char* value(const  ::MotorControlMsg::MotorCommand_<ContainerAllocator> &) { return value(); } 
-  static const uint64_t static_value1 = 0x328e85f5960f8399ULL;
-  static const uint64_t static_value2 = 0xaf83b4d4d167e4a2ULL;
+  static const uint64_t static_value1 = 0x435226135b8d7ba3ULL;
+  static const uint64_t static_value2 = 0x20f037f1609e6fc6ULL;
 };
 
 template<class ContainerAllocator>
@@ -175,7 +183,7 @@ struct Definition< ::MotorControlMsg::MotorCommand_<ContainerAllocator> > {
     return "Header header\n\
 \n\
 int32 precedence\n\
-\n\
+bool isLeftRightVel\n\
 float32 linear_velocity\n\
 float32 angular_velocity\n\
 \n\
@@ -220,6 +228,7 @@ template<class ContainerAllocator> struct Serializer< ::MotorControlMsg::MotorCo
   {
     stream.next(m.header);
     stream.next(m.precedence);
+    stream.next(m.isLeftRightVel);
     stream.next(m.linear_velocity);
     stream.next(m.angular_velocity);
   }
@@ -244,6 +253,8 @@ s << std::endl;
     Printer< ::std_msgs::Header_<ContainerAllocator> >::stream(s, indent + "  ", v.header);
     s << indent << "precedence: ";
     Printer<int32_t>::stream(s, indent + "  ", v.precedence);
+    s << indent << "isLeftRightVel: ";
+    Printer<uint8_t>::stream(s, indent + "  ", v.isLeftRightVel);
     s << indent << "linear_velocity: ";
     Printer<float>::stream(s, indent + "  ", v.linear_velocity);
     s << indent << "angular_velocity: ";
