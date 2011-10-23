@@ -28,7 +28,7 @@ public class NavRunner implements NodeMain{
 			// set the nodes up
 			ObstacleAvoidance obsAvoid = new ObstacleAvoidance();
 			NodeConfiguration obsConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
-			obsConfig.setNodeName("obstacle_avoidance");
+			obsConfig.setNodeName("brait_obstacle_avoidance");
 			
 			
 			
@@ -37,8 +37,17 @@ public class NavRunner implements NodeMain{
 			mtrCtrConfig.setNodeName("motor_control");
 			
 			
+			BraitenburgAvoid infraAvoid = new BraitenburgAvoid();
+			NodeConfiguration infraAvoidConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
+			infraAvoidConfig.setNodeName("brait_infrared_avoid");
 			
 			
+			
+			BraitenburgAvoid ultraAvoid = new BraitenburgAvoid();
+			NodeConfiguration ultraAvoidConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
+			ultraAvoidConfig.setNodeName("brait_ultrasonic_avoid");
+			
+			/*
 			
 			SensorAvoidance infraAvoid = new SensorAvoidance();
 			NodeConfiguration infraAvoidConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
@@ -68,18 +77,21 @@ public class NavRunner implements NodeMain{
 			NodeConfiguration rightUSConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			rightUSConfig.setNodeName("right_US");
 			
-			
+			*/
 			
 			// run them
 			nodeRunner.run(obsAvoid, obsConfig);
 			nodeRunner.run(mtrCtr, mtrCtrConfig);
+			
+			
 			nodeRunner.run(infraAvoid, infraAvoidConfig);
 			nodeRunner.run(ultraAvoid, ultraAvoidConfig);
+			/*
 			nodeRunner.run(leftIR, leftIRConfig);
 			nodeRunner.run(rightIR, rightIRConfig);
 			nodeRunner.run(leftUS, leftUSConfig);
 			nodeRunner.run(rightUS, rightUSConfig);
-			
+			*/
 		} catch (Exception e) {
 			if (node != null) {
 				node.getLog().fatal(e);

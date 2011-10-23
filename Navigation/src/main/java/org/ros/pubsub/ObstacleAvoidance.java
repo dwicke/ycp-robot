@@ -152,8 +152,8 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		// beta * MAX_ANGULAR_VELOCITY = angular velocity.
 		// and then also multiply that by the normalizing constant
 
-		mtrCmd.angular_velocity += message.angular_velocity * maxAngularVelocity * constants.get(message.header.frame_id);
-		mtrCmd.linear_velocity  += message.linear_velocity * maxLinearVelocity * constants.get(message.header.frame_id);
+		mtrCmd.angular_velocity += message.angular_velocity * maxAngularVelocity; //* constants.get(message.header.frame_id);
+		mtrCmd.linear_velocity  += message.linear_velocity * maxLinearVelocity; //* constants.get(message.header.frame_id);
 		curNum++;// done another
 
 		log.debug("Received both IR and US key: " + message.header.stamp.secs + " Size of cmds = " + curNum);

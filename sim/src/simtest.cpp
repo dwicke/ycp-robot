@@ -9,7 +9,7 @@
 void motordataCallback(const robot_msgs::MotorData::ConstPtr& msg)
 {
 	//Got motor packet
-	//ROS_INFO("Got motor packet: %.1f:%d | %.1f:%d", msg->motor_left_velocity,msg->motor_left_time,msg->motor_right_velocity,msg->motor_right_time);
+	ROS_INFO("Got motor packet: %.1f:%d | %.1f:%d", msg->motor_left_velocity,msg->motor_left_time,msg->motor_right_velocity,msg->motor_right_time);
 	
 	//Do something with it
 }
