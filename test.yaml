@@ -82,30 +82,7 @@ human_topics:
 - human_right_presence
  
   
-left_IR: 
-- infrared_frontLeftLeft_distance
-- infrared_frontLeftCenter_distance
 
-right_IR:
-- infrared_frontRightCenter_distance
-- infrared_frontRightRight_distance
-
-left_US:
-- ultrasonic_frontLeft_distance
-- ultrasonic_frontCenter_distance
-
-right_US:
-- ultrasonic_frontCenter_distance
-- ultrasonic_frontRight_distance
-
-
-# Angle measures for Obstacle Avoidance
-right_US_theta: {ultrasonic_frontCenter_distance: 0.0, ultrasonic_frontRight_distance: 45.0}
-left_US_theta: {ultrasonic_frontCenter_distance: 0.0, ultrasonic_frontLeft_distance: -45.0 }
-right_IR_theta: {infrared_frontRightCenter_distance: 11.25, infrared_frontRightRight_distance: 33.75}
-left_IR_theta: {infrared_frontLeftCenter_distance: -11.25, infrared_frontLeftLeft_distance: -33.75}
-
-#comb_const: {ultrasonic_avoid: 0.6, infrared_avoid: 0.4}
 comb_const: {brait_ultrasonic_avoid: 0.6, brait_infrared_avoid: 0.4}
 
 
@@ -120,17 +97,6 @@ sigma_squared_linear: 1400.0
 sigma_squared_angular: 350.0
 
 
-infrared_avoid_subscriptions:
-- left_IR_Motor_Command
-- right_IR_Motor_Command
-
-ultrasonic_avoid_subscriptions:
-- left_US_Motor_Command
-- right_US_Motor_Command
-
-obstacle_avoidance_subscriptions:
-- ultrasonic_avoid_Motor_Command
-- infrared_avoid_Motor_Command
 
 wheelbase: .08 # in cm
 
