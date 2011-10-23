@@ -7,7 +7,7 @@
 
 #include "DrRobotMotionSensorDriver.hpp"
 #include "DrRobotCommConst.hpp"
-
+#include "ros/ros.h"
 
 //#define DEBUG_ERROR           //set printf out error message
 #undef DEBUG_ERROR
@@ -497,6 +497,11 @@ void DrRobot_MotionSensorDriver::DrRobotMotionSensorDriver::DealWithPacket(const
               _motorSensorData.motorSensorEncoderVel[0] = lpComData[INDEX_DATA + 26] + lpComData[INDEX_DATA + 27] * 256;
               _motorSensorData.motorSensorEncoderPos[1] = lpComData[INDEX_DATA + 28] + lpComData[INDEX_DATA + 29] * 256;
               _motorSensorData.motorSensorEncoderVel[1] = lpComData[INDEX_DATA + 30] + lpComData[INDEX_DATA + 31] * 256;
+	      //DEBUG STUFF - JMC
+	      ///ROS_INFO("Motor Sensor Encoder Velocity 0: %d", _motorSensorData.motorSensorEncoderVel[0]);
+	      //ROS_INFO("Motor Sensor Encoder Velocity 1: %d", _motorSensorData.motorSensorEncoderVel[1]);
+	      //ROS_INFO("Motor Sensor Encoder Direction 0: %d", _motorSensorData.motorSensorEncoderDir[0]);
+	      //ROS_INFO("Motor Sensor Encoder Direction 1: %d", _motorSensorData.motorSensorEncoderDir[1]);
               if (lpComData[INDEX_DATA + 32] & 0x01)
               {
                 _motorSensorData.motorSensorEncoderDir[0] = 1;
@@ -505,14 +510,15 @@ void DrRobot_MotionSensorDriver::DrRobotMotionSensorDriver::DealWithPacket(const
               {
                 _motorSensorData.motorSensorEncoderDir[0] = -1;
               }
-              if (lpComData[INDEX_DATA + 32] & 0x02)
+              //force a negative here - JMC
+	      /*if (lpComData[INDEX_DATA + 32] & 0x02)
               {
                 _motorSensorData.motorSensorEncoderDir[1] = 1;
               }
               else
-              {
-                _motorSensorData.motorSensorEncoderDir[1] = -1;
-              }
+              {*/
+              _motorSensorData.motorSensorEncoderDir[1] = -1;
+              //}
               pthread_mutex_unlock(&_mutex_Data_Buf);
               break;
             case COMTYPE_CUSTOM_SENSOR:
