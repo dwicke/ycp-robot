@@ -17,6 +17,7 @@
 package main.java.org.ros.pubsub;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.google.common.base.Preconditions;
 
@@ -47,7 +48,7 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 	// this is the datastructure to synchronize messages
 	private MessageCollection<Range> mesCollector;
 	// these are the received ranges
-	private ArrayList<Range> ranges;
+	private Iterator<Range> ranges;
 
 	@Override
 	public void main(NodeConfiguration configuration) {

@@ -17,6 +17,7 @@
 package main.java.org.ros.pubsub;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -47,9 +48,11 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 	private Publisher<MotorCommand> pubCmd;
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
-	private MessageCollection<Range> mesCollector;
+	//private MessageCollection<Range> mesCollector;
+	private MotorCommand mtrCmd;// message to send
+	private int curNum, curKey;// info used to sync data transmition
 	// these are the received ranges
-	private ArrayList<Range> ranges;
+	private Iterator<Range> ranges;
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 
@@ -60,7 +63,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 	private Map<String, Double> theta;
 	// These are the weights that I multiply the range measurement by
 	private Map<String, Double> linearWeight, angularWeight;
-	
+
 
 	// variance of function
 	private double linearVariance, angularVariance;
@@ -88,24 +91,30 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			linearVariance = node.newParameterTree().getDouble("sigma_squared_linear");
 			angularVariance = node.newParameterTree().getDouble("sigma_squared_angular");
 			log.info("LinearVariance: " + linearVariance + "AngularVariance: " + angularVariance);
-			
+
 
 			// get the angular distances
 			theta = (Map<String, Double>) node.newParameterTree().getMap(node.getName()+"_theta");
-			
+
 			linearWeight = new TreeMap<String, Double>();
 			angularWeight = new TreeMap<String, Double>();
 			// Make the data structure to hold the messages that I receive.
 			// the key is the time stamp of the message.  For each time stamp
 			// I have a list of Range objects for each of the sensors.
-			mesCollector = new MessageCollection<Range>(numberInputs);
+			//mesCollector = new MessageCollection<Range>(numberInputs);
+			curNum = 0;
+			curKey = 0;
+			mtrCmd = node.getMessageFactory().newMessage("MotorControlMsg/MotorCommand");
+			mtrCmd.angular_velocity = (float) 0.0;
+			mtrCmd.linear_velocity = (float) 0.0;
+			
 
 			// Say name of topic ie. left_IR_Motor_Command
 			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
 
 
-			
-			
+
+
 			// Right now I am doing the simple approach and saying that
 			// the normalizing constant k in the paper is the same for all 
 			// the sensors.  Since the equation is w = 1 = k*sum(e^-(theta^2/(2*sigma^2)) (w = 1 since want normal)
@@ -122,18 +131,18 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			double angularConst = 0.0;
 			for (String key: topics)
 			{
-			
+
 				double thetaSquared = theta.get(key) * theta.get(key);
 				linearConst += Math.exp(-1.0 * ( thetaSquared) / (2.0 * linearVariance));
 				angularConst += Math.exp(-1.0 * ( thetaSquared) / (2.0 * angularVariance)) * (90.0 - Math.abs(theta.get(key)));
 			}
-			
+
 			// 1 / sum(e^-(theta^2/(2*sigma^2)) ...
 			linearConst = 1.0 / linearConst; 
 			angularConst = 1.0 / angularConst;
-			
+
 			double sum = 0.0;
-			
+
 			// Now I can make the linear and angular weights
 			for (String key: topics)
 			{
@@ -178,35 +187,35 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 
 	@Override
-	public void onNewMessage(Range message) {
+	public void onNewMessage(Range range) {
 
-		int key = message.header.stamp.secs;
+		int key = range.header.stamp.secs;
 		log.debug(key);
 
-		// Once I receive all the messages I can then process them
-		if ((ranges = this.mesCollector.receiveMessage(message, message.header.stamp.secs)) != null)
+		if (key != curKey)
 		{
+			mtrCmd.angular_velocity = (float) 0.0;
+			mtrCmd.linear_velocity = (float) 0.0;
+			curNum = 0;
+			curKey = key;
+		}
+		// so now I can do the math
+		// the normal of the filtered range * linear_weight
+		log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
+		double normalizedSensor = (range.range / range.max_range);
+		mtrCmd.linear_velocity += normalizedSensor * linearWeight.get(range.header.frame_id);
+		mtrCmd.angular_velocity += (normalizedSensor * angularWeight.get(range.header.frame_id));
 
-			MotorCommand mtrCmd = node.getMessageFactory().newMessage("MotorControlMsg/MotorCommand");
-
-			log.debug("Number of messages= " + ranges.size());
-
-			for (Range range : ranges)
-			{
-				// so now I can do the math
-				// the normal of the filtered range * linear_weight
-				log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
-				double normalizedSensor = (range.range / range.max_range);
-				mtrCmd.linear_velocity += normalizedSensor * linearWeight.get(range.header.frame_id);
-				mtrCmd.angular_velocity += (normalizedSensor * angularWeight.get(range.header.frame_id));
-			}
-
+		// Once I receive all the messages I can then process them
+		curNum++;// finished another
+		if (curNum == numberInputs)
+		{
 			mtrCmd.header.frame_id = node.getName().toString();
 			mtrCmd.header.stamp.secs = key;
-
+			curNum = 0;
 			pubCmd.publish(mtrCmd);
-
 		}
+
 
 	}
 

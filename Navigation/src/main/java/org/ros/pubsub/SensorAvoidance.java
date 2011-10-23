@@ -17,6 +17,7 @@
 package main.java.org.ros.pubsub;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -48,17 +49,17 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 
 	// this stores the incoming messages until I have all the data
 	// needed to compute final MotorCommand to publish
-	private MessageCollection<MotorCommand> mesCollector;
+	//private MessageCollection<MotorCommand> mesCollector;
 
 	// this is the list of motorcommands
-	private ArrayList<MotorCommand> cmds;
+	private Iterator<MotorCommand> cmds;
 
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;// the number of topics i am going to subscribe to
 	private SimpleLog log;// log for debugging
 	private MotorCommand mtrCmd;// message to send to ObstacleAvoidance
 	private int key;// the key of the received message
-
+	private int curKey, curNum;
 
 	@Override
 	public void main(NodeConfiguration configuration) {
@@ -74,8 +75,9 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 
 			numberInputs = topics.size();// Left and right sensor motor control messages should be two one left and one right
 
-			mesCollector = new MessageCollection<MotorCommand>(numberInputs);
-
+			//mesCollector = new MessageCollection<MotorCommand>(numberInputs);
+			curNum = 0;
+			curKey = 0;
 
 			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
 
@@ -117,7 +119,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 
 
 	@Override
-	public void onNewMessage(MotorCommand message) {
+	public void onNewMessage(MotorCommand cmd) {
 		// TODO Auto-generated method stub
 
 		// Combine the left and the right sides to get the linear
@@ -128,44 +130,49 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		// since timestamp secs couldn't keep up (neither could nsecs)
 		// I define my own secs in terms of when it leaves the sensorListener
 		// in the robot package.
-		key = message.header.stamp.secs;
+		key = cmd.header.stamp.secs;
 		//long key = message.header.seq;
 		log.debug("Received message with key: " + key);
 
 		// Receive the message and check if 
-		if ((cmds = this.mesCollector.receiveMessage(message, key)) != null)
+
+		// Has the key and there are enough keys
+		// all the input I need so get it and remove the key and publish
+		if (key != curKey)
 		{
-			// Has the key and there are enough keys
-			// all the input I need so get it and remove the key and publish
-
-
 			mtrCmd.linear_velocity = (float) 0.0;
 			mtrCmd.angular_velocity = (float) 0.0;
-			// So I need to combine the two sides
-			// add the left side to the right for the linear
-			// and subtract the left side from the right
-			// for the angular
+			curKey = key;
+			curNum = 0;
+		}
+		// So I need to combine the two sides
+		// add the left side to the right for the linear
+		// and subtract the left side from the right
+		// for the angular
 
-			for (MotorCommand cmd: cmds)
-			{
-				// Might need to multiply by .5 so that I get Sum(w) and Sum(D(theta')*w) = 1
-				// since I am going to be doing only the right or left sides...
-				mtrCmd.linear_velocity += cmd.linear_velocity;
-				// the precondition is that the frame_id states in it somewhere that it is the left
-				// side.
-				if (cmd.header.frame_id.contains("left"))
-				{// if left I subtract
-					mtrCmd.angular_velocity -= cmd.angular_velocity;
-				}
-				else
-				{// if right i add
-					mtrCmd.angular_velocity += cmd.angular_velocity;
-				}
-			}
+		// Might need to multiply by .5 so that I get Sum(w) and Sum(D(theta')*w) = 1
+		// since I am going to be doing only the right or left sides...
+		mtrCmd.linear_velocity += cmd.linear_velocity;
+		// the precondition is that the frame_id states in it somewhere that it is the left
+		// side.
+		if (cmd.header.frame_id.contains("left"))
+		{// if left I subtract
+			mtrCmd.angular_velocity -= cmd.angular_velocity;
+		}
+		else
+		{// if right i add
+			mtrCmd.angular_velocity += cmd.angular_velocity;
+		}
 
+		curNum++;// finished another
+		if (curNum == numberInputs)
+		{
 			// Normalize the values
-			mtrCmd.linear_velocity /= (numberInputs * cmds.size());
-			mtrCmd.angular_velocity /= (numberInputs * cmds.size());
+			mtrCmd.linear_velocity /= (numberInputs * numberInputs);
+			mtrCmd.angular_velocity /= (numberInputs * numberInputs);
+
+			// zero count
+			curNum = 0;
 
 
 			// remember to set the FrameID of the header to that of
@@ -178,9 +185,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 			mtrCmd.header.stamp.secs = key;
 			// publish
 			pubCmd.publish(mtrCmd);
-
 		}
-
 
 	}
 
