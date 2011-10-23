@@ -73,12 +73,12 @@ namespace DrRobot_MotionSensorDriver
 
   const int ULTRASONICSENSOR_NUM = 6;	//!< on motion control system up to 6 channel ultrasonic sensor,
 					//!< I90, Sentinel3 [0,1,2], Hawk [0~5], H20[0~4], X80SV, X80SVP [0~5]
-  const int CUSTOMSENSOR_NUM = 8;	//!< on motion control system up to 8 AD channel
+  const int CUSTOMSENSOR_NUM = 2;	//!< on motion control system up to 8 AD channel
 					//!< not available on standard I90,Sentinel3, Hawk/H20 robot
-  const int MOTORSENSOR_NUM = 6;	//!< on motion control system up to 6 motor channel
+  const int MOTORSENSOR_NUM = 2;	//!< on motion control system up to 6 motor channel
 					//!< channel 0,1 for I90,Sentinel3,Hawk/H20 left/right motor
 					//!< channel 0,1 for Jaguar Arm motor, channel 3,4 for Jaguar forward/Turn power,
-  const int IRRANGESENSOR_NUM = 10;	//!< up to 10 IR range sensor on standard I90/Sentinel3/Hawk/H20 Robot
+  const int IRRANGESENSOR_NUM = 7;	//!< up to 10 IR range sensor on standard I90/Sentinel3/Hawk/H20 Robot
 					//!< mounting position/orientation information please referee robot manual
 
   /*! \enum CommMethod

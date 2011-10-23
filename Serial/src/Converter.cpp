@@ -22,11 +22,20 @@ JMC
 #define PORT "/dev/ttyUSB0"
 #define BAUD 115200
 
+#define RIGHT_MOTOR_OFFSET 18
 
+//prototypes
+int IR_Convert(int value);
+double Motor_Convert(double motor_val);
 
 using namespace DrRobot_MotionSensorDriver;
 
+//globals
 DrRobotMotionSensorDriver *driver; //serial driver needs global access
+
+//make a range sensor data object and a standard sensor object
+RangeSensorData *rangeSensorData = new RangeSensorData();
+StandardSensorData *standardSensorData = new StandardSensorData();
 
 
 //callback for the motor Data
@@ -36,16 +45,15 @@ void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
 	ROS_INFO("Motor data received: \n");
 	
 	//send left/right values to the robot
-	int motorLPASS = driver->sendMotorCtrlCmd(Velocity, 0, msg->motor_left_velocity, msg->motor_left_time);
+	int motorLPASS = driver->sendMotorCtrlCmd(Velocity, 0, Motor_Convert(msg->motor_left_velocity), msg->motor_left_time);
+	
 	if(motorLPASS < 0) ROS_INFO("Left motor value was not sent to the robot!");
-	int motorRPASS = driver->sendMotorCtrlCmd(Velocity, 1, msg->motor_right_velocity*-1, msg->motor_right_time);
+	int motorRPASS;
+	if(msg->motor_right_velocity>0) motorRPASS = driver->sendMotorCtrlCmd(Velocity, 1, Motor_Convert((msg->motor_right_velocity)*-1-RIGHT_MOTOR_OFFSET), msg->motor_right_time); 
+	else motorRPASS = driver->sendMotorCtrlCmd(Velocity, 1, Motor_Convert((msg->motor_right_velocity)*-1), msg->motor_right_time); 
+
 	if(motorRPASS < 0) ROS_INFO("Right motor value was not sent to the robot!");
 
-}
-
-
-int IR_Convert(int value){
-	return 739.38*pow(value,-.8105);
 }
 
 void serialInit(){
@@ -78,15 +86,12 @@ int main(int argc, char**argv){
 	ros::Publisher sensordata_pub = n.advertise<robot_msgs::SensorData>("sensordata", 20);
 
 	//check to see if the node handle returned an empty ros::Publisher
-	if(!sensordata_pub) ROS_INFO("Failed to create a publisher node!");
+	if(!sensordata_pub) ROS_INFO("Failed to create a publisher node!MotorCtrl");
 	
 	ros::Rate loop_rate(10); //10 Hz publish time
 			
 	int count = 0; //count of how many messages were sent
 	
-	//make a range sensor data object and a standard sensor object
-	RangeSensorData *rangeSensorData = new RangeSensorData();
-	StandardSensorData *standardSensorData = new StandardSensorData();
 	while(ros::ok())
 	{
 		//This is a message object, it is stuffed with the datas and then can be published
@@ -120,24 +125,11 @@ int main(int argc, char**argv){
 		SensorMsg.human_left_presence = standardSensorData->humanSensorData[1];
 		SensorMsg.human_right_motion = standardSensorData->humanSensorData[2];
 		SensorMsg.human_right_presence = standardSensorData->humanSensorData[3];
-
-		ROS_INFO("Human left presence = %d", standardSensorData->humanSensorData[1]);
-		ROS_INFO("Human right presence = %d", standardSensorData->humanSensorData[3]);
-		
 			
-/*
-		//print out the sensor data messages for testing purposes
- 		ROS_INFO("Infrasonic range sensor 1 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[0]));
-		ROS_INFO("Infrasonic range sensor 2 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[1]));
-		ROS_INFO("Infrasonic range sensor 3 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[2]));
-		ROS_INFO("Infrasonic range sensor 4 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[3]));
-		ROS_INFO("Infrasonic range sensor 5 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[4]));
-		ROS_INFO("Infrasonic range sensor 6 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[5]));
-		ROS_INFO("Infrasonic range sensor 7 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[6]));
-*/
+
 		//now publish the sensor data
 		sensordata_pub.publish(SensorMsg);
-	
+
 		//spinOnce is required so the callback finishes
 		ros::spinOnce();
 		loop_rate.sleep();
@@ -147,4 +139,38 @@ int main(int argc, char**argv){
 	
 	return 0;
 }
+void print_infrared(){
+	//print out the sensor data messages for testing purposes
+	ROS_INFO("Infrared range sensor 1 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[0]));
+	ROS_INFO("Infrared range sensor 2 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[1]));
+	ROS_INFO("Infrared range sensor 3 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[2]));
+	ROS_INFO("Infrared range sensor 4 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[3]));
+	ROS_INFO("Infrared range sensor 5 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[4]));
+	ROS_INFO("Infrared range sensor 6 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[5]));
+	ROS_INFO("Infrared range sensor 7 = %d\n", IR_Convert(rangeSensorData->irRangeSensor[6]));
+}
+void print_ultrasonic(){
+	//print out the sensor data messages for testing purposes
+	ROS_INFO("Ultrasonic range sensor 1 = %d\n", IR_Convert(rangeSensorData->usRangeSensor[0]));
+	ROS_INFO("Ultrasonic range sensor 2 = %d\n", IR_Convert(rangeSensorData->usRangeSensor[1]));
+	ROS_INFO("Ultrasonic range sensor 3 = %d\n", IR_Convert(rangeSensorData->usRangeSensor[2]));
+	ROS_INFO("Ultrasonic range sensor 4 = %d\n", IR_Convert(rangeSensorData->usRangeSensor[3]));
+	ROS_INFO("Ultrasonic range sensor 5 = %d\n", IR_Convert(rangeSensorData->usRangeSensor[4]));
+	ROS_INFO("Ultrasonic range sensor 6 = %d\n", IR_Convert(rangeSensorData->usRangeSensor[5]));
+}
+
+/*Convert the IR Sensor to a value in cm.  Note that this is currently not too accurate,
+it is just an approximation for the voltage slope*/
+int IR_Convert(int value){
+	return 739.38*pow(value,-.8105);
+}
+/*Convert the Motor encoder values into cm/s values.
+Diameter is 18 cm so circumference is about 56.5 cm. 800 ticks on each encoder
+Motor_num is 0 for left and 1 for right on the X80SVP*/
+double Motor_Convert(double motor_val){
+	return (800/56.5) * motor_val;
+}
+
+
+
 
