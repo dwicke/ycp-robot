@@ -59,6 +59,7 @@ public class PyroelectricSensor implements NodeMain, MessageListener<Range> {
 			node = new DefaultNodeFactory().newNode("human_listener", configuration);
 
 			log = new SimpleLog(node.getName().toString());
+			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
 			// Print out the name
 			log.info("Sensor name: " + node.getName());
 

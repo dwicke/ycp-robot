@@ -17,6 +17,7 @@
 package main.java.org.ros.pubsub;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.ros.message.MessageListener;
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
@@ -40,7 +41,7 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 	private Node node;
 	private double wheelbase;
 	private Publisher<MotorData> motorData;
-	private Log log; 
+	private SimpleLog log; 
 	@Override
 	public void main(NodeConfiguration configuration) {
 
@@ -50,7 +51,9 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 		try {
 			node = new DefaultNodeFactory().newNode("motor_control", configuration);
 			wheelbase = node.newParameterTree().getDouble("wheelbase");
-			log = node.getLog();
+			log = new SimpleLog(node.getName().toString());
+			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
+			
 			motorData = node.newPublisher("motordata", "robot_msgs/MotorData");
 			node.newSubscriber("Motor_Command", "MotorControlMsg/MotorCommand",this);
 		} catch (Exception e) {

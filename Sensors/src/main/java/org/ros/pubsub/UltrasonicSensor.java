@@ -63,7 +63,7 @@ public class UltrasonicSensor implements NodeMain, MessageListener<Range> {
 			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
 			// create a log.
 			log = new SimpleLog(node.getName().toString());
-
+			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
 			// Print out the name
 			log.info("Sensor name: " + node.getName());
 

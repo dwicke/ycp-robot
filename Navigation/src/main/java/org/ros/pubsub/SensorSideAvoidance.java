@@ -80,6 +80,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			node = new DefaultNodeFactory().newNode("sensor_side_avoidance", configuration);
 			log = new SimpleLog(node.getName().toString());
 			log.setLevel(SimpleLog.LOG_LEVEL_INFO);
+			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
 			//log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 			// get the names of the topics by querying the parameter server
 			// based on the name of this node
