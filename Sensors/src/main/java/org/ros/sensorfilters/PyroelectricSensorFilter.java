@@ -14,7 +14,7 @@
  * the License.
  */
 
-package main.java.org.ros.pubsub;
+package main.java.org.ros.sensorfilters;
 
 import java.awt.image.FilteredImageSource;
 import java.util.ArrayList;
@@ -38,12 +38,12 @@ import com.sun.net.httpserver.Filter;
 
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of this node is to filter the IRSensor
+ * external roscore is already running.  The job of this node is to filter the IRSensorFilter
  * data and publish it.
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class PyroelectricSensor implements NodeMain, MessageListener<Range> {
+public class PyroelectricSensorFilter implements NodeMain, MessageListener<Range> {
 
 	private Node node;
 	private TreeMap<String, Publisher<Range> > filteredRangeMap;

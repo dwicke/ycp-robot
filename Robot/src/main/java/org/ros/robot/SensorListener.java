@@ -14,7 +14,7 @@
  * the License.
  */
 
-package main.java.org.ros.pubsub;
+package main.java.org.ros.robot;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;

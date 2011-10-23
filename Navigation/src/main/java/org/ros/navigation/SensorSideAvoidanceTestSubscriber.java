@@ -14,7 +14,7 @@
  * the License.
  */
 
-package main.java.org.ros.pubsub;
+package main.java.org.ros.navigation;
 
 import java.util.ArrayList;
 import java.util.List;

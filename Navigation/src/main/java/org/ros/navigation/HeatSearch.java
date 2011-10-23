@@ -14,7 +14,7 @@
  * the License.
  */
 
-package main.java.org.ros.pubsub;
+package main.java.org.ros.navigation;
 
 import org.apache.commons.logging.Log;
 import org.ros.message.MessageListener;
@@ -29,13 +29,13 @@ import org.ros.message.sensor_msgs.Range;
 
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of MotorListener is to 
- * listen for odometry data and publish in ros format.
+ * external roscore is already running.  The job of the Robot listener is to
+ * listen for messages that have the sensor data in our implementation is from
+ * either Converter or from VirtualX80SVP it depends on the startup configuration.
  * 
- * Not sure we really need this yet.  Will see as we make the rest...
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class MotorListener implements NodeMain {
+public class HeatSearch implements NodeMain {
 
 	private Node node;
 
@@ -44,18 +44,26 @@ public class MotorListener implements NodeMain {
 
 		//ParameterTreenode.newParameterTree();
 		try {
-			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
-			
-		
+			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
 			
 			final Log log = node.getLog();
-			node.newSubscriber("MotorData", "robot_msgs/MotorData",
-					new MessageListener<MotorData>() {
+			node.newSubscriber("SensorData", "robot_msgs/SensorData",
+					new MessageListener<SensorData>() {
 
 				@Override
-				public void onNewMessage(MotorData message) {
+				public void onNewMessage(SensorData message) {
 					
-					log.info("I heard: \"" + message.motor_left_time + "\"");
+					log.info("I heard: \"" + message.infrared_frontLeftLeft_distance + "\"");
+					
+					// Ok so I heard the sensor data so publish the data in ROS format
+					// to the specific topics
+					
+					// first do IR
+					
+					
+					
+					// then do Ultrasonic
+					
 					
 					
 				}
@@ -74,6 +82,17 @@ public class MotorListener implements NodeMain {
 
 	}
 	
+	public void publishIR(String topic, float range)
+	{
+		Range leftfrontIR = new Range();
+		leftfrontIR.radiation_type = Range.INFRARED;
+		leftfrontIR.range = range;
+		//String topics = message.infrared_frontLeftLeft_distance;
+		
+		Publisher<Range> publisher =
+		          node.newPublisher("fronLeftLeftIRData", "sensor_msgs/Range");
+		publisher.publish(leftfrontIR);
+	}
 
 	@Override
 	public void shutdown() {

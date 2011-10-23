@@ -1,48 +1,29 @@
-/*
- * Copyright (C) 2011 Google Inc.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
+package main.java.org.ros.navigation;
 
-package main.java.org.ros.pubsub;
-
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.SimpleLog;
 import org.ros.message.MessageListener;
+import org.ros.message.MotorControlMsg.MotorCommand;
+import org.ros.message.sensor_msgs.Range;
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
-import org.ros.node.topic.Subscriber;
-import com.google.common.base.Preconditions;
-import org.ros.message.MotorControlMsg.MotorCommand;
-import org.ros.message.sensor_msgs.Range;
-/**
- * This is a simple rosjava {@link Subscriber} {@link Node}. 
- * Basically this node is named so that it subscribes to the correct
- * data ie IRLeft etc and so it will publish that way
- * 
- * @author drewwicke@google.com (Drew Wicke)
- */
-public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
+import com.google.common.base.Preconditions;
+
+/**
+ * create one for infrared and one for ultrasonic
+ * publish a motor command to obstacleAvoidance
+ * which will combine the ir and us. and 
+ * send to motor control
+ */
+public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 	private Node node;
 	// this is the Object that I use to publish my final motor command
 	private Publisher<MotorCommand> pubCmd;
@@ -70,6 +51,8 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 	private SimpleLog log;
 
+
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void main(NodeConfiguration configuration) {
@@ -86,7 +69,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			// based on the name of this node
 
 			@SuppressWarnings("unchecked")
-			List<String> topics = (List<String>) node.newParameterTree().getList(node.getName());
+			List<String> topics = (List<String>) node.newParameterTree().getList(node.getName() + "_subscriptions");
 			numberInputs = topics.size();
 			// get the variance constants
 			linearVariance = node.newParameterTree().getDouble("sigma_squared_linear");
@@ -108,7 +91,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			mtrCmd = node.getMessageFactory().newMessage("MotorControlMsg/MotorCommand");
 			mtrCmd.angular_velocity = (float) 0.0;
 			mtrCmd.linear_velocity = (float) 0.0;
-			
+			mtrCmd.header.frame_id = node.getName().toString();
 
 			// Say name of topic ie. left_IR_Motor_Command
 			pubCmd = node.newPublisher(node.getName() + "_Motor_Command", "MotorControlMsg/MotorCommand");
@@ -189,7 +172,6 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 
 	@Override
 	public void onNewMessage(Range range) {
-
 		int key = range.header.stamp.secs;
 		log.debug(key);
 
@@ -199,28 +181,36 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 			mtrCmd.linear_velocity = (float) 0.0;
 			curNum = 0;
 			curKey = key;
+			
 		}
 		// so now I can do the math
 		// the normal of the filtered range * linear_weight
 		log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
 		double normalizedSensor = (range.range / range.max_range);
 		mtrCmd.linear_velocity += normalizedSensor * linearWeight.get(range.header.frame_id);
-		mtrCmd.angular_velocity += (normalizedSensor * angularWeight.get(range.header.frame_id));
+		if (range.header.frame_id.contains("left"))
+		{// if left I subtract
+			mtrCmd.angular_velocity -= (normalizedSensor * angularWeight.get(range.header.frame_id));
+		}
+		else
+		{
+			mtrCmd.angular_velocity += (normalizedSensor * angularWeight.get(range.header.frame_id));
 
+		}
 		// Once I receive all the messages I can then process them
 		curNum++;// finished another
 		if (curNum == numberInputs)
 		{
-			mtrCmd.header.frame_id = node.getName().toString();
+			// normalize the values
+			mtrCmd.angular_velocity /= curNum;
+			mtrCmd.linear_velocity /= curNum;
+			
 			mtrCmd.header.stamp.secs = key;
 			curNum = 0;
 			pubCmd.publish(mtrCmd);
 		}
-
-
 	}
 
 
 
 }
-

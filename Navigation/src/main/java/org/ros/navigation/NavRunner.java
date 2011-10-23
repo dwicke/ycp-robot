@@ -1,4 +1,8 @@
-package main.java.org.ros.pubsub;
+package main.java.org.ros.navigation;
+
+import main.java.org.ros.navigation.BraitenburgAvoid;
+import main.java.org.ros.navigation.MotorControl;
+import main.java.org.ros.navigation.ObstacleAvoidance;
 
 import org.ros.address.InetAddressFactory;
 import org.ros.node.DefaultNodeFactory;

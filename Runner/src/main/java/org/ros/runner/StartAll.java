@@ -1,4 +1,4 @@
-package main.java.org.ros.pubsub;
+package main.java.org.ros.runner;
 
 import org.ros.address.InetAddressFactory;
 import org.ros.node.DefaultNodeFactory;
@@ -7,6 +7,10 @@ import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.NodeRunner;
+
+import main.java.org.ros.navigation.*;
+import main.java.org.ros.robot.*;
+import main.java.org.ros.sensorfilters.*;
 
 import com.google.common.base.Preconditions;
 /**
@@ -35,15 +39,15 @@ public class StartAll implements NodeMain{
 			
 			
 			
-			UltrasonicSensor ultraSen = new UltrasonicSensor();
+			UltrasonicSensorFilter ultraSen = new UltrasonicSensorFilter();
 			NodeConfiguration ultraConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			ultraConfig.setNodeName("ultrasonic_sensor");
 			
-			IRSensor irSen= new IRSensor();
+			IRSensorFilter irSen= new IRSensorFilter();
 			NodeConfiguration irConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			irConfig.setNodeName("infrared_sensor");
 			
-			PyroelectricSensor pyroSen = new PyroelectricSensor();
+			PyroelectricSensorFilter pyroSen = new PyroelectricSensorFilter();
 			NodeConfiguration pyroConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			pyroConfig.setNodeName("human_sensor");
 			

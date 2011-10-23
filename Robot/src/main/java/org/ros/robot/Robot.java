@@ -1,4 +1,5 @@
-package main.java.org.ros.pubsub;
+package main.java.org.ros.robot;
+
 
 import org.ros.address.InetAddressFactory;
 import org.ros.node.DefaultNodeFactory;

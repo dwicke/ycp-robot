@@ -11,11 +11,11 @@
   <depend package="rosjava" />
   <depend package="std_msgs" />
   <depend package="sensor_msgs" />
-  <depend package="Robot" />
+  
   
   <export>
   	<rosjava-src location="src"/>
-  	    <rosjava-pathelement location="target/" groupId="org.ros" artifactId="main.java.org.ros.pubsub" version="0.0.0" built="true" />
+  	    <rosjava-pathelement location="target/" groupId="org.ros" artifactId="main.java.org.ros.sensorfilters" version="0.0.0" built="true" />
 	</export>
 </package>
 

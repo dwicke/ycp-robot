@@ -14,7 +14,7 @@
  * the License.
  */
 
-package main.java.org.ros.pubsub;
+package main.java.org.ros.navigation;
 
 import java.awt.image.FilteredImageSource;
 import java.util.ArrayList;

@@ -9,10 +9,15 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/Runner</url>
   <depend package="rosjava"/>
-  
+  <depend package="std_msgs" />
   <depend package="Sensors" />
   <depend package="Navigation" />
   <depend package="Robot" />
+  
+  <export>
+  	<rosjava-src location="src"/>
+  	    <rosjava-pathelement location="target/" groupId="org.ros" artifactId="main.java.org.ros.runner" version="0.0.0" built="true" />
+	</export>
 
 </package>
 

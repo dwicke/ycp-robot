@@ -1,4 +1,5 @@
-package main.java.org.ros.pubsub;
+package main.java.org.ros.sensorfilters;
+
 
 import org.ros.address.InetAddressFactory;
 import org.ros.node.DefaultNodeFactory;
@@ -26,15 +27,15 @@ public class SensorRunner implements NodeMain{
 			
 			
 			// set the nodes up
-			UltrasonicSensor ultraSen = new UltrasonicSensor();
+			UltrasonicSensorFilter ultraSen = new UltrasonicSensorFilter();
 			NodeConfiguration ultraConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			ultraConfig.setNodeName("ultrasonic_sensor");
 			
-			IRSensor irSen= new IRSensor();
+			IRSensorFilter irSen= new IRSensorFilter();
 			NodeConfiguration irConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			irConfig.setNodeName("infrared_sensor");
 			
-			PyroelectricSensor pyroSen = new PyroelectricSensor();
+			PyroelectricSensorFilter pyroSen = new PyroelectricSensorFilter();
 			NodeConfiguration pyroConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			pyroConfig.setNodeName("human_sensor");
 			

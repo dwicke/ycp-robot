@@ -16,7 +16,7 @@
   
   <export>
   	<rosjava-src location="src"/>
-  	    <rosjava-pathelement location="target/" groupId="org.ros" artifactId="main.java.org.ros.pubsub" version="0.0.0" built="true" />
+  	    <rosjava-pathelement location="target/" groupId="org.ros" artifactId="main.java.org.ros.robot" version="0.0.0" built="true" />
 	</export>
 </package>
 
