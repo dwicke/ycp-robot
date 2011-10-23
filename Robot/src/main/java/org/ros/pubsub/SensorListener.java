@@ -122,30 +122,31 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 				// get the current time for the time stamps
 				Time timeStamp = node.getCurrentTime();
 			
+				Range pubRange = node.getMessageFactory().newMessage("sensor_msgs/Range");
 				if (fieldName.contains("infrared"))
 				{
 					// get the field data
 					float rangeData = (Float) messField.get(message);
 					
 					// now publish it!
-					Range IRRange = new Range();
-					IRRange.max_range = (float) .8; // 80cm
-					IRRange.min_range = (float) .075; // 7.5cm
-					IRRange.radiation_type = Range.INFRARED;
-					IRRange.range = (float) (rangeData * .01);
+					
+					pubRange.max_range = (float) .8; // 80cm
+					pubRange.min_range = (float) .075; // 7.5cm
+					pubRange.radiation_type = Range.INFRARED;
+					pubRange.range = (float) (rangeData * .01);
 					// name it the same as the sensor
-					IRRange.header.frame_id = fieldName;
+					pubRange.header.frame_id = fieldName;
 					// this is the angle theta the sensor is located on the bot
 					// Not sure that field_of_view means that so I probably won't
 					// use it.
-					IRRange.field_of_view = (float) sensorAngles.get(fieldName);
+					pubRange.field_of_view = (float) sensorAngles.get(fieldName);
 					
 					// I am using secs in the header to be the key
 					// since timestamp secs couldn't keep up (neither could nsecs)
 					// I define my own secs in terms of when it leaves here
-					IRRange.header.stamp.secs = (int) count;
+					pubRange.header.stamp.secs = (int) count;
 					
-					publisher.get(fieldName).publish(IRRange);
+					publisher.get(fieldName).publish(pubRange);
 				}
 				else if (fieldName.contains("ultrasonic"))
 				{
@@ -157,23 +158,23 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					
 					log.debug(rangeData);
 					
-					Range USRange = new Range();
-					USRange.max_range = (float) 2.55; // 255cm
-					USRange.min_range = (float) .04; // 4cm
-					USRange.radiation_type = Range.ULTRASOUND;
-					USRange.range = (float) ((float) rangeData * .01);
+					
+					pubRange.max_range = (float) 2.55; // 255cm
+					pubRange.min_range = (float) .04; // 4cm
+					pubRange.radiation_type = Range.ULTRASOUND;
+					pubRange.range = (float) ((float) rangeData * .01);
 					// name it the same as the sensor
-					USRange.header.frame_id = fieldName;
+					pubRange.header.frame_id = fieldName;
 					// this is the angle theta the sensor is located on the bot
 					// Not sure that field_of_view means that so I probably won't
 					// use it.
-					USRange.field_of_view = (float) sensorAngles.get(fieldName);
+					pubRange.field_of_view = (float) sensorAngles.get(fieldName);
 					
 					// I am using secs in the header to be the key
 					// since timestamp secs couldn't keep up (neither could nsecs)
 					// I define my own secs in terms of when it leaves here
-					USRange.header.stamp.secs = (int) count;
-					publisher.get(fieldName).publish(USRange);
+					pubRange.header.stamp.secs = (int) count;
+					publisher.get(fieldName).publish(pubRange);
 				}
 				else if (fieldName.contains("human"))
 				{
@@ -183,19 +184,18 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 					int rangeData = (Integer) messField.get(message);
 					
 					// put in the data
-					Range humanRange = new Range();
-					humanRange.max_range = 4095;
-					humanRange.min_range = 0;
-					humanRange.range = (float) rangeData;
+					pubRange.max_range = 4095;
+					pubRange.min_range = 0;
+					pubRange.range = (float) rangeData;
 					// I am using secs in the header to be the key
 					// since timestamp secs couldn't keep up (neither could nsecs)
 					// I define my own secs in terms of when it leaves here
-					humanRange.header.stamp.secs = (int) count;
-					humanRange.header.frame_id = fieldName;
+					pubRange.header.stamp.secs = (int) count;
+					pubRange.header.frame_id = fieldName;
 					
-					log.info("Recieved Message from " + fieldName + " range is " + humanRange.range);
+					//log.info("Recieved Message from " + fieldName + " range is " + pubRange.range);
 					
-					publisher.get(fieldName).publish(humanRange);
+					publisher.get(fieldName).publish(pubRange);
 					
 					
 				}
@@ -231,6 +231,7 @@ public class SensorListener implements NodeMain, MessageListener<SensorData> {
 		// to the specific topics
 		publishData(message);
 		count++;
+		
 		
 	}
 

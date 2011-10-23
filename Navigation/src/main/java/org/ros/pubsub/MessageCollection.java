@@ -13,6 +13,7 @@ public class MessageCollection <MessageType> {
 	{
 		this.numExpecting = numExpecting;
 		curKey = 0;
+		
 		messages = new ArrayList<MessageType>(numExpecting);
 		for (int i = 0; i < numExpecting; i++)
 		{
@@ -27,6 +28,7 @@ public class MessageCollection <MessageType> {
 		// or just on a new key because we have finished the previous key
 		if (key != curKey)
 		{
+			
 			curIndex = 0;
 			curKey = key;
 		}

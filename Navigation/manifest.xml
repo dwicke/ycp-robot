@@ -13,6 +13,7 @@
   <depend package="sensor_msgs" />
   <depend package="MotorControlMsg" />
   <depend package="robot_msgs" />
+  <depend package="Sensors" />
   
   <export>
   	<rosjava-src location="src"/>

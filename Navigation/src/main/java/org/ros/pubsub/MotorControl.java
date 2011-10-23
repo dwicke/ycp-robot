@@ -27,6 +27,8 @@ import org.ros.node.topic.Subscriber;
 import org.ros.message.MotorControlMsg.MotorCommand;
 import org.ros.message.robot_msgs.*;
 
+import com.google.common.base.Preconditions;
+
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. 
  * I accept a 
@@ -42,9 +44,11 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 	@Override
 	public void main(NodeConfiguration configuration) {
 
+		Preconditions.checkState(node == null);
+		Preconditions.checkNotNull(configuration);
 
 		try {
-			node = new DefaultNodeFactory().newNode("listener", configuration);
+			node = new DefaultNodeFactory().newNode("motor_control", configuration);
 			wheelbase = node.newParameterTree().getDouble("wheelbase");
 			log = node.getLog();
 			motorData = node.newPublisher("motordata", "robot_msgs/MotorData");
@@ -67,23 +71,36 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 	public void shutdown() {
 		node.shutdown();
 	}
-	
+
 	@Override
 	public void onNewMessage(MotorCommand message) {
 		//log.info("I heard: \"" + message.motor_left_velocity + "\"");
 		//log.info("I heard: \"" + message.motor_left_velocity + "\"");
-		MotorData newMsg = new MotorData();
-		// Convert the message I heard into left and right wheel velocities
-		// VLeft = (2*(LINEAR_VELOCITY) + d(ANGULAR_VELOCITY)) / 2
-		// VRight = VLeft - d(ANGULAR_VELOCITY)
-		// where d is the wheel base of the robot
-		newMsg.motor_left_velocity = (float) (2 * message.linear_velocity + (wheelbase * message.angular_velocity) / 2);
-		newMsg.motor_right_velocity = (float) (newMsg.motor_left_velocity - wheelbase * message.angular_velocity);
+		MotorData newMsg = node.getMessageFactory().newMessage("robot_msgs/MotorData");
+
+		if (message.isLeftRightVel == false)
+		{
+			// Convert the message I heard into left and right wheel velocities
+			// VLeft = (2*(LINEAR_VELOCITY) + d(ANGULAR_VELOCITY)) / 2
+			// VRight = VLeft - d(ANGULAR_VELOCITY)
+			// where d is the wheel base of the robot
+			newMsg.motor_left_velocity = (float) (2 * message.linear_velocity + (wheelbase * message.angular_velocity) / 2);
+			newMsg.motor_right_velocity = (float) (newMsg.motor_left_velocity - wheelbase * message.angular_velocity);
+			newMsg.motor_left_time = 55;// based on nav.cpp 1100 is one second  so send it for 1/20 s
+			newMsg.motor_right_time = 55;// change later if to slow.
+			log.info("MotorData: LeftV: " + newMsg.motor_left_velocity + "  RightV: " + newMsg.motor_right_velocity);
+		}
+		else
+		{
+			newMsg.motor_left_velocity = message.linear_velocity;
+			newMsg.motor_right_velocity = message.angular_velocity;
+
+		}
+
 		newMsg.motor_left_time = 55;// based on nav.cpp 1100 is one second  so send it for 1/20 s
 		newMsg.motor_right_time = 55;// change later if to slow.
 		log.info("MotorData: LeftV: " + newMsg.motor_left_velocity + "  RightV: " + newMsg.motor_right_velocity);
-		
-		
+
 		motorData.publish(newMsg);
 	}
 

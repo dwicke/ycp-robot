@@ -42,13 +42,13 @@ int main(int argc, char **argv)
 		msg.ultrasonic_rearCenter_distance=105;
 		msg.ultrasonic_rearLeft_distance=106;
 
-		msg.infrared_frontLeftLeft_distance=107;
-		msg.infrared_frontLeftCenter_distance=108;
-		msg.infrared_frontRightCenter_distance=109;
-		msg.infrared_frontRightRight_distance=110;
-		msg.infrared_right_distance=111;
-		msg.infrared_rear_distance=112;
-		msg.infrared_left_distance=113;
+		msg.infrared_frontLeftLeft_distance=10;
+		msg.infrared_frontLeftCenter_distance=10;
+		msg.infrared_frontRightCenter_distance=10;
+		msg.infrared_frontRightRight_distance=11;
+		msg.infrared_right_distance=11;
+		msg.infrared_rear_distance=11;
+		msg.infrared_left_distance=11;
 		
 		msg.human_left_motion=301;
 		msg.human_left_presence=302;

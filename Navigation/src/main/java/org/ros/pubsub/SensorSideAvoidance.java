@@ -187,7 +187,7 @@ public class SensorSideAvoidance implements NodeMain, MessageListener<Range> {
 		if ((ranges = this.mesCollector.receiveMessage(message, message.header.stamp.secs)) != null)
 		{
 
-			MotorCommand mtrCmd = new MotorCommand();
+			MotorCommand mtrCmd = node.getMessageFactory().newMessage("MotorControlMsg/MotorCommand");
 
 			log.debug("Number of messages= " + ranges.size());
 

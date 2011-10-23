@@ -67,7 +67,7 @@ public class SensorAvoidance implements NodeMain, MessageListener<MotorCommand> 
 		try {
 			node = new DefaultNodeFactory().newNode("motor_listener", configuration);
 
-			mtrCmd = new MotorCommand();
+			mtrCmd = node.getMessageFactory().newMessage("MotorControlMsg/MotorCommand");
 			// must say who I subscribe to.  So get my subscriptions from the Parameter server 
 			@SuppressWarnings("unchecked")
 			List<String> topics = (List<String>) node.newParameterTree().getList(node.getName() + "_subscriptions");

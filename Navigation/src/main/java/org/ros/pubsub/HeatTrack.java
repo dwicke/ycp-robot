@@ -16,6 +16,8 @@
 
 package main.java.org.ros.pubsub;
 
+import java.util.ArrayList;
+
 import com.google.common.base.Preconditions;
 
 import org.ros.node.DefaultNodeFactory;
@@ -41,7 +43,11 @@ import org.ros.message.sensor_msgs.Range;
 public class HeatTrack implements NodeMain, MessageListener<Range> {
 
 	private Node node;
-
+	private double maxVelocity;
+	// this is the datastructure to synchronize messages
+	private MessageCollection<Range> mesCollector;
+	// these are the received ranges
+	private ArrayList<Range> ranges;
 
 	@Override
 	public void main(NodeConfiguration configuration) {
@@ -50,9 +56,10 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 
 
 		try {
-
-
-
+			//get max velocity from parameter server
+			node = new DefaultNodeFactory().newNode("heat_track", configuration);
+			maxVelocity = node.newParameterTree().getDouble("MAX_LINEAR_VELOCITY");
+			mesCollector = new MessageCollection<Range>(2);
 
 
 		} catch (Exception e) {
@@ -72,8 +79,17 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 	}
 
 	@Override
-	public void onNewMessage(Range arg0) {
+	public void onNewMessage(Range message) {
 		// TODO Auto-generated method stub
+
+		// So I get a range message that describes the 
+		if ((ranges = this.mesCollector.receiveMessage(message, message.header.stamp.secs)) != null)
+		{
+			
+			
+
+		}
+
 
 	}
 
