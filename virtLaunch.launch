@@ -10,7 +10,7 @@
 	
 	<!-- Params -->
 	<rosparam file="test.yaml" ns="$(arg space)" command="load"/>
-<node name="start_all" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Navigation main.java.org.ros.pubsub.StartAll" />
+<node name="start_all" ns="$(arg space)" type="run.py" pkg="rosjava_bootstrap" args="Runner main.java.org.ros.pubsub.StartAll" />
 	
 
 

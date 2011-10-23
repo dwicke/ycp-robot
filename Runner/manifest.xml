@@ -1,0 +1,19 @@
+<package>
+  <description brief="Runner">
+
+     Runner
+
+  </description>
+  <author>drew</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/Runner</url>
+  <depend package="rosjava"/>
+  
+  <depend package="Sensors" />
+  <depend package="Navigation" />
+  <depend package="Robot" />
+
+</package>
+
+
