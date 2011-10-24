@@ -29,13 +29,13 @@ import org.ros.message.sensor_msgs.Range;
 
 /**
  * This is a simple rosjava {@link Subscriber} {@link Node}. It assumes an
- * external roscore is already running.  The job of the Robot listener is to
- * listen for messages that have the sensor data in our implementation is from
- * either Converter or from VirtualX80SVP it depends on the startup configuration.
+ * external roscore is already running.  
+ * 
+ * this performs a pivot maneuver
  * 
  * @author drewwicke@google.com (Drew Wicke)
  */
-public class HeatSearch implements NodeMain {
+public class HeatSearch implements NodeMain, MessageListener<Range> {
 
 	private Node node;
 
@@ -46,28 +46,9 @@ public class HeatSearch implements NodeMain {
 		try {
 			node = new DefaultNodeFactory().newNode("sensor_listener", configuration);
 			
-			final Log log = node.getLog();
-			node.newSubscriber("SensorData", "robot_msgs/SensorData",
-					new MessageListener<SensorData>() {
+			
+			
 
-				@Override
-				public void onNewMessage(SensorData message) {
-					
-					log.info("I heard: \"" + message.infrared_frontLeftLeft_distance + "\"");
-					
-					// Ok so I heard the sensor data so publish the data in ROS format
-					// to the specific topics
-					
-					// first do IR
-					
-					
-					
-					// then do Ultrasonic
-					
-					
-					
-				}
-			});
 		} catch (Exception e) {
 			if (node != null) {
 				node.getLog().fatal(e);
@@ -87,6 +68,14 @@ public class HeatSearch implements NodeMain {
 	@Override
 	public void shutdown() {
 		node.shutdown();
+	}
+
+
+
+	@Override
+	public void onNewMessage(Range arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
