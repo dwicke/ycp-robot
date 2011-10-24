@@ -82,17 +82,7 @@ public class HeatSearch implements NodeMain {
 
 	}
 	
-	public void publishIR(String topic, float range)
-	{
-		Range leftfrontIR = new Range();
-		leftfrontIR.radiation_type = Range.INFRARED;
-		leftfrontIR.range = range;
-		//String topics = message.infrared_frontLeftLeft_distance;
-		
-		Publisher<Range> publisher =
-		          node.newPublisher("fronLeftLeftIRData", "sensor_msgs/Range");
-		publisher.publish(leftfrontIR);
-	}
+	
 
 	@Override
 	public void shutdown() {
