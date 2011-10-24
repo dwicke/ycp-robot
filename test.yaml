@@ -87,8 +87,8 @@ comb_const: {brait_ultrasonic_avoid: 0.6, brait_infrared_avoid: 0.4}
 
 
 
-MAX_ANGULAR_VELOCITY: 5 # rad per second
-MAX_LINEAR_VELOCITY: 0.75  # meters per second
+MAX_ANGULAR_VELOCITY: 0.75 # rads per second
+MAX_LINEAR_VELOCITY: 0.75  # m per second
 
 # variance in the gaussian function used for obstacle avoidance
 # change these to effect things...  Can always make seperate
@@ -98,7 +98,7 @@ sigma_squared_angular: 350.0
 
 
 
-wheelbase: 30.0 # in cm
+wheelbase: 0.3 # in m
 
 human_range_avg_dif: 300.0 # this is how much from 2047 (when saw nothing) we thing reading will go
 human_thresh: 25.0 # this is the threshold at which I accept the reading as being true

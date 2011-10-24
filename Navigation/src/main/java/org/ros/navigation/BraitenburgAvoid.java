@@ -62,9 +62,9 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 		try {
 			node = new DefaultNodeFactory().newNode("sensor_side_avoidance", configuration);
 			log = new SimpleLog(node.getName().toString());
-			log.setLevel(SimpleLog.LOG_LEVEL_INFO);
-			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
-			//log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
+			//log.setLevel(SimpleLog.LOG_LEVEL_INFO);
+			//log.setLevel(SimpleLog.LOG_LEVEL_OFF);
+			log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 			// get the names of the topics by querying the parameter server
 			// based on the name of this node
 
@@ -173,7 +173,7 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 	@Override
 	public void onNewMessage(Range range) {
 		int key = range.header.stamp.secs;
-		log.debug(key);
+		//log.debug(key);
 
 		if (key != curKey)
 		{
@@ -183,13 +183,15 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			curKey = key;
 			
 		}
+		log.debug(range.header.frame_id);
 		// so now I can do the math
 		// the normal of the filtered range * linear_weight
 		log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
 		double normalizedSensor = (range.range / range.max_range);
 		mtrCmd.linear_velocity += normalizedSensor * linearWeight.get(range.header.frame_id);
-		if (range.header.frame_id.contains("left"))
+		if (range.header.frame_id.contains("Left"))
 		{// if left I subtract
+			log.debug("LEfT ............................");
 			mtrCmd.angular_velocity -= (normalizedSensor * angularWeight.get(range.header.frame_id));
 		}
 		else
@@ -204,7 +206,7 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			// normalize the values
 			mtrCmd.angular_velocity /= curNum;
 			mtrCmd.linear_velocity /= curNum;
-			
+			log.debug("Ang: " + mtrCmd.angular_velocity + " Lin: " + mtrCmd.linear_velocity);
 			mtrCmd.header.stamp.secs = key;
 			curNum = 0;
 			pubCmd.publish(mtrCmd);

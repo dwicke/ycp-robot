@@ -87,16 +87,17 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 			// VLeft = (2*(LINEAR_VELOCITY) + d(ANGULAR_VELOCITY)) / 2
 			// VRight = VLeft - d(ANGULAR_VELOCITY)
 			// where d is the wheel base of the robot
-			newMsg.motor_left_velocity = (float) (2 * message.linear_velocity + (wheelbase * message.angular_velocity) / 2);
-			newMsg.motor_right_velocity = (float) (newMsg.motor_left_velocity - wheelbase * message.angular_velocity);
+			
+			newMsg.motor_left_velocity = (float) (2 * message.linear_velocity + (wheelbase * message.angular_velocity) / 2) * 100 ;
+			newMsg.motor_right_velocity = (float) (newMsg.motor_left_velocity - (wheelbase * message.angular_velocity * 100));
 			newMsg.motor_left_time = 55;// based on nav.cpp 1100 is one second  so send it for 1/20 s
 			newMsg.motor_right_time = 55;// change later if to slow.
 			log.info("MotorData: LeftV: " + newMsg.motor_left_velocity + "  RightV: " + newMsg.motor_right_velocity);
 		}
 		else
 		{
-			newMsg.motor_left_velocity = message.linear_velocity;
-			newMsg.motor_right_velocity = message.angular_velocity;
+			newMsg.motor_left_velocity = message.linear_velocity * 100;
+			newMsg.motor_right_velocity = message.angular_velocity *  100;
 
 		}
 
