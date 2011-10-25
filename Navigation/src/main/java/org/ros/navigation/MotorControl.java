@@ -52,7 +52,7 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 			node = new DefaultNodeFactory().newNode("motor_control", configuration);
 			wheelbase = node.newParameterTree().getDouble("wheelbase");
 			log = new SimpleLog(node.getName().toString());
-			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
+			//log.setLevel(SimpleLog.LOG_LEVEL_OFF);
 			
 			motorData = node.newPublisher("motordata", "robot_msgs/MotorData");
 			node.newSubscriber("Motor_Command", "MotorControlMsg/MotorCommand",this);
@@ -88,7 +88,7 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 			// VRight = VLeft - d(ANGULAR_VELOCITY)
 			// where d is the wheel base of the robot
 			
-			newMsg.motor_left_velocity = (float) (2 * message.linear_velocity + (wheelbase * message.angular_velocity) / 2) * 100 ;
+			newMsg.motor_left_velocity = (float) ((2 * message.linear_velocity + (wheelbase * message.angular_velocity)) / 2) * 100 ;
 			newMsg.motor_right_velocity = (float) (newMsg.motor_left_velocity - (wheelbase * message.angular_velocity * 100));
 			newMsg.motor_left_time = 55;// based on nav.cpp 1100 is one second  so send it for 1/20 s
 			newMsg.motor_right_time = 55;// change later if to slow.

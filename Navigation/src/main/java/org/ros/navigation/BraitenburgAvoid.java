@@ -37,6 +37,9 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 	// This is the number of inputs I expect to receive before publishing
 	private int numberInputs;
 
+	// these values I use to know how to normalize the lin and ang velocity
+	private int numAngInput, numLinInput;
+
 	// these are the anglular locations of the sensors
 	// remember that the positive y axis is 0 degrees
 	// positive x-axis is 90 degrees
@@ -88,6 +91,8 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			//mesCollector = new MessageCollection<Range>(numberInputs);
 			curNum = 0;
 			curKey = 0;
+			numAngInput = 1;
+			numLinInput = 1;
 			mtrCmd = node.getMessageFactory().newMessage("MotorControlMsg/MotorCommand");
 			mtrCmd.angular_velocity = (float) 0.0;
 			mtrCmd.linear_velocity = (float) 0.0;
@@ -115,12 +120,14 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			double angularConst = 0.0;
 			for (String key: topics)
 			{
+				if (!key.contains("frontCenter"))
+				{
+					double thetaSquared = theta.get(key) * theta.get(key);
+					linearConst += Math.exp(-1.0 * ( thetaSquared) / (2.0 * linearVariance));
+					angularConst += Math.exp(-1.0 * ( thetaSquared) / (2.0 * angularVariance)) * (90.0 - Math.abs(theta.get(key)));
 
-				double thetaSquared = theta.get(key) * theta.get(key);
-				linearConst += Math.exp(-1.0 * ( thetaSquared) / (2.0 * linearVariance));
-				angularConst += Math.exp(-1.0 * ( thetaSquared) / (2.0 * angularVariance)) * (90.0 - Math.abs(theta.get(key)));
+				}
 			}
-
 			// 1 / sum(e^-(theta^2/(2*sigma^2)) ...
 			linearConst = 1.0 / linearConst; 
 			angularConst = 1.0 / angularConst;
@@ -130,12 +137,16 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			// Now I can make the linear and angular weights
 			for (String key: topics)
 			{
-				double thetaSquared = theta.get(key) * theta.get(key);
-				double linearPsi = Math.exp(-1.0 * ( thetaSquared) / (2.0 * linearVariance));
-				double angularPsi = Math.exp(-1.0 * ( thetaSquared) / (2.0 * angularVariance)) * (90.0 - Math.abs(theta.get(key)));
-				sum += linearConst * linearPsi + angularConst * angularPsi;
-				linearWeight.put(key, linearConst * linearPsi);
-				angularWeight.put(key, angularConst * angularPsi);
+				//for now I can't do frontCenter
+				if (!key.contains("frontCenter"))
+				{
+					double thetaSquared = theta.get(key) * theta.get(key);
+					double linearPsi = Math.exp(-1.0 * ( thetaSquared) / (2.0 * linearVariance));
+					double angularPsi = Math.exp(-1.0 * ( thetaSquared) / (2.0 * angularVariance)) * (90.0 - Math.abs(theta.get(key)));
+					sum += linearConst * linearPsi + angularConst * angularPsi;
+					linearWeight.put(key, linearConst * linearPsi);
+					angularWeight.put(key, angularConst * angularPsi);
+				}
 			}
 
 			log.info("The sum of the sensors is: " + sum);//should be two
@@ -180,32 +191,51 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			mtrCmd.angular_velocity = (float) 0.0;
 			mtrCmd.linear_velocity = (float) 0.0;
 			curNum = 0;
+			numAngInput = 1;
+			numLinInput = 1;
 			curKey = key;
-			
+
 		}
 		log.debug(range.header.frame_id);
 		// so now I can do the math
 		// the normal of the filtered range * linear_weight
 		log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
 		double normalizedSensor = (range.range / range.max_range);
-		mtrCmd.linear_velocity += normalizedSensor * linearWeight.get(range.header.frame_id);
-		if (range.header.frame_id.contains("Left"))
+		
+		if (range.header.frame_id.contains("frontCenter"))
+		{
+			
+			mtrCmd.linear_velocity += normalizedSensor;
+			
+			if (normalizedSensor < 0.95)
+			{
+				mtrCmd.angular_velocity -= normalizedSensor;
+				numAngInput = 2;
+			}
+			numLinInput = 2;
+			// else we say that it canceled since nothing is there
+		}
+		else if (range.header.frame_id.contains("Left"))
 		{// if left I subtract
 			log.debug("LEfT ............................");
+			mtrCmd.linear_velocity += normalizedSensor * linearWeight.get(range.header.frame_id);
 			mtrCmd.angular_velocity -= (normalizedSensor * angularWeight.get(range.header.frame_id));
+			//numAngInput++;
 		}
-		else
+		else// right or center
 		{
+			mtrCmd.linear_velocity += normalizedSensor * linearWeight.get(range.header.frame_id);
 			mtrCmd.angular_velocity += (normalizedSensor * angularWeight.get(range.header.frame_id));
-
+			//numAngInput++;
 		}
 		// Once I receive all the messages I can then process them
 		curNum++;// finished another
+		//numLinInput++;
 		if (curNum == numberInputs)
 		{
 			// normalize the values
-			mtrCmd.angular_velocity /= curNum;
-			mtrCmd.linear_velocity /= curNum;
+			mtrCmd.angular_velocity /= numAngInput ;
+			mtrCmd.linear_velocity /= numLinInput;
 			log.debug("Ang: " + mtrCmd.angular_velocity + " Lin: " + mtrCmd.linear_velocity);
 			mtrCmd.header.stamp.secs = key;
 			curNum = 0;

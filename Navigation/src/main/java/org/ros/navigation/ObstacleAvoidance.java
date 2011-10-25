@@ -90,7 +90,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			pubCmd = node.newPublisher("Motor_Command", "MotorControlMsg/MotorCommand");
 			log = new SimpleLog(node.getName().toString());
 			log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
-			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
+			//log.setLevel(SimpleLog.LOG_LEVEL_OFF);
 
 			// The job of this node is to provide to the MotorControler a linear and
 			// angular velocity such that the robot avoids obstacles.  It uses
@@ -151,16 +151,16 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		// by doing alpha * MAX_LINEAR_VELOCITY = linear velocity
 		// beta * MAX_ANGULAR_VELOCITY = angular velocity.
 		// and then also multiply that by the normalizing constant
-
-		mtrCmd.angular_velocity += message.angular_velocity * maxAngularVelocity; //* constants.get(message.header.frame_id);
-		mtrCmd.linear_velocity  += message.linear_velocity * maxLinearVelocity; //* constants.get(message.header.frame_id);
+		log.debug("The constant is " + constants.get(message.header.frame_id.substring(1)));
+		mtrCmd.angular_velocity += message.angular_velocity * maxAngularVelocity * constants.get(message.header.frame_id.substring(1));
+		mtrCmd.linear_velocity  += message.linear_velocity * maxLinearVelocity * constants.get(message.header.frame_id.substring(1));
 		curNum++;// done another
 
 		log.debug("Received both IR and US key: " + message.header.stamp.secs + " Size of cmds = " + curNum);
 		if (curNum == numberInputs)// check to see if done all
 		{
 			// and publish that
-			
+			log.debug("Angular = " + mtrCmd.angular_velocity + " Linear= " + mtrCmd.linear_velocity);
 			mtrCmd.precedence = 0;// highest priority
 			mtrCmd.header.frame_id = node.getName().toString();// name
 			mtrCmd.header.stamp = node.getCurrentTime();// time sent
