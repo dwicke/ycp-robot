@@ -51,7 +51,7 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 
 	// variance of function
 	private double linearVariance, angularVariance;
-	
+
 	private double linVel, angVel;
 
 	private SimpleLog log;
@@ -68,8 +68,8 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			node = new DefaultNodeFactory().newNode("sensor_side_avoidance", configuration);
 			log = new SimpleLog(node.getName().toString());
 			//log.setLevel(SimpleLog.LOG_LEVEL_INFO);
-			//log.setLevel(SimpleLog.LOG_LEVEL_OFF);
-			log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
+			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
+			//log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 			// get the names of the topics by querying the parameter server
 			// based on the name of this node
 
@@ -208,14 +208,18 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 		// the normal of the filtered range * linear_weight
 		log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
 		double normalizedSensor = (range.range / range.max_range);
-		
+
 		if (range.header.frame_id.contains("frontCenter"))
 		{
-			
+			// must deal with centered sensors
+			// otherwise it will just cancel itself out in the
+			// angular velocity
 			linVel += normalizedSensor;
-			
+
 			if (normalizedSensor < 0.95)
 			{
+				// we could add or subtract doesn't
+				// matter
 				angVel -= normalizedSensor;
 				numAngInput = 2;
 			}
@@ -226,20 +230,16 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 		{// if left I subtract
 			linVel += normalizedSensor * linearWeight.get(range.header.frame_id);
 			angVel -= (normalizedSensor * angularWeight.get(range.header.frame_id));
-			if (node.getName().toString().contains("red"))
-			{
-				log.debug("Subtracting on left side for infrared " + (normalizedSensor * angularWeight.get(range.header.frame_id)) + " for sum of " + mtrCmd.angular_velocity);
-			}
+
 		}
 		else// right or center
 		{
 			linVel += normalizedSensor * linearWeight.get(range.header.frame_id);
 			angVel += (normalizedSensor * angularWeight.get(range.header.frame_id));
-			log.debug("Adding on left side for infrared ddeifjjjjjjjjjjjjjjjj" + (normalizedSensor * angularWeight.get(range.header.frame_id)) + " for sum of " + mtrCmd.angular_velocity);
 		}
 		// Once I receive all the messages I can then process them
 		curNum++;// finished another
-		
+
 		if (curNum == numberInputs)
 		{
 			// normalize the values
