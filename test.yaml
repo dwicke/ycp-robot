@@ -82,7 +82,7 @@ human_topics:
  
   
 
-comb_const: {brait_ultrasonic_avoid: 0.5, brait_infrared_avoid: 0.5}
+comb_const: {brait_ultrasonic_avoid: 0.9, brait_infrared_avoid: 0.1}
 
 
 

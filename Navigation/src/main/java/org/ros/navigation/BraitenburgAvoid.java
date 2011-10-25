@@ -51,6 +51,8 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 
 	// variance of function
 	private double linearVariance, angularVariance;
+	
+	private double linVel, angVel;
 
 	private SimpleLog log;
 
@@ -93,6 +95,9 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			curKey = 0;
 			numAngInput = 1;
 			numLinInput = 1;
+			// storage for velocities so that the precision is constant until the end
+			linVel = 0.0;
+			angVel = 0.0;
 			mtrCmd = node.getMessageFactory().newMessage("MotorControlMsg/MotorCommand");
 			mtrCmd.angular_velocity = (float) 0.0;
 			mtrCmd.linear_velocity = (float) 0.0;
@@ -190,6 +195,8 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 		{
 			mtrCmd.angular_velocity = (float) 0.0;
 			mtrCmd.linear_velocity = (float) 0.0;
+			linVel = 0.0;
+			angVel = 0.0;
 			curNum = 0;
 			numAngInput = 1;
 			numLinInput = 1;
@@ -205,11 +212,11 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 		if (range.header.frame_id.contains("frontCenter"))
 		{
 			
-			mtrCmd.linear_velocity += normalizedSensor;
+			linVel += normalizedSensor;
 			
 			if (normalizedSensor < 0.95)
 			{
-				mtrCmd.angular_velocity -= normalizedSensor;
+				angVel -= normalizedSensor;
 				numAngInput = 2;
 			}
 			numLinInput = 2;
@@ -217,25 +224,27 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 		}
 		else if (range.header.frame_id.contains("Left"))
 		{// if left I subtract
-			log.debug("LEfT ............................");
-			mtrCmd.linear_velocity += normalizedSensor * linearWeight.get(range.header.frame_id);
-			mtrCmd.angular_velocity -= (normalizedSensor * angularWeight.get(range.header.frame_id));
-			//numAngInput++;
+			linVel += normalizedSensor * linearWeight.get(range.header.frame_id);
+			angVel -= (normalizedSensor * angularWeight.get(range.header.frame_id));
+			if (node.getName().toString().contains("red"))
+			{
+				log.debug("Subtracting on left side for infrared " + (normalizedSensor * angularWeight.get(range.header.frame_id)) + " for sum of " + mtrCmd.angular_velocity);
+			}
 		}
 		else// right or center
 		{
-			mtrCmd.linear_velocity += normalizedSensor * linearWeight.get(range.header.frame_id);
-			mtrCmd.angular_velocity += (normalizedSensor * angularWeight.get(range.header.frame_id));
-			//numAngInput++;
+			linVel += normalizedSensor * linearWeight.get(range.header.frame_id);
+			angVel += (normalizedSensor * angularWeight.get(range.header.frame_id));
+			log.debug("Adding on left side for infrared ddeifjjjjjjjjjjjjjjjj" + (normalizedSensor * angularWeight.get(range.header.frame_id)) + " for sum of " + mtrCmd.angular_velocity);
 		}
 		// Once I receive all the messages I can then process them
 		curNum++;// finished another
-		//numLinInput++;
+		
 		if (curNum == numberInputs)
 		{
 			// normalize the values
-			mtrCmd.angular_velocity /= numAngInput ;
-			mtrCmd.linear_velocity /= numLinInput;
+			mtrCmd.angular_velocity = (float) (angVel / numAngInput) ;
+			mtrCmd.linear_velocity = (float) (linVel / numLinInput);
 			log.debug("Ang: " + mtrCmd.angular_velocity + " Lin: " + mtrCmd.linear_velocity);
 			mtrCmd.header.stamp.secs = key;
 			curNum = 0;

@@ -52,7 +52,7 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 			node = new DefaultNodeFactory().newNode("motor_control", configuration);
 			wheelbase = node.newParameterTree().getDouble("wheelbase");
 			log = new SimpleLog(node.getName().toString());
-			//log.setLevel(SimpleLog.LOG_LEVEL_OFF);
+			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
 			
 			motorData = node.newPublisher("motordata", "robot_msgs/MotorData");
 			node.newSubscriber("Motor_Command", "MotorControlMsg/MotorCommand",this);
