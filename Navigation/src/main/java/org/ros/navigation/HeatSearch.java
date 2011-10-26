@@ -73,7 +73,7 @@ public class HeatSearch implements NodeMain, MessageListener<Range> {
 				// only care about presence
 				if (topic.contains("presence"))
 				{
-					node.newSubscriber(topic, "sensor_msgs/Range", this);
+					node.newSubscriber(topic + "filtered", "sensor_msgs/Range", this);
 				}
 			}
 
@@ -120,6 +120,7 @@ public class HeatSearch implements NodeMain, MessageListener<Range> {
 			if (countRange < maxCount * 4)
 			{
 				// so only publish until 4 * the max
+				// so don't keep circling
 				mtrPub.publish(mtrCmd);
 			}
 			else 

@@ -23,6 +23,7 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 
 
+import org.apache.commons.logging.impl.SimpleLog;
 import org.ros.node.DefaultNodeFactory;
 import org.ros.node.Node;
 import org.ros.node.NodeConfiguration;
@@ -31,6 +32,7 @@ import org.ros.node.topic.Publisher;
 import org.ros.message.MessageListener;
 import org.ros.message.MotorControlMsg.MotorCommand;
 import org.ros.message.robot_msgs.*;
+import org.ros.message.rosgraph_msgs.Log;
 import org.ros.message.sensor_msgs.Range;
 
 /**
@@ -50,11 +52,12 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 	private double maxVelocity;
 	private Publisher<MotorCommand> pubCmd;
 	private MotorCommand mtrCmd;
-	private int count;
+	private int countLeft, countRight;
 	private int midRange;
 	private double thresh;
 	private double maxAvg;
 
+	private SimpleLog log;
 	@Override
 	public void main(NodeConfiguration configuration) {
 		Preconditions.checkState(node == null);
@@ -66,7 +69,10 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 			node = new DefaultNodeFactory().newNode("heat_track", configuration);
 			maxVelocity = node.newParameterTree().getDouble("MAX_LINEAR_VELOCITY");
 
-
+			log = new SimpleLog(node.getName().toString());
+			log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
+			
+			
 			// set up publisher
 			pubCmd = node.newPublisher("Motor_Command", "MotorControlMsg/MotorCommand");
 
@@ -76,8 +82,8 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 			mtrCmd.isLeftRightVel = true;
 			mtrCmd.precedence = 1;
 			// set up count 
-			count = 0;
-
+			countLeft = 0;
+			countRight = 0;
 			// set the mid range of the sensor
 			midRange = 2047;
 			// set the threshold for which something is said to be human
@@ -92,7 +98,7 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 				// only care about presence
 				if (topic.contains("presence"))
 				{
-					node.newSubscriber(topic, "sensor_msgs/Range", this);
+					node.newSubscriber(topic + "filtered", "sensor_msgs/Range", this);
 				}
 			}
 
@@ -116,10 +122,12 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 	public void onNewMessage(Range message) {
 		// TODO Auto-generated method stub
 
+		log.debug("RECIEVED MESSAGE");
+		
 		// So I get a range message that describes the 
 		if (message.header.frame_id.contains("left"))
 		{
-
+			log.debug("Left sensor" + message.range);
 			// do left velocity
 			if (Math.abs(midRange - message.range) <= thresh)
 			{
@@ -131,9 +139,11 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 				mtrCmd.linear_velocity = Math.abs(midRange - message.range);
 			}
 			mtrCmd.linear_velocity = (float) (maxVelocity * (1 - (mtrCmd.linear_velocity / maxAvg) ));
+			countLeft++;
 		}
 		else
 		{
+			log.debug("Right sensor" + message.range);
 			// do right velocity
 			if (Math.abs(midRange - message.range) <= thresh)
 			{
@@ -145,21 +155,24 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 				mtrCmd.angular_velocity = Math.abs(midRange - message.range);
 			}
 			mtrCmd.angular_velocity = (float) (maxVelocity * (1 - (mtrCmd.angular_velocity / maxAvg) ));
-
+			countRight++;
 		}
-		count++;
-		if (count == 2)
+		
+		if (countLeft > 0 && countRight > 0)
 		{
 			// there are two sensors so pub once got them both
-			count = 0;// reset counter
-			
-			mtrCmd.linear_velocity *= 100; // meters to cm
-			mtrCmd.angular_velocity *= 100; // meters to cm
+			countLeft = 0;// reset counter
+			countRight = 0; 
 			// assign priority
 			
-			if (mtrCmd.angular_velocity != maxVelocity && mtrCmd.linear_velocity != maxVelocity)
+			if (mtrCmd.angular_velocity != maxVelocity || mtrCmd.linear_velocity != maxVelocity)
 			{
+				log.debug("Publishing Heat track");
 				pubCmd.publish(mtrCmd);
+			}
+			else
+			{
+				log.debug("Not publishing Heat track");
 			}
 			
 		}

@@ -99,7 +99,7 @@ sigma_squared_angular: 350.0
 
 wheelbase: 0.3 # in m
 
-human_range_avg_dif: 300.0 # this is how much from 2047 (when saw nothing) we thing reading will go
+human_range_avg_dif: 500.0 # this is how much from 2047 (when saw nothing) we thing reading will go
 human_thresh: 25.0 # this is the threshold at which I accept the reading as being true
 
 

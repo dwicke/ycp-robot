@@ -75,12 +75,28 @@ public class StartAll implements NodeMain{
 			ultraAvoidConfig.setNodeName("brait_ultrasonic_avoid");
 			
 			
+			
+			HeatTrack track = new HeatTrack();
+			NodeConfiguration trackConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
+			trackConfig.setNodeName("heat_track");
+			
+			
+			HeatSearch heat_search = new HeatSearch();
+			NodeConfiguration heatSearchConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
+			heatSearchConfig.setNodeName("heat_search");
+			
+			
+			
+			
 			nodeRunner.run(obsAvoid, obsConfig);
 			nodeRunner.run(mtrCtr, mtrCtrConfig);
 			
 			
 			nodeRunner.run(infraAvoid, infraAvoidConfig);
 			nodeRunner.run(ultraAvoid, ultraAvoidConfig);
+			nodeRunner.run(heat_search, heatSearchConfig);
+			nodeRunner.run(track, trackConfig);
+			
 			
 			
 			

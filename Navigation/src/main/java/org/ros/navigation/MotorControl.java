@@ -84,11 +84,10 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 		//log.info("I heard: \"" + message.motor_left_velocity + "\"");
 		MotorData newMsg = node.getMessageFactory().newMessage("robot_msgs/MotorData");
 
+		
 		if (message.precedence <= prevPriority)
 		{
 			// then do it
-
-
 
 
 			if (message.isLeftRightVel == false)

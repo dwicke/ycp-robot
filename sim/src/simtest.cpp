@@ -67,10 +67,10 @@ int main(int argc, char **argv)
 		msg.infrared_rear_distance=80;
 		msg.infrared_left_distance=80;
 
-		msg.human_left_motion=301;
-		msg.human_left_presence=302;
-		msg.human_right_motion=303;
-		msg.human_right_presence=304;
+		msg.human_left_motion=1600;
+		msg.human_left_presence=1600;
+		msg.human_right_motion=2047;
+		msg.human_right_presence=2047;
 
 		//Send sensor packet
 		sensor_pub.publish(msg);

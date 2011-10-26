@@ -59,7 +59,8 @@ public class PyroelectricSensorFilter implements NodeMain, MessageListener<Range
 			node = new DefaultNodeFactory().newNode("human_listener", configuration);
 
 			log = new SimpleLog(node.getName().toString());
-			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
+			log.setLevel(SimpleLog.LOG_LEVEL_INFO);
+			//log.setLevel(SimpleLog.LOG_LEVEL_OFF);
 			// Print out the name
 			log.info("Sensor name: " + node.getName());
 
@@ -112,7 +113,7 @@ public class PyroelectricSensorFilter implements NodeMain, MessageListener<Range
 		//log.info(newMess.header.seq + "  " + message.header.seq);
 		
 		filteredRangeMap.get(message.header.frame_id).publish(message);
-		log.info("Message recieved");
+		log.info("Message recieved " + message.header.frame_id);
 	}
 
 }
