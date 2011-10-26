@@ -89,6 +89,7 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 			List<String> topics = (List<String>) node.newParameterTree().getList("human_topics");
 			for (String topic : topics)
 			{
+				// only care about presence
 				if (topic.contains("presence"))
 				{
 					node.newSubscriber(topic, "sensor_msgs/Range", this);
@@ -122,6 +123,7 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 			// do left velocity
 			if (Math.abs(midRange - message.range) <= thresh)
 			{
+				// this is left velocity not linear velocity
 				mtrCmd.linear_velocity = 0;
 			}
 			else
@@ -133,9 +135,9 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 		else
 		{
 			// do right velocity
-			// do left velocity
 			if (Math.abs(midRange - message.range) <= thresh)
 			{
+				// this is right wheel velocity not angular velocity
 				mtrCmd.angular_velocity = 0;
 			}
 			else
@@ -150,6 +152,15 @@ public class HeatTrack implements NodeMain, MessageListener<Range> {
 		{
 			// there are two sensors so pub once got them both
 			count = 0;// reset counter
+			
+			mtrCmd.linear_velocity *= 100; // meters to cm
+			mtrCmd.angular_velocity *= 100; // meters to cm
+			// assign priority
+			
+			if (mtrCmd.angular_velocity != maxVelocity && mtrCmd.linear_velocity != maxVelocity)
+			{
+				pubCmd.publish(mtrCmd);
+			}
 			
 		}
 

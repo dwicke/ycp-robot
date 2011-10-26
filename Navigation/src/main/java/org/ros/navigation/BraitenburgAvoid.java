@@ -52,7 +52,11 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 	// variance of function
 	private double linearVariance, angularVariance;
 
+	// for precision of calculation
 	private double linVel, angVel;
+	
+	// so that I don't get too close to objects
+	private double threshold;
 
 	private SimpleLog log;
 
@@ -81,6 +85,7 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			angularVariance = node.newParameterTree().getDouble("sigma_squared_angular");
 			log.info("LinearVariance: " + linearVariance + "AngularVariance: " + angularVariance);
 
+			threshold = node.newParameterTree().getDouble("sensor_threshold");
 
 			// get the angular distances
 			theta = (Map<String, Double>) node.newParameterTree().getMap(node.getName()+"_theta");
@@ -204,6 +209,8 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 
 		}
 		log.debug(range.header.frame_id);
+		// set range so that it corresponds to the threshold
+		range.range = (range.range > threshold) ? range.range : 0;
 		// so now I can do the math
 		// the normal of the filtered range * linear_weight
 		log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
@@ -223,6 +230,17 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 				angVel -= normalizedSensor;
 				numAngInput = 2;
 			}
+			
+			// if normalizedSensor is zero then 
+			// in order to get it out of a stationary
+			// state set angVel to .25
+			// this is not in the paper I made this up
+			if (normalizedSensor == 0)
+			{
+				angVel -= 0.25;
+			}
+			
+			
 			numLinInput = 2;
 			// else we say that it canceled since nothing is there
 		}
@@ -248,6 +266,7 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			log.debug("Ang: " + mtrCmd.angular_velocity + " Lin: " + mtrCmd.linear_velocity);
 			mtrCmd.header.stamp.secs = key;
 			curNum = 0;
+			
 			pubCmd.publish(mtrCmd);
 		}
 	}

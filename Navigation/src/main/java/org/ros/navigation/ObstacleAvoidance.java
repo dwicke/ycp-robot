@@ -161,7 +161,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 		{
 			// and publish that
 			log.debug("Angular = " + mtrCmd.angular_velocity + " Linear= " + mtrCmd.linear_velocity);
-			mtrCmd.precedence = 0;// highest priority
+			mtrCmd.precedence = (mtrCmd.angular_velocity > (maxAngularVelocity / 40)) ? 0 : 5;// highest priority if turning else not so much
 			mtrCmd.header.frame_id = node.getName().toString();// name
 			mtrCmd.header.stamp = node.getCurrentTime();// time sent
 			curNum = 0;
