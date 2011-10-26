@@ -71,8 +71,8 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 		try {
 			node = new DefaultNodeFactory().newNode("sensor_side_avoidance", configuration);
 			log = new SimpleLog(node.getName().toString());
-			//log.setLevel(SimpleLog.LOG_LEVEL_INFO);
-			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
+			log.setLevel(SimpleLog.LOG_LEVEL_INFO);
+		//	log.setLevel(SimpleLog.LOG_LEVEL_OFF);
 			//log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 			// get the names of the topics by querying the parameter server
 			// based on the name of this node
@@ -86,7 +86,8 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 			log.info("LinearVariance: " + linearVariance + "AngularVariance: " + angularVariance);
 
 			threshold = node.newParameterTree().getDouble("sensor_threshold");
-
+			log.info("the threshold is " + threshold);
+			
 			// get the angular distances
 			theta = (Map<String, Double>) node.newParameterTree().getMap(node.getName()+"_theta");
 
@@ -209,11 +210,14 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 
 		}
 		log.debug(range.header.frame_id);
+		log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
+
+		
 		// set range so that it corresponds to the threshold
 		range.range = (range.range > threshold) ? range.range : 0;
 		// so now I can do the math
 		// the normal of the filtered range * linear_weight
-		log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
+	//	log.info(range.range / range.max_range + " range " + range.range + " max range" + range.max_range);
 		double normalizedSensor = (range.range / range.max_range);
 
 		if (range.header.frame_id.contains("frontCenter"))

@@ -89,7 +89,7 @@ public class ObstacleAvoidance implements NodeMain, MessageListener<MotorCommand
 			// publish to Motor_Command
 			pubCmd = node.newPublisher("Motor_Command", "MotorControlMsg/MotorCommand");
 			log = new SimpleLog(node.getName().toString());
-			log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
+			//log.setLevel(SimpleLog.LOG_LEVEL_DEBUG);
 			log.setLevel(SimpleLog.LOG_LEVEL_OFF);
 
 			// The job of this node is to provide to the MotorControler a linear and
