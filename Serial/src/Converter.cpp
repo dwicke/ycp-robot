@@ -29,7 +29,7 @@ JMC
 #define YCP_ROBOT 1
 
 //prototypes
-int IR_Convert(int value);
+double IR_Convert(int IRValue);
 double Motor_Convert(double motor_val);
 void print_infrared(void);
 void print_ultrasonic(void);
@@ -97,7 +97,7 @@ int main(int argc, char**argv){
 	//check to see if the node handle returned an empty ros::Publisher
 	if(!sensordata_pub) ROS_INFO("Failed to create a publisher node!MotorCtrl");
 	
-	ros::Rate loop_rate(100); //10 Hz publish time
+	ros::Rate loop_rate(10); //10 Hz publish time
 			
 	int count = 0; //count of how many messages were sent
 	
