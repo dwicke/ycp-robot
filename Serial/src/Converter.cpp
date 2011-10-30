@@ -52,7 +52,7 @@ robot_msgs::SensorData SensorMsg;  //create a message struct for publishing
 //motors are controlled by taking in a velocity value which is then set for the specific motor channel
 void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
 	ROS_INFO("Motor data received: \n");
-	ROS_INFO("motor1: %lf", msg->motor_left_velocity);
+	ROS_INFO("motor1: %lf", Motor_Convert(msg->motor_left_velocity));
 	ROS_INFO("motor2: %lf", Motor_Convert(msg->motor_left_velocity));
 	//send left/right values to the robot
 	int motorLPASS = driver->sendMotorCtrlCmd(Velocity, 0, Motor_Convert(msg->motor_left_velocity), msg->motor_left_time);
@@ -205,11 +205,25 @@ void print_ultrasonic(){
 	#endif
 }
 
-/*Convert the IR Sensor to a value in cm.  Note that this is currently not too accurate,
-it is just an approximation for the voltage slope*/
-int IR_Convert(int value){
-	return 739.38*pow(value,-.8105);
+//Convert the IR Sensor to a value in cm
+double IR_Convert(int IRValue)
+{
+    double temp = 0;
+    double IRAD2Distance = 0;
+
+    temp = 21.6 / ((double)IRValue * 3 / 4028 - 0.17);
+
+    // IR range 10-80cm
+    if ((temp > 80) || (temp < 0))
+        IRAD2Distance = 81;
+    else if ((temp < 10) && (temp > 0))
+        IRAD2Distance = 90;
+    return IRAD2Distance;
 }
+
+
+
+
 /*Convert the Motor encoder values into cm/s values.
 Diameter is 18 cm so circumference is about 56.5 cm. 800 ticks on each encoder
 Motor_num is 0 for left and 1 for right on the X80SVP*/
