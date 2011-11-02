@@ -82,12 +82,16 @@ human_topics:
  
   
 
-comb_const: {brait_ultrasonic_avoid: 0.9, brait_infrared_avoid: 0.1}
+comb_const: {brait_ultrasonic_avoid: 1.0, brait_infrared_avoid: 0.0}
 
 
 
-MAX_ANGULAR_VELOCITY: 5.0 # rads per second
-MAX_LINEAR_VELOCITY: 0.75  # m per second
+#MAX_ANGULAR_VELOCITY: 5.0 # rads per second
+#MAX_LINEAR_VELOCITY: 0.75  # m per second
+
+MAX_ANGULAR_VELOCITY: 0.67 # rads per second (1 / .15) * linearVelocity 
+MAX_LINEAR_VELOCITY: 0.1  # m per second
+
 
 # variance in the gaussian function used for obstacle avoidance
 # change these to effect things...  Can always make seperate
@@ -103,7 +107,7 @@ human_range_avg_dif: 500.0 # this is how much from 2047 (when saw nothing) we th
 human_thresh: 25.0 # this is the threshold at which I accept the reading as being true
 
 
-sensor_threshold: 0.25 # 25cm or .25 meters this is the threshold at which I start seeing things anything below is considered 0
+sensor_threshold: 0.08 # 25cm or .25 meters this is the threshold at which I start seeing things anything below is considered 0
 
 
 
