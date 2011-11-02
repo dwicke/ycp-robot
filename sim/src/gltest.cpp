@@ -57,6 +57,14 @@ void glxPrintf(int x,int y,const char * format, ... )
 	va_end (args);
 }
 
+Display *dpy;
+Window root_window;
+void init_xorg()
+{
+	dpy = XOpenDisplay(0);
+	root_window = XRootWindow(dpy, 0);
+	XSelectInput(dpy, root_window, KeyReleaseMask);
+}
 
 int winx=0,winy=0;
 
@@ -120,6 +128,8 @@ int main(int argc, char *argv[])
 	
 	// Create window
 	glutCreateWindow("GL Test");
+	
+	init_xorg();
 
 #ifndef OSX
 	// Initialize GLEW - MUST BE DONE AFTER CREATING GLUT WINDOW
