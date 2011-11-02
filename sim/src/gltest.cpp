@@ -29,6 +29,14 @@
 
 #include <SOIL/SOIL.h>
 
+
+//#include "roscomm.h"
+#include "ros/ros.h"
+
+#include "robot_msgs/SensorData.h"
+#include "robot_msgs/MotorData.h"
+
+
 #define	TIMER_ID	1
 #define	FPS	60
 
