@@ -29,5 +29,9 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_add_executable(example examples/example.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
 
+
+rosbuild_add_executable(gltest src/gltest.cpp)
+target_link_libraries(gltest GLEW glut SOIL GLU)
 rosbuild_add_executable(simtest src/simtest.cpp)
-rosbuild_add_executable(sim src/sim.cpp)
+#rosbuild_add_executable(simtesthuman src/simtesthuman.cpp)
+#rosbuild_add_executable(sim src/sim.cpp)

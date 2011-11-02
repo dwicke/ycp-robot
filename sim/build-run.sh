@@ -1,1 +1,0 @@
-rosmake&&rosrun sim sim
