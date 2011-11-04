@@ -1,62 +1,76 @@
-// CS370 - Fall 2010
-// Final Project
+//GL Simulator for ROS
+// Cory Boyle 2011
 
 const char* HELP_STRING=
+"--Keyboard--\n"
 "W,A,S,D: Move\n"
 "Q,E: Pan left/right\n"
 "R,F: Tilt up/down\n"
 "Numpad 0: Reset (Initialize Actors)\n"
 "Numpad 8,2: Select actor up/down\n"
 "Numpad 4,5,6: Select sensor left/first/right\n"
+"Numpad /,*: Select mesh left/right\n"
 "H: Toggle help\n"
 "O: Toggle OSD\n"
 "B: Toggle bounds\n"
 "N: Toggle noise\n"
 "M: Toggle motors\n"
-"`: Toggle fullscreen (FPS mode)\n";
-
-/**
-Controls:
-WS AD	Move/strafe
-QE RF	Rotate Z/X
-TG D	Adjust convergence /reset
-ZX C	Adjust IPD /reset
-I		Cycle 3D modes
-O		Toggle OSD
-P		Toggle bounds
-
-`		Fullscreen
-
-1		Light
-2		Fan
-3		Door
-4		Tilt blinds
-5		Open blinds
+"`: Toggle fullscreen (FPS mode)\n"
+"\n"
+"--Mouse--\n"
+"Scroll: Select actor up/down\n"
+"Left click: Toggle fullscreen\n"
+"Middle click: Select sensor next\n"
+"Right click: Select mesh next\n";
 
 
-Anaglyph Red/Cyan should work best with good quality filter glasses,
-the other modes provide various tradeoffs in color accuracy, color fringing, and depth
-when used with cheaper ones that significantly bleed the green channel.
+//Resolution to render sensors at. Also sets minimum window size and resolution for virtual Kinect.
+#define SENSOR_WINDOW_WIDTH		640
+#define SENSOR_WINDOW_HEIGHT	480
 
-2D
-"Anaglyph Red/Blue",
-"Anaglyph Red/Blue + Green",
-"Anaglyph Red/Cyan",
-*/
+//Initial window size
+#define INITIAL_WINDOW_WIDTH	640
+#define INITIAL_WINDOW_HEIGHT	480
 
-//todo
-/*
-avoid updating convergence every frame
+//Target FPS. MUST be a multiple of ROS_HZ greater than ROS_HZ*2.
+//Comment out to run at max speed.
+#define	FPS		60
 
-should only read vals at CUPS rate,
-but apply weight/recompute on every frame
+//Number of times per second to process ROS messages
+#define ROS_HZ	10
 
-CUPS //Nuimber of times/sec to refocus the 3D camera
-*/
+
+#define OSD_COLOR	0,1,1
+
+//Max length of most strings- lines/words/filenames
+#define MAX_LEN	512
+//Max textures to allocate. Increase if texture error occurs.
+#define MAX_TEXTURES	20
+
+
+//Disable display output
+//#define NO_DISPLAY
+
+//Disable lighting (will crash Intel GMA950 gfx if not set)
+//This does NOT work in this revision
+//#define NO_LIGHTING	1
+
+
+
+
+
+//////////
+
+//These should not be changed
+#define	TIMER_ID	1
+
+//Generally only defined on Windows.
+#ifndef	VK_ESCAPE
+#define VK_ESCAPE	27
+#endif
 
 //ROS *MUST* be included first for some reason
 #include "ros/ros.h"
-
 #include "robot_msgs/SensorData.h"
 #include "robot_msgs/MotorData.h"
 
@@ -87,57 +101,17 @@ CUPS //Nuimber of times/sec to refocus the 3D camera
 	#include <X11/Xos.h>
 #endif
 
-
-//#define NO_DISPLAY
-
-
 #include <SOIL/SOIL.h>
 
-#define SENSOR_WINDOW_WIDTH		640
-#define SENSOR_WINDOW_HEIGHT	480
-#define INITIAL_WINDOW_WIDTH	SENSOR_WINDOW_WIDTH
-#define INITIAL_WINDOW_HEIGHT	SENSOR_WINDOW_HEIGHT
-
-
-
-//Max length of most strings- lines/words/filenames
-#define MAX_LEN	512
-#define MAX_TEXTURES	20
-
-int winx,winy;
-
 #include "glx.h"
-
-#define	TIMER_ID	1
-#define	FPS	60
-
-
-#ifndef	VK_ESCAPE
-#define VK_ESCAPE	27
-#endif
-
-//To prevent system from crashing on sucky Intel GMA950 gfx card
-#ifdef __linux
-//#define NO_LIGHTING	1
-#endif
-
-#ifndef	NO_LIGHTING
-//#include "lighting.h"
-#endif
 #include "loader3.h"
 
 
 //ROS stuff
-#include "robot.h"
 #include "sensors.h"
-
 #include "roscomm.h"
-#define SENSOR_DELAY	100;
 
 #include "move.h"
-
-
-
 #include "display.h"
 
 
@@ -145,8 +119,26 @@ int winx,winy;
 
 void load_res()
 {
+	//Find the source directory
+	char exe[MAX_LEN];
+	int len=readlink("/proc/self/exe",exe,MAX_LEN);
+	int slashes=0;
+	for(int i=len;i>0;i--)
+	{
+		if(exe[i]=='/')
+			slashes++;
+		if(slashes==2)
+		{
+			exe[i]=0;
+			break;
+		}
+	}
+	
+	if(chdir(exe))
+		printf("WARNING: Failed to locate sim root directory. Must do `roscd sim` manually before starting!\n");
+	
 	if(chdir("res"))
-		lerr("Resource directory missing!\n(NOTE: Currently, you must be in the ros_workspace/sim/ directory for it to find this)\n");
+		lerr("Resource directory missing!\n");
 
 	mesh * m=load_meshfile("room.x");
 	//mesh * m=load_meshfile("robot.x");
@@ -177,7 +169,7 @@ void load_res()
 int main(int argc, char *argv[])
 {
 	//Initialize RNG
-	srand (time(NULL));
+	srand(time(NULL));
 	
 	// Initialize GLUT
 	glutInit(&argc,argv);
@@ -199,12 +191,11 @@ int main(int argc, char *argv[])
 	//set event handlers
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
-	glutTimerFunc(1000/FPS,timer,TIMER_ID);
+	glutTimerFunc(0,timer,TIMER_ID);
 	glutKeyboardFunc(keydown);
 	glutKeyboardUpFunc(keyup);
 	glutMouseFunc(mouseClick);
 	
-
 	//move.h
 	init_keystate();
 	init_xorg();
@@ -236,14 +227,13 @@ int main(int argc, char *argv[])
 	glEnable(GL_NORMALIZE);
 
 
-		GLfloat v[4];
+	GLfloat v[4];
 	v[0]=.8;
 	v[1]=.8;
 	v[2]=.8;
 	v[3]=1;
 	glLightfv(GL_LIGHT0,GL_AMBIENT,v);
 	glEnable(GL_LIGHT0);
-
 #else
 	printf("WARNING: Lighting disabled!\n");
 #endif

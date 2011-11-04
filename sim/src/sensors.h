@@ -1,10 +1,23 @@
-#define SENSOR_TYPE_ULTRASONIC	1
-#define SENSOR_TYPE_INFRARED	2
-#define SENSOR_TYPE_HUMAN		3
-#define SENSOR_TYPE_CAMERA		4
-#define SENSOR_TYPE_3PCAM		5
-#define SENSOR_TYPE_FIXEDCAM	6
-#define SENSOR_TYPE_KINECT		7
+//Sensor parameters
+// Cory Boyle 2011
+
+///From robot.h
+float bot_xtheta=0,bot_ztheta=0,//degrees
+      bot_x=0,bot_y=0;//meters
+
+float wheel_l_velocity=0,wheel_r_velocity=0;//speeds in m/s
+int wheel_l_end=0,wheel_r_end=0;
+
+///
+
+#define SENSOR_TYPE_ULTRASONIC		1
+#define SENSOR_TYPE_INFRARED		2
+#define SENSOR_TYPE_HUMAN			3
+#define SENSOR_TYPE_CAMERA			4
+#define SENSOR_TYPE_3PCAM			5
+#define SENSOR_TYPE_FIXEDCAM		6
+#define SENSOR_TYPE_KINECT_DEPTHMAP	7
+#define SENSOR_TYPE_KINECT_RGB		8
 
 struct Sensor{
 	const char *name;//Display name of sensor
@@ -19,7 +32,7 @@ struct Sensor{
 bool noise_enable=true;
 float noise_factor=1;
 #define NOISE_MAX	100.0
-#define NOISE_D		2
+#define NOISE_D		2	//in units/sec
 
 //Distance between wheels in cm
 #define WHEEL_SPACING	30.0
@@ -197,7 +210,7 @@ Sensor* load_X80SVP_sensors()
 	sensors[i].ztheta=	  0;
 	
 	i++;
-	sensors[i].type=	SENSOR_TYPE_KINECT;
+	sensors[i].type=	SENSOR_TYPE_KINECT_DEPTHMAP;
 	sensors[i].name=	"Kinect Depthmap";
 	sensors[i].x=		  0;
 	sensors[i].y=		+13;
@@ -206,7 +219,7 @@ Sensor* load_X80SVP_sensors()
 	sensors[i].ztheta=	  0;
 	
 	i++;
-	sensors[i].type=	SENSOR_TYPE_FIXEDCAM;
+	sensors[i].type=	SENSOR_TYPE_KINECT_RGB;
 	sensors[i].name=	"Kinect RGB";
 	sensors[i].x=		  0;
 	sensors[i].y=		+13;

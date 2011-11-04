@@ -1,11 +1,13 @@
 /*
+Load a mesh from the .x model format produced by Blender 2.49. Will NOT work with .x meshes exported by newer versions of Blender or other tools.
+
 IMPORTANT- Mesh must be triangulated and right-handed!
 Must not export in edit mode(blender bug)
 Must have at least one material
 Must "apply transform" (Ctrl+a) all meshes - otherwise static_transform isnt a simple translation, which screws things up
 Scene graph relationships MUST match those in blender
 */
-
+// Cory Boyle 2011
 
 //fatal error :-(
 void lerr(const char * format, ... )
@@ -577,47 +579,3 @@ void load_mesh(mesh * &first,const char * name,node &g)
 		first=NULL;
 	}
 }
-
-//get matrix, material?, 
-/*
-void xxx(mesh * &first,const char * name,node &g)
-{
-	mesh *m=first,*lm=NULL;
-	if(m==NULL)lerr("Attempt to render null mesh!");
-
-		printf("?ing: %s\n",name);
-		for(;;)
-		{
-			if(strcmp(name,(*m).name)==0)
-			{//this is it
-
-					//draw_mesh(*m);
-					
-				
-				//store matrix
-				memcpy(g.static_transform,(*m).static_transform,sizeof(g.static_transform));
-				
-				//unlink
-				if(lm==NULL)
-				{//rm first
-					first=(*m).next;
-				}
-				else
-				{//rm other
-					(*lm).next=(*m).next;
-				}
-				//free
-				free_mesh(m);
-				return;
-			}
-			
-			//try next one
-			m=(*m).next;
-			if(m==NULL)
-				lerr("Mesh '%s' not found!",name);
-		}
-	}
-
-}
-
-*/

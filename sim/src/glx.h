@@ -1,5 +1,5 @@
 //assorted extra functions
-
+// Cory Boyle 2011
 
 //#define cot(theta) (1/tan(theta))
 #define rad(deg) ((deg) * (3.14/180.0))
@@ -7,26 +7,6 @@
 #define X	0
 #define Y	1
 #define Z	2
-
-/*
-void glPrintf( const char * format, ... );
-void glPrintf(int x,int y, const char * format, ... );
-//TODO: glx
-void glPrintf(const char * format, ... )
-{
-	char buffer[MAX_LEN+1];
-	va_list args;
-	va_start (args, format);
-	vsnprintf (buffer,MAX_LEN,format, args);
-	char c;
-	for(int i=0;;i++)
-	{
-		c=buffer[i];
-		if(!c)break;
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,c);//10 or 24
-	}
-	va_end (args);
-}*/
 
 #define CHAR_HEIGHT	20 //Doesnt seem to be a GL function to actually retrieve this
 void glxPrintf(int x,int y,const char * format, ... )
@@ -84,6 +64,3 @@ void glxShear(GLfloat factor,GLuint axis,GLuint by)
 	//apply transform
 	glMultMatrixf((GLfloat*)m);
 }
-	//scale
-	//m[axis][axis]=(cos(rad(factor*180.0))+1.0)/2.0;
-	//printf("scal%f\n",(cos(rad(factor*180.0))+1.0)/2.0);

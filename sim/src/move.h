@@ -1,3 +1,6 @@
+//Environment/movement logic
+// Cory Boyle 2011
+
 #define ACTOR_MAX_MESHES	10
 
 struct named_node{
@@ -17,11 +20,11 @@ struct Actor{
 	
 	struct named_node mesh[ACTOR_MAX_MESHES];
 	int mesh_active;
-	
-	//struct node *node;
-	
-	//ros name thing?
 };
+
+//window size
+int winx,winy;
+GLfloat aspect=1.0;
 
 //nodes(scene graph meshes)
 node root,camera,robot,
@@ -181,13 +184,9 @@ int actor_active=1;//?
 #define MOUSE_SCALE	.05	//in degrees per pixel
 #endif
 
+//Movement rate of actors when driven by user
 #define player_dtheta	60	//in degrees/sec
 #define player_dxy	5		//in meters/sec
-//#define player_z	1.7		//initial height (m)
-#define player_z	.15		//initial height (m)
-
-//movement vars
-//float player_xtheta=0,player_ztheta=0,player_x=0,player_y=0;
 
 bool enable_motors=true;
 
@@ -198,9 +197,6 @@ bool fullscreen=false;
 #define CONVERGENCE_POINTS			3.0		//3x3 (9-point) grid
 #define CONVERGENCE_WINDOW_SIZE_X	.1		//size of grid (in % window size)
 #define CONVERGENCE_WINDOW_SIZE_Y	.01		//size of grid (in % window size)
-//#define CONVERGENCE_WEIGHT			.1		//how fast to apply new convergence values, avoids "jitter" (%)
-//#define CONVERGENCE_MIN				.5		//prevent camera from going cross-eyed (m)
-//#define CONVERGENCE_DEBUG_DRAW	//for debug
 
 #define osd_mode_count	4
 int osd_mode=4;
@@ -227,35 +223,6 @@ void keydown(unsigned char key,int x, int y)
 {
 	switch(toupper(key))
 	{
-/*
-		case '1':
-			light=!light;
-			if(light)
-				glEnable(GL_LIGHT0);
-			else
-				glDisable(GL_LIGHT0);
-			break;
-		case '2':
-			fan_on=!fan_on;
-			break;
-		case '3':
-			door_dir*=-1;
-			break;
-		case '4':
-			blinds_tilt_dir*=-1;
-			break;
-		case '5':
-			blinds_open_dir*=-1;
-			break;
-
-		case 'C':
-			stereo_ipd=stereo_ipd_initial;
-			break;
-		case 'B':
-			stereo_convergence_auto=!stereo_convergence_auto;
-			break;
-*/
-
 		case '8':
 			if(actor_active>0)
 				actor_active--;
@@ -461,81 +428,6 @@ void mouseClick(int button, int state,int x, int y)
 		toggleFullscreen();
 		break;
 	}
-	
-	
-/*
- * 
-
-	switch(button)
-	{/*case '8':
-
-		case '2':
-
-		case '4':
-			if(actors[actor_active].sensor_active>0)
-				actors[actor_active].sensor_active--;
-			break;
-		case '5':
-			actor_active=0;
-			actors[actor_active].sensor_active=0;
-			break;
-		case '6':
-			if(actors[actor_active].sensor_active<actors[actor_active].sensor_count-1)
-				actors[actor_active].sensor_active++;
-			break;
-		case '0':
-			//FIXME: Memory leak.
-			printf("FIXME: Memory leak.\n");
-			init_actors();
-			noise_factor=1.0;
-			noise_enable=true;
-			enable_motors=true;
-			check_bounds=false;
-			actor_active=1;
-			break;
-			
-		case '*':
-			actors[actor_active].mesh_active++;
-			if(actors[actor_active].mesh[actors[actor_active].mesh_active].node==0)
-				actors[actor_active].mesh_active--;
-			break;
-		case '/':
-			if(actors[actor_active].mesh_active>0)
-				actors[actor_active].mesh_active--;
-			break;
-		case '.':
-			actors[actor_active].mesh_active=0;
-			break;
-			
-		case 'H':
-			osd_mode=-osd_mode;
-			break;//
-	case 4:
-		stereo_convergence_auto=false;stereo_convergence-=stereo_convergence_delta_scroll;
-		break;
-	case 3:
-		stereo_convergence_auto=false;stereo_convergence+=stereo_convergence_delta_scroll;
-		break;
-	case GLUT_MIDDLE_BUTTON:
-		stereo_convergence_auto=!stereo_convergence_auto;
-		break;
-	case GLUT_LEFT_BUTTON:
-		if(!fullscreen)
-		{
-			toggleFullscreen();
-			return;
-		}
-		break;
-	case GLUT_RIGHT_BUTTON:
-		light=!light;
-		if(light)
-			glEnable(GL_LIGHT0);
-		else
-			glDisable(GL_LIGHT0);
-		break;
-	}
-
-*/
 }
 
 void move(int ttime,int ltime)
