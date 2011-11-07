@@ -24,13 +24,13 @@
 
 //Top speed, in cm/sec
 #define SPEED		30
-#define STUCK_TURN	15
+#define STUCK_TURN	47.1238898038/2.0
 
 //Time interval the motor commands should be valid for
 #define TIME		200
 
 //If robot encounters a corner, it will get stuck- this controls how likely it is to turn around to get out of that situation (lower=more likely, higher=less likely)
-#define STUCK	200
+#define STUCK		50
 
 
 
@@ -52,7 +52,7 @@ int st=0;
 //IR left and right "clear" flags
 void nav(int il,int ir,int &sl,int &sr)
 {
-	st=st+(4-((il+ir)*2))*2;
+	st=st+(4-((il+ir)*2))*4;
 	
 	//Object avoidance is repeatedly cycling left/right- most likely stuck in a corner
 	if( st>=STUCK)
