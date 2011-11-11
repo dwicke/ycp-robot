@@ -356,11 +356,14 @@ void setMousePos(int x,int y)
 #endif
 }
 
+int windowed_x,windowed_y;
 void toggleFullscreen()
 {
 	fullscreen=!fullscreen;
 	if(fullscreen)
 	{
+		windowed_x=winx;
+		windowed_y=winy;
 		glutFullScreen();
 		
 		glutMotionFunc(mouseMove);
@@ -371,7 +374,7 @@ void toggleFullscreen()
 	else
 	{//turn off
 		glutPositionWindow(0,0);
-		glutReshapeWindow(INITIAL_WINDOW_WIDTH,INITIAL_WINDOW_HEIGHT);
+		glutReshapeWindow(windowed_x,windowed_y);
 
 		glutMotionFunc(NULL);
 		glutPassiveMotionFunc(NULL);
