@@ -1,2 +1,2 @@
-if you run rosmake Robot
-rosmake will make the dependancies as well as Robot.
+if you run rosmake Runner
+rosmake will make the dependancies as well as Runner.

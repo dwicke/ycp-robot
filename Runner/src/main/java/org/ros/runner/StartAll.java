@@ -94,8 +94,8 @@ public class StartAll implements NodeMain{
 			
 			nodeRunner.run(infraAvoid, infraAvoidConfig);
 			nodeRunner.run(ultraAvoid, ultraAvoidConfig);
-			nodeRunner.run(heat_search, heatSearchConfig);
-			nodeRunner.run(track, trackConfig);
+			//nodeRunner.run(heat_search, heatSearchConfig);
+			//nodeRunner.run(track, trackConfig);
 			
 			
 			
