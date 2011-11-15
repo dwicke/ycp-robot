@@ -80,8 +80,6 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 
 	@Override
 	public void onNewMessage(MotorCommand message) {
-		//log.info("I heard: \"" + message.motor_left_velocity + "\"");
-		//log.info("I heard: \"" + message.motor_left_velocity + "\"");
 		MotorData newMsg = node.getMessageFactory().newMessage("robot_msgs/MotorData");
 
 		
@@ -99,9 +97,7 @@ public class MotorControl implements NodeMain, MessageListener<MotorCommand> {
 
 				newMsg.motor_left_velocity = (float) ((2 * message.linear_velocity + (wheelbase * message.angular_velocity)) / 2) * 100 ;
 				newMsg.motor_right_velocity = (float) (newMsg.motor_left_velocity - (wheelbase * message.angular_velocity * 100));
-				newMsg.motor_left_time = 250;// based on nav.cpp 1100 is one second  so send it for 1/20 s
-				newMsg.motor_right_time = 250;// change later if to slow.
-				log.info("MotorData: LeftV: " + newMsg.motor_left_velocity + "  RightV: " + newMsg.motor_right_velocity);
+				
 			}
 			else
 			{

@@ -126,7 +126,6 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 
 			// Must make the weights for each of the sensors as per the algorithm
 			// linear is sum of 1 / e^(-theta^2 / (2sigma_squared)) of all thetas
-			// use the sum of psi to 
 			double linearConst = 0.0;
 			double angularConst = 0.0;
 			for (String key: topics)
@@ -232,7 +231,7 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 				// we could add or subtract doesn't
 				// matter
 				angVel -= normalizedSensor;
-				numAngInput = 2;
+				numAngInput = 2;// same reasoning as below for numLinInput
 			}
 			
 			// if normalizedSensor is zero then 
@@ -244,7 +243,11 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 				angVel -= 0.25;
 			}
 			
-			
+			// need to normalize it then so
+			// not only must we account for the front sensor
+			// but also for the the side sensors
+			// so it is two 1 + 1 = 2  max of side is one and
+			// max of center is one.
 			numLinInput = 2;
 			// else we say that it canceled since nothing is there
 		}
@@ -265,8 +268,12 @@ public class BraitenburgAvoid implements NodeMain, MessageListener<Range> {
 		if (curNum == numberInputs)
 		{
 			// normalize the values
+			
 			mtrCmd.angular_velocity = (float) (angVel / numAngInput) ;
 			mtrCmd.linear_velocity = (float) (linVel / numLinInput);
+			
+		
+			
 			log.debug("Ang: " + mtrCmd.angular_velocity + " Lin: " + mtrCmd.linear_velocity);
 			mtrCmd.header.stamp.secs = key;
 			curNum = 0;

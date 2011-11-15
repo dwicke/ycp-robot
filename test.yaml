@@ -107,7 +107,7 @@ human_range_avg_dif: 500.0 # this is how much from 2047 (when saw nothing) we th
 human_thresh: 25.0 # this is the threshold at which I accept the reading as being true
 
 
-sensor_threshold: 0.08 # 25cm or .25 meters this is the threshold at which I start seeing things anything below is considered 0
+sensor_threshold: 0.15 # 25cm or .25 meters this is the threshold at which I start seeing things anything below is considered 0
 
 
 
