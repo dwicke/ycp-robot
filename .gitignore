@@ -41,4 +41,4 @@ CMakeCache.txt
 .classpath
 build/
 cmake_install.cmake
-#bin/
+bin/
