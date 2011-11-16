@@ -92,6 +92,7 @@ public class UltrasonicSensorFilter extends SensorFilter {
 				message.range = message.max_range;
 			}
 			prevFilteredRange.put(key, message);
+			
 			// publish the filtered range
 			filteredRangeMap.get(key).publish(message);
 		}
