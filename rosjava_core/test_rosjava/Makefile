@@ -1,0 +1,2 @@
+all:
+	touch todo.txt

@@ -1,0 +1,17 @@
+<stack>
+  <description brief="rosjava core">
+    rosjava provides a pure-Java implementation of ROS that also
+    supports Android.  rosjava_core contains the core rosjava packages
+    necessary for ROS integration.
+  </description>
+  <author>Maintained by Damon Kohler</author>
+  <license>Apache License 2.0</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/rosjava_core</url>
+
+  <depend stack="common_msgs" /> <!-- actionlib_msgs -->
+  <depend stack="common_tutorials" /> <!-- actionlib_tutorials -->
+  <depend stack="ros" /> <!-- roslang, roslib -->
+  <depend stack="ros_comm" /> <!-- rosgraph_msgs, test_ros, rostest, std_msgs -->
+
+</stack>
