@@ -1,0 +1,24 @@
+<package>
+  <description brief="X80SVPRobot">
+
+     X80SVPRobot
+
+  </description>
+  <author>drew</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/X80SVPRobot</url>
+  <depend package="rosjava"/>
+  <depend package="std_msgs" />
+  <depend package="sensor_msgs" />
+  <depend package="MotorControlMsg" />
+  <depend package="robot_msgs" />
+  
+   <export>
+  	<rosjava-src location="src"/>
+  	    <rosjava-pathelement location="target/" groupId="org.ros" artifactId="main.java.org.ros.x80svp_robot" version="0.0.0" built="true" />
+	</export>
+
+</package>
+
+
