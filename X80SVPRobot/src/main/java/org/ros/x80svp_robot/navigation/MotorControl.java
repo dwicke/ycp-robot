@@ -14,7 +14,7 @@
  * the License.
  */
 
-package main.java.org.ros.navigation;
+package main.java.org.ros.x80svp_robot.navigation;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.SimpleLog;

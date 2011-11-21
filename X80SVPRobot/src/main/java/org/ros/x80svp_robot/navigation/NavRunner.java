@@ -1,4 +1,4 @@
-package main.java.org.ros.navigation;
+package main.java.org.ros.x80svp_robot.navigation;
 
 import main.java.org.ros.navigation.BraitenburgAvoid;
 import main.java.org.ros.navigation.MotorControl;

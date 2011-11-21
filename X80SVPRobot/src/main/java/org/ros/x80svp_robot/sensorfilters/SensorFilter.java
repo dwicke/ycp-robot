@@ -1,4 +1,4 @@
-package main.java.org.ros.sensorfilters;
+package main.java.org.ros.x80svp_robot.sensorfilters;
 
 import java.util.List;
 import java.util.TreeMap;

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package main.java.org.ros.robot;
+package main.java.org.ros.x80svp_robot.robot;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;

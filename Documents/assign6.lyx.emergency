@@ -1,0 +1,295 @@
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options false
+\language english
+\inputencoding latin9
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Title
+\end_layout
+
+\begin_layout Author
+Tori Bare, Cory Boyle, Jason Cluck, Drew Wicke
+\end_layout
+
+\begin_layout Date
+November 21 2011
+\end_layout
+
+\begin_layout Abstract
+We developed a software system that can be used as a basis for a robotics
+ class...
+ 
+\end_layout
+
+\begin_layout Part*
+Introduction
+\end_layout
+
+\begin_layout Part*
+Background
+\end_layout
+
+\begin_layout Standard
+Various devices, technologies and algorithms were used to create an autonomous
+ robot.
+ The robot was a X80SVP, a Beagleboard hosted the software and acted as
+ a bridge to the robot, the Robot Operating System provided a framework
+ for the software, Braitenburg aggression behavior was used to provide obstacle
+ avoidance.
+ Also, a Kinect was used to provide vision and various ROS stacks were used
+ for SLAM.
+ OpenGL was used to provide 3D graphics for the simulator.
+\end_layout
+
+\begin_layout Section*
+Technologies
+\end_layout
+
+\begin_layout Standard
+Robot Operating System (ROS) is a framework that facilitates the construction
+ and execution of applications for robots.
+ There are implementations of ROS in C++, Python, Lisp and Java.
+ ROS executables are called nodes.
+ ROS provides a master node who oversees running nodes, a parameter server
+ and also acts as the match maker for nodes and topics.
+ ROS nodes communicate over topics or services using ROS methods.
+ Nodes publish messages on topics which other nodes can subscribe to in
+ order to receive the information.
+ The message's fields are described in a data file using the yaml language
+ which ROS converts into a file which the targeted language can use, such
+ as a header file in C++.
+\end_layout
+
+\begin_layout Standard
+ROS also provides a hierarchy to group common elements.
+ So, for Nodes that perform common functions they are grouped into a package.
+ Packages that share a common purpose are grouped into stacks.
+ Therefore, ROS's goal is to build a complex system out of simple single
+ purpose parts.
+\end_layout
+
+\begin_layout Standard
+The rosjava stack is an implementation of ROS in Java.
+ Therefore, rosjava nodes work with the rest of the nodes in ROS.
+ In order for rosjava nodes to communicate, ROS messages are converted to
+ classes and made into jar files.
+ Allowing for easy integration of message data types into rosjava nodes.
+\end_layout
+
+\begin_layout Section*
+Algorithms
+\end_layout
+
+\begin_layout Standard
+Two ways to implement obstacle avoidance are motor fusion which uses a direct
+ correlation between sensor readings and motor velocities.
+ The other, sensor fusion, uses the sensor data to reconstruct the surroundings
+ to produce motor commands.
+ Obstacle avoidance was provided by a motor fusion algorithm utilizing Braitenbu
+rg's aggression behavior.
+ Braitenburg behaviors are a form of synthetic psychology described in Valenino
+ Braitenberg book.
+ These behaviors were thought experiments into how different emotions, such
+ as fear, aggression and love can causes movement based on sensor stimulation.
+ Aggression behavior is caused by pairing the sensors and motors on opposite
+ sides through a non-decreasing function.
+ 
+\end_layout
+
+\begin_layout Standard
+To implement aggression behavior for obstacle avoidance, modifications to
+ use a centered sensor were made to the algorithm presented in [1].
+ The algorithm computes both the linear angular velocity for the robot given
+ normalized sensor readings as shown in figure N.
+ Accounting for the center sensor separately, allows the robot to avoid
+ deadlock when in symmetric corners.
+ Since the value of the sensor increases as the farther away an obstacle
+ gets, the greater the velocity is in that direction.
+ Providing a smooth and life like wandering movement that effectively avoids
+ obstacles.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula \begin{equation}
+\alpha_{S}(t_{k})=\sum_{i\in L\cup R}w_{i}^{\alpha_{S}}\hat{r}_{i}^{S}(t_{k})\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula \begin{equation}
+\beta_{S}(t_{k})=\sum_{i\in R}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})-\sum_{i\in L}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part*
+Design
+\end_layout
+
+\begin_layout Standard
+The design model favors modularity and simplicity to create a complex system.
+ The goal was to follow the subsumption control architecture, to create
+ a robust and fault tolerant system.
+ By following the model view controller design pattern the implementation
+ is extensible.
+ The model is based in the ROS parameter server in which the model of the
+ robot and communication layout is stored.
+ The view is the world or the virtual world as made by the simulator.
+ The controller classes act to move the robot, changing the robot’s view.
+ 
+\end_layout
+
+\begin_layout Standard
+The design is centered on the Converter and the RobotActor classes.
+ Converter and RobotActor are interchangeable bridges between the view and
+ the control.
+ They publish the sensor data and send commands to actuate the robot’s motors.
+ The SensorListener class subscribes to the sensor messages published by
+ a bridge class and publishes converted sensor data in the ROS standard
+ Range message type.
+ The SensorFilter classes filter the sensor data so that the data is more
+ useful.
+ The BraitenburgAvoid class uses the filtered sensor data to publish a MotorComm
+and message based on the Braitenburg aggression behavior algorithm.
+ The ObstacleAvoidance node publishes a linear combination of the MotorCommand
+ sent by the infrared and ultrasonic based BraitenburgAvoid nodes.
+ The MotorController acts as both an arbiter of motor commands and as a
+ gateway back to the bridge nodes.
+\end_layout
+
+\begin_layout Part*
+Implementation
+\end_layout
+
+\begin_layout Standard
+The implementation of the design was made using both C++ and Java.
+ C++ was used for the serial communication between the robot and Beagleboard
+ and for the simulator.
+ Java was used to implement the rest of the design.
+\end_layout
+
+\begin_layout Standard
+The obstacle avoidance algorithm produces linear and angular velocity values.
+ However, the robot requires left and right wheel velocities.
+ Using the differential drive kinematics equations in Figure N, the conversion
+ is possible.
+\end_layout
+
+\begin_layout Standard
+Ultrasonic sensors were used to provide obstacle avoidance, however the
+ sensors can overestimate the distance to a flat wall due to specular reflection.
+ These readings can be improved by applying an incremental filter (Figure
+ N) as described in [1].
+ The filter works by acting as a short term memory to ensure that a current
+ reading of free space is correct based on the previous range.
+ 
+\end_layout
+
+\begin_layout Standard
+One issue of using rosjava was the overhead of creating new nodes, since
+ each new node started a new JVM process.
+ After implementing the design of the rosjava nodes, rosjava released documentat
+ion detailing how using a NodeRunner object can start the nodes as threads
+ rather than as new processes.
+ This significantly reduced the memory overhead and launch time of the rosjava
+ nodes.
+\end_layout
+
+\begin_layout Part*
+Future Work
+\end_layout
+
+\begin_layout Standard
+The system could be extended by adding turtlebots to create a multi-agent
+ system.
+ Capture the flag could be a way to explore algorithms involved in multi-agent
+ systems.
+ However, due to the limited processing power of the BeagleBoard there would
+ be considerable challenges implementing efficient navigation, SLAM and
+ learning algorithms.
+ One solution would be to use a remote computer to perform these features.
+ 
+\end_layout
+
+\begin_layout Standard
+Another way the system could be extended is by using the kinect for facial
+ and object recognition.
+ This would allow for high level behavior and learning rather than the current
+ reacitve based system.
+ However, processing capabilities of an onboard computer may be overwhelmed.
+ 
+\end_layout
+
+\begin_layout Standard
+A future system could also utilize rosjava’s ability to operate on android
+ to provide a user with the ability to teleoperate the robot or provide
+ the robot access to the cloud.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-1"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_body
+\end_document

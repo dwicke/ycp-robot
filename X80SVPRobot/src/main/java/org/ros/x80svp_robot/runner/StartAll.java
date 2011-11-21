@@ -1,4 +1,4 @@
-package main.java.org.ros.runner;
+package main.java.org.ros.x80svp_robot.runner;
 
 import org.ros.address.InetAddressFactory;
 import org.ros.node.DefaultNodeFactory;

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package main.java.org.ros.sensorfilters;
+package main.java.org.ros.x80svp_robot.sensorfilters;
 
 import java.awt.image.FilteredImageSource;
 import java.util.ArrayList;

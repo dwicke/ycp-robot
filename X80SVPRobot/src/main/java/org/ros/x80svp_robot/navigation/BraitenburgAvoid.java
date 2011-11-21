@@ -1,4 +1,4 @@
-package main.java.org.ros.navigation;
+package main.java.org.ros.x80svp_robot.navigation;
 
 import java.util.Iterator;
 import java.util.List;
