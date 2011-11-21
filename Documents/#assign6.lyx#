@@ -55,8 +55,15 @@ November 21 2011
 \end_layout
 
 \begin_layout Abstract
-short 2 paragraph summary of what was done...
- 
+The project that was completed in fulfillment of the CS481 requirement was
+ the design and implementation of software that made a robot both mobile
+ and autonomous.
+ The group members for this project are Tori Bare, Cory Boyle, Jason Cluck
+ and Drew Wicke.
+ Using the Robot Operating System (ROS), algorithms were developed for obstacle
+ avoidance, 3D navigation, and gesture recognition.
+ Additionally, a simulator was created in OpenGL that was used as a testbed
+ for these algorithms.
 \end_layout
 
 \begin_layout Part*
@@ -64,15 +71,33 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-expand the summary with more detail maybe check out 
-\begin_inset CommandInset href
-LatexCommand href
-name "this"
-target "https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B5UngzhILvYCNWZiOTZiNjItZWM0Yy00MjAxLWIwMDgtZmRiNTY5YmFmNzE3&hl=en_US"
+One of the goals of the Robot Operating System (ROS) is to provide roboticists
+ a software platform for specific robots.
+ <insert quote on how this improves research> <insert what robots are implemente
+d in ros already> This paper addresses the construction of a new ROS package
+ that controls the X80SVP robot.
+ The package, which already implements obstacle avoidance and wandering
+ behavior, provides low level drivers up to a robust development framework
+ that can be extended.
+ 
+\end_layout
 
-\end_inset
+\begin_layout Standard
+Another goal of the ROS community is to provide simulation software to test
+ the robot.
+ For example, the player project consists of Player, a robot interface,
+ Stage, a two-dimensional robot simulator, and Gazebo, a three-dimensional
+ robot simulator.
+ The paper describes a new simulator for ROS that can be extended and provides
+ a kinect sensor.
+ 
+\end_layout
 
-.
+\begin_layout Standard
+The paper is organized as follows: the first part provides a background
+ detailing the devices, algorithms and libraries that were used; the second
+ part discusses the design of the system following with implementation details;
+ finally, it concludes with an overview of future work.
 \end_layout
 
 \begin_layout Part*
@@ -82,13 +107,37 @@ Background
 \begin_layout Standard
 Various devices, technologies and algorithms were used to create an autonomous
  robot.
- The robot was a X80SVP, a Beagleboard hosted the software and acted as
- a bridge to the robot, the Robot Operating System provided a framework
- for the software, Braitenburg aggression behavior was used to provide obstacle
- avoidance.
- Also, a Kinect was used to provide vision and various ROS stacks were used
- for SLAM.
- OpenGL was used to provide 3D graphics for the simulator.
+ The robot that was used was an X80SVP.
+ A Beagleboard hosted the software and acted as a bridge to the robot while
+ the Robot Operating System provided a framework for the software.
+ Braitenburg aggression behavior was used to provide obstacle avoidance
+ and a Kinect was used to provide vision.
+ Lastly, OpenGL was used to provide 3D graphics for the simulator.
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+Braitenburg behaviors are a form of synthetic psychology described in Valentino
+ Braitenberg’s book.
+ These behaviors were thought experiments into how different emotions, such
+ as fear, aggression, and love, can provoke movement based on sensor stimulation.
+ Aggression behavior is caused by pairing the sensors and motors on opposite
+ sides through a non-decreasing function.
+\end_layout
+
+\begin_layout Standard
+To implement aggression behavior for obstacle avoidance, modifications to
+ use a centered sensor were made to the algorithm presented in [1].
+ The algorithm computes both the linear and angular velocity for the robot
+ given the normalized sensor readings as shown in Figure N.
+ Accounting for the center sensor separately allows the robot to avoid deadlock
+ while in symmetric corners.
+ The value of the sensor increases as an obstacle gets farther away and
+ as the velocity becomes greater in that direction, providing a smooth wandering
+ movement that effectively avoids obstacles.
 \end_layout
 
 \begin_layout Section*
@@ -96,7 +145,25 @@ Devices
 \end_layout
 
 \begin_layout Standard
-robot,beagleboard,kinect
+The Beagleboard XM was chosen as the computer for the X80SVP.
+ Some of the major advantages to this is that the Beagleboard has many periphera
+l options, a 1 GHz CPU, a DSP, and it is very popular in the open source
+ and ROS communities.
+ 
+\end_layout
+
+\begin_layout Standard
+A Kinect was used to generate maps of the robot's surroundings and to allow
+ the robot to navigate intelligently through his environment.
+ One of the main concerns with using the Kinect was the processing power
+ that it would require.
+ The Kinect produces a message that is roughly 10 MB at a rate of 30 frames
+ per second, this equates to the Kinect sending about 300 MB of data each
+ second.
+ At first, it was expected that the DSP on the Beagleboard would have been
+ able to handle the Kinect’s processing; however, due to the overhead of
+ ROS, the processing will most likely have to be offloaded to a netbook.
+ 
 \end_layout
 
 \begin_layout Section*
@@ -357,15 +424,60 @@ The implementation of the design was made using both C++ and Java.
 \begin_layout Standard
 The obstacle avoidance algorithm produces linear and angular velocity values.
  However, the robot requires left and right wheel velocities.
- Using the differential drive kinematics equations in Figure N, the conversion
- is possible.
+ Using the differential drive kinematics equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:LeftVelocity"
+
+\end_inset
+
+and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:RightVelocity"
+
+\end_inset
+
+, the conversion is possible.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+V_{L}=\frac{2\alpha_{S}(t_{k})+d\beta_{S}(t_{k})}{2}\label{eq:LeftVelocity}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+V_{R}=V_{L}-d\beta_{S}(t_{k})\label{eq:RightVelocity}\end{equation}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 Ultrasonic sensors were used to provide obstacle avoidance, however the
  sensors can overestimate the distance to a flat wall due to specular reflection.
- These readings can be improved by applying an incremental filter (Figure
- N) as described in [1].
+ These readings can be improved by applying an incremental filter (Equation
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:USFilter"
+
+\end_inset
+
+) as described in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ran2005obsavothrbraaggbehmotfus"
+
+\end_inset
+
+.
  The filter works by acting as a short term memory to ensure that a current
  reading of free space is correct based on the previous range.
  
@@ -374,12 +486,40 @@ Ultrasonic sensors were used to provide obstacle avoidance, however the
 \begin_layout Standard
 \begin_inset Formula \begin{equation}
 \tilde{r_{i}}(t_{k})=\begin{cases}
-r_{i}^{s}(t_{k}) & if\, r_{i}^{s}(\\
-Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s}\end{cases}\end{equation}
+r_{i}^{s}(t_{k}) & \textrm{if }r_{i}^{s}(t_{k})<r_{nr}^{s}\\
+Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s} & \textrm{if }r_{i}^{s}(t_{k})=r_{nr}^{s}\end{cases}\label{eq:USFilter}\end{equation}
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+\begin_inset Formula $r_{nr}^{s}$
+\end_inset
+
+is the max range of the sensor, 
+\begin_inset Formula $r_{i}^{s}(t_{k})$
+\end_inset
+
+ is the current range measurement, 
+\begin_inset Formula $\tilde{r_{i}}(t_{k})$
+\end_inset
+
+ is the current filtered range value and 
+\begin_inset Formula $\tilde{r_{i}}(t_{k-1})$
+\end_inset
+
+ is the previous filtered value.
 \end_layout
 
 \begin_layout Standard

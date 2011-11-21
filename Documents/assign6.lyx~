@@ -55,8 +55,15 @@ November 21 2011
 \end_layout
 
 \begin_layout Abstract
-short 2 paragraph summary of what was done...
- 
+The project that was completed in fulfillment of the CS481 requirement was
+ the design and implementation of software that made a robot both mobile
+ and autonomous.
+ The group members for this project are Tori Bare, Cory Boyle, Jason Cluck
+ and Drew Wicke.
+ Using the Robot Operating System (ROS), algorithms were developed for obstacle
+ avoidance, 3D navigation, and gesture recognition.
+ Additionally, a simulator was created in OpenGL that was used as a testbed
+ for these algorithms.
 \end_layout
 
 \begin_layout Part*
@@ -64,15 +71,33 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-expand the summary with more detail maybe check out 
-\begin_inset CommandInset href
-LatexCommand href
-name "this"
-target "https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B5UngzhILvYCNWZiOTZiNjItZWM0Yy00MjAxLWIwMDgtZmRiNTY5YmFmNzE3&hl=en_US"
+One of the goals of the Robot Operating System (ROS) is to provide roboticists
+ a software platform for specific robots.
+ <insert quote on how this improves research> <insert what robots are implemente
+d in ros already> This paper addresses the construction of a new ROS package
+ that controls the X80SVP robot.
+ The package, which already implements obstacle avoidance and wandering
+ behavior, provides low level drivers up to a robust development framework
+ that can be extended.
+ 
+\end_layout
 
-\end_inset
+\begin_layout Standard
+Another goal of the ROS community is to provide simulation software to test
+ the robot.
+ For example, the player project consists of Player, a robot interface,
+ Stage, a two-dimensional robot simulator, and Gazebo, a three-dimensional
+ robot simulator.
+ The paper describes a new simulator for ROS that can be extended and provides
+ a kinect sensor.
+ 
+\end_layout
 
-.
+\begin_layout Standard
+The paper is organized as follows: the first part provides a background
+ detailing the devices, algorithms and libraries that were used; the second
+ part discusses the design of the system following with implementation details;
+ finally, it concludes with an overview of future work.
 \end_layout
 
 \begin_layout Part*
@@ -82,13 +107,12 @@ Background
 \begin_layout Standard
 Various devices, technologies and algorithms were used to create an autonomous
  robot.
- The robot was a X80SVP, a Beagleboard hosted the software and acted as
- a bridge to the robot, the Robot Operating System provided a framework
- for the software, Braitenburg aggression behavior was used to provide obstacle
- avoidance.
- Also, a Kinect was used to provide vision and various ROS stacks were used
- for SLAM.
- OpenGL was used to provide 3D graphics for the simulator.
+ The robot that was used was an X80SVP.
+ A Beagleboard hosted the software and acted as a bridge to the robot while
+ the Robot Operating System provided a framework for the software.
+ Braitenburg aggression behavior was used to provide obstacle avoidance
+ and a Kinect was used to provide vision.
+ Lastly, OpenGL was used to provide 3D graphics for the simulator.
 \end_layout
 
 \begin_layout Section*
@@ -96,7 +120,25 @@ Devices
 \end_layout
 
 \begin_layout Standard
-robot,beagleboard,kinect
+The Beagleboard XM was chosen as the computer for the X80SVP.
+ Some of the major advantages to this is that the Beagleboard has many periphera
+l options, a 1 GHz CPU, a DSP, and it is very popular in the open source
+ and ROS communities.
+ 
+\end_layout
+
+\begin_layout Standard
+A Kinect was used to generate maps of the robot's surroundings and to allow
+ the robot to navigate intelligently through his environment.
+ One of the main concerns with using the Kinect was the processing power
+ that it would require.
+ The Kinect produces a message that is roughly 10 MB at a rate of 30 frames
+ per second, this equates to the Kinect sending about 300 MB of data each
+ second.
+ At first, it was expected that the DSP on the Beagleboard would have been
+ able to handle the Kinect’s processing; however, due to the overhead of
+ ROS, the processing will most likely have to be offloaded to a netbook.
+ 
 \end_layout
 
 \begin_layout Section*
@@ -104,34 +146,34 @@ Technologies
 \end_layout
 
 \begin_layout Standard
-Robot Operating System (ROS) is a framework that facilitates the construction
- and execution of applications for robots.
- There are implementations of ROS in C++, Python, Lisp and Java.
+ROS is a framework that facilitates the construction and execution of applicatio
+ns for robots.
+ There are implementations of ROS in C++, Python, Lisp, and Java.
  ROS executables are called nodes.
- ROS provides a master node who oversees running nodes, a parameter server
- and also acts as the match maker for nodes and topics.
+ ROS provides a master node that oversees running nodes and a parameter
+ server, it also acts as the matchmaker for nodes and topics.
  ROS nodes communicate over topics or services using ROS methods.
  Nodes publish messages on topics which other nodes can subscribe to in
  order to receive the information.
  The message's fields are described in a data file using the yaml language
- which ROS converts into a file which the targeted language can use, such
+ which ROS converts into a file that the targeted language can use, such
  as a header file in C++.
 \end_layout
 
 \begin_layout Standard
 ROS also provides a hierarchy to group common elements.
- So, for Nodes that perform common functions they are grouped into a package.
+ Nodes that perform common functions are grouped into a package.
  Packages that share a common purpose are grouped into stacks.
- Therefore, ROS's goal is to build a complex system out of simple single
- purpose parts.
+ Therefore, ROS's goal is to build a complex system out of simple, single-purpos
+e parts.
 \end_layout
 
 \begin_layout Standard
-The rosjava stack is an implementation of ROS in Java.
- Therefore, rosjava nodes work with the rest of the nodes in ROS.
+The rosjava stack is an implementation of ROS in Java; therefore, rosjava
+ nodes work with the rest of the nodes in ROS.
  In order for rosjava nodes to communicate, ROS messages are converted to
- classes and made into jar files.
- Allowing for easy integration of message data types into rosjava nodes.
+ classes and made into jar files; this allows for easy integration of message
+ data types into rosjava nodes.
 \end_layout
 
 \begin_layout Section*
@@ -139,26 +181,33 @@ Obstacle Avoidance Algorithm
 \end_layout
 
 \begin_layout Standard
-Two ways to implement obstacle avoidance are motor fusion which uses a direct
- correlation between sensor readings and motor velocities.
- The other, sensor fusion, uses the sensor data to reconstruct the surroundings
- to produce motor commands.
- Obstacle avoidance was provided by a motor fusion algorithm utilizing Braitenbu
-rg's aggression behavior.
- Braitenburg behaviors are a form of synthetic psychology described in Valenino
- Braitenberg book.
+There are two ways to implement obstacle avoidance.
+ One implementation is motor fusion, which uses a direct correlation between
+ sensor readings and motor velocities.
+ The second implementation, sensor fusion, uses the sensor data to reconstruct
+ the surroundings to produce motor commands.
+ For the X80SVP robot, obstacle avoidance was accomplished by a motor fusion
+ algorithm utilizing Braitenburg's aggression behavior.
+ Braitenburg behaviors are a form of synthetic psychology described in Valentino
+ Braitenberg’s book.
  These behaviors were thought experiments into how different emotions, such
- as fear, aggression and love can causes movement based on sensor stimulation.
+ as fear, aggression, and love, can provoke movement based on sensor stimulation.
  Aggression behavior is caused by pairing the sensors and motors on opposite
  sides through a non-decreasing function.
- 
 \end_layout
 
 \begin_layout Standard
 To implement aggression behavior for obstacle avoidance, modifications to
- use a centered sensor were made to the algorithm presented in [1].
+ use a centered sensor were made to the algorithm presented in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ran2005obsavothrbraaggbehmotfus"
+
+\end_inset
+
+.
  The algorithm computes both the linear and angular velocity for the robot
- given normalized sensor readings as shown in equations 
+ given the normalized sensor readings as shown in equations 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:translationalSpeed"
@@ -173,11 +222,11 @@ reference "eq:rotationalSpeed"
 \end_inset
 
 .
- Accounting for the center sensor separately, allows the robot to avoid
- deadlock when in symmetric corners.
- Since the value of the sensor increases as the farther away an obstacle
- gets, the greater the velocity is in that direction.
- Providing a smooth wandering movement that effectively avoids obstacles.
+ Accounting for the center sensor separately allows the robot to avoid deadlock
+ while in symmetric corners.
+ The value of the sensor increases as an obstacle gets farther away and
+ as the velocity becomes greater in that direction, providing a smooth wandering
+ movement that effectively avoids obstacles.
 \end_layout
 
 \begin_layout Standard
@@ -301,7 +350,18 @@ Libraries
 \end_layout
 
 \begin_layout Standard
-openni,opengl
+The simulator uses a number of libraries to make the OpenGL API more manageable.
+ FreeGLUT is used to provide the basic windowing functions for the GL applicatio
+n.
+ GLU provides utility functions for computing projection matrices, used
+ to create the perspective camera views.
+ SOIL is used to provide texture-loading capabilities.
+ The simulator also interfaces directly with the Xorg APIs for some functions
+ in handling mouse and full-screen controls.
+ A custom loader was written to load DirectX format mesh files exported
+ by Blender.
+ This allows environments as well as movable obstacles of completely arbitrary
+ design and complexity to be modelled quickly.
 \end_layout
 
 \begin_layout Part*
@@ -310,37 +370,33 @@ Design
 
 \begin_layout Standard
 The design model favors modularity and simplicity to create a complex system.
- The goal was to follow the subsumption control architecture, to create
- a robust and fault tolerant system.
- By following the model view controller design pattern the implementation
+ The goal was to follow the subsumption control architecture to create a
+ robust and fault tolerant system.
+ By following the model view controller design pattern, the implementation
  is extensible.
- The model is based in the ROS parameter server in which the model of the
+ The model is based on the ROS parameter server in which the model of the
  robot and communication layout is stored.
- The view is the world or the virtual world as made by the simulator.
+ The view is the world or the virtual world as created by the simulator.
  The controller classes act to move the robot, changing the robot’s view.
  
 \end_layout
 
 \begin_layout Standard
-The design is centered on the Converter and the RobotActor classes.
+The design is centered around the Converter and the RobotActor classes.
  Converter and RobotActor are interchangeable bridges between the view and
- the control.
- They publish the sensor data and send commands to actuate the robot’s motors.
+ the control, they publish the sensor data and send commands to actuate
+ the robot’s motors.
  The SensorListener class subscribes to the sensor messages published by
  a bridge class and publishes converted sensor data in the ROS standard
  Range message type.
  The SensorFilter classes filter the sensor data so that the data is more
- useful.
- 
-\end_layout
-
-\begin_layout Standard
-The BraitenburgAvoid class uses the filtered sensor data to publish a MotorComma
-nd message based on the Braitenburg aggression behavior algorithm.
+ useful and the BraitenburgAvoid class uses the filtered sensor data to
+ publish a MotorCommand message based on the Braitenburg aggression behavior
+ algorithm.
  The ObstacleAvoidance node publishes a linear combination of the MotorCommand
- sent by the infrared and ultrasonic based BraitenburgAvoid nodes.
- The MotorController acts as both an arbiter of motor commands and as a
- gateway back to the bridge nodes.
+ sent by the infrared and ultrasonic based on BraitenburgAvoid nodes.
+ Finally, the MotorController acts as both an arbiter of motor commands
+ and as a gateway back to the bridge nodes.
 \end_layout
 
 \begin_layout Part*
@@ -348,24 +404,125 @@ Implementation
 \end_layout
 
 \begin_layout Standard
-The implementation of the design was made using both C++ and Java.
- C++ was used for the serial communication between the robot and Beagleboard
- and for the simulator.
- Java was used to implement the rest of the design.
+The implementation of the design was completed in both C++ and Java.
+ C++ was used for the simulator and the serial communication between the
+ robot and Beagleboard while Java was used to implement the rest of the
+ design.
 \end_layout
 
 \begin_layout Standard
-The obstacle avoidance algorithm produces linear and angular velocity values.
- However, the robot requires left and right wheel velocities.
- Using the differential drive kinematics equations in Figure N, the conversion
- is possible.
+The serial library used the PMS5005 protocol which allows any processor,
+ DSP, or PC to control the robot through the Universal Asynchronous Receiver/Tra
+nsmitter (UART) communication interface.
+ The basic packet outline, shown in Figure N, handles both the sensor and
+ motor data transmission.
+ The library that implements this interacts with ROS by subscribing to motor
+ controls and publishing sensor data.
+ Using this packet structure, a large amount of information can be processed
+ every tick.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/drew/Desktop/packet.png
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Packet format for serial library
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once the serial library was implemented on a desktop system, the next step
+ was to achieve this functionality on the Beagleboard.
+ The Beagleboard was loaded with Ubuntu 11.10 since this OS would work best
+ with ROS.
+ Some of the configuration scripts for ROS requires Internet access so a
+ wireless internet connection was also part of the Beagleboard setup.
+ 
+\end_layout
+
+\begin_layout Standard
+The obstacle avoidance algorithm produces linear and angular velocity values,
+ but the robot requires left and right wheel velocities.
+ Using the differential drive kinematics equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:LeftVelocity"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:RightVelocity"
+
+\end_inset
+
+, the conversion is possible.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+V_{L}=\frac{2\alpha_{S}(t_{k})+d\beta_{S}(t_{k})}{2}\label{eq:LeftVelocity}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+V_{R}=V_{L}-d\beta_{S}(t_{k})\label{eq:RightVelocity}\end{equation}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 Ultrasonic sensors were used to provide obstacle avoidance, however the
  sensors can overestimate the distance to a flat wall due to specular reflection.
- These readings can be improved by applying an incremental filter (Figure
- N) as described in [1].
+ These readings can be improved by applying an incremental filter (Equation
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:USFilter"
+
+\end_inset
+
+) as described in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ran2005obsavothrbraaggbehmotfus"
+
+\end_inset
+
+.
  The filter works by acting as a short term memory to ensure that a current
  reading of free space is correct based on the previous range.
  
@@ -374,12 +531,40 @@ Ultrasonic sensors were used to provide obstacle avoidance, however the
 \begin_layout Standard
 \begin_inset Formula \begin{equation}
 \tilde{r_{i}}(t_{k})=\begin{cases}
-r_{i}^{s}(t_{k}) & if\, r_{i}^{s}(t_{k})<r_{nr}^{s}\\
-Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s} & if\, r_{i}^{s}(t_{k})=r_{nr}^{s}\end{cases}\end{equation}
+r_{i}^{s}(t_{k}) & \textrm{if }r_{i}^{s}(t_{k})<r_{nr}^{s}\\
+Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s} & \textrm{if }r_{i}^{s}(t_{k})=r_{nr}^{s}\end{cases}\label{eq:USFilter}\end{equation}
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+\begin_inset Formula $r_{nr}^{s}$
+\end_inset
+
+is the max range of the sensor, 
+\begin_inset Formula $r_{i}^{s}(t_{k})$
+\end_inset
+
+ is the current range measurement, 
+\begin_inset Formula $\tilde{r_{i}}(t_{k})$
+\end_inset
+
+ is the current filtered range value and 
+\begin_inset Formula $\tilde{r_{i}}(t_{k-1})$
+\end_inset
+
+ is the previous filtered value.
 \end_layout
 
 \begin_layout Standard
