@@ -372,6 +372,17 @@ Ultrasonic sensors were used to provide obstacle avoidance, however the
 \end_layout
 
 \begin_layout Standard
+\begin_inset Formula \begin{equation}
+\tilde{r_{i}}(t_{k})=\begin{cases}
+r_{i}^{s}(t_{k}) & if\, r_{i}^{s}(\\
+Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s}\end{cases}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 One issue of using rosjava was the overhead of creating new nodes, since
  each new node started a new JVM process.
  After implementing the design of the rosjava nodes, rosjava released documentat
