@@ -870,6 +870,25 @@ reference "eq:RightVelocity"
 \end_inset
 
 , the conversion is possible.
+ Note that 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\alpha_{S}(t_{k})$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta_{S}(t_{k})$
+\end_inset
+
+ are normalized linear and angular velocities and d is the wheel base of
+ the robot.
 \end_layout
 
 \begin_layout Standard
@@ -1129,8 +1148,8 @@ status open
 \begin_layout Plain Layout
 \begin_inset Graphics
 	filename images/3rdperson.jpeg
-	lyxscale 25
-	scale 25
+	lyxscale 20
+	scale 20
 
 \end_inset
 
@@ -1177,8 +1196,8 @@ status open
 \begin_layout Plain Layout
 \begin_inset Graphics
 	filename images/depthmap.jpeg
-	lyxscale 25
-	scale 25
+	lyxscale 20
+	scale 20
 
 \end_inset
 
@@ -1291,6 +1310,10 @@ name "sec:Appendix-A"
 \end_layout
 
 \begin_layout Standard
+Updated design model shows how messages and nodes relate.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Graphics
 	filename images/DesignModel.jpg
 	lyxscale 65
@@ -1310,6 +1333,13 @@ name "sec:Appendix-B"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+The User can select to control any Actor's position.
+ The specific sensor the CameraView is rendered from can also be selected.
+ Data from ROS is also used to control the RobotActor's position and the
+ Sensors are output back to ROS.
 \end_layout
 
 \begin_layout Standard

@@ -169,7 +169,14 @@ name "fig:X80SVP-Robot"
 
 \end_inset
 
-X80SVP Robot
+X80SVP Robot 
+\begin_inset CommandInset citation
+LatexCommand cite
+key ":XSVPQuickStartGuide"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -230,15 +237,18 @@ name "fig:Beagleboard's-Main-Components"
 
 \end_inset
 
-Beagleboard's Main Components
-\end_layout
+Beagleboard's Main Components 
+\begin_inset CommandInset citation
+LatexCommand cite
+key ":BeaglSysteReferManua"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
+
 
 \end_layout
 
@@ -830,7 +840,7 @@ Linear interpolation of Voltage with respect to ADC
 \begin_layout Standard
 Once the serial library and sensor conversions were implemented on a desktop
  system, the next step was to achieve this functionality on the Beagleboard.
- The Beagleboard was loaded with Ubuntu 11.10 since this OS work best with
+ The Beagleboard was loaded with Ubuntu 11.10 since this OS works best with
  ROS.
  Some of the configuration scripts for ROS require Internet access so a
  wireless internet connection was part of the Beagleboard setup.
@@ -860,6 +870,25 @@ reference "eq:RightVelocity"
 \end_inset
 
 , the conversion is possible.
+ Note that 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\alpha_{S}(t_{k})$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta_{S}(t_{k})$
+\end_inset
+
+ are normalized linear and angular velocities and d is the wheel base of
+ the robot.
 \end_layout
 
 \begin_layout Standard
@@ -1131,15 +1160,11 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Simulator 3d person view
+Simulator in third person view
 \end_layout
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -1171,8 +1196,8 @@ status open
 \begin_layout Plain Layout
 \begin_inset Graphics
 	filename images/depthmap.jpeg
-	lyxscale 25
-	scale 25
+	lyxscale 20
+	scale 20
 
 \end_inset
 
@@ -1285,6 +1310,10 @@ name "sec:Appendix-A"
 \end_layout
 
 \begin_layout Standard
+Updated design model shows how messages and nodes relate.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Graphics
 	filename images/DesignModel.jpg
 	lyxscale 65
@@ -1304,6 +1333,13 @@ name "sec:Appendix-B"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+The User can select to control any Actor's position.
+ The specific sensor the CameraView is rendered from can also be selected.
+ Data from ROS is also used to control the RobotActor's position and the
+ Sensors are output back to ROS.
 \end_layout
 
 \begin_layout Standard
