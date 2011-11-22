@@ -169,7 +169,14 @@ name "fig:X80SVP-Robot"
 
 \end_inset
 
-X80SVP Robot
+X80SVP Robot 
+\begin_inset CommandInset citation
+LatexCommand cite
+key ":XSVPQuickStartGuide"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -230,15 +237,18 @@ name "fig:Beagleboard's-Main-Components"
 
 \end_inset
 
-Beagleboard's Main Components
-\end_layout
+Beagleboard's Main Components 
+\begin_inset CommandInset citation
+LatexCommand cite
+key ":BeaglSysteReferManua"
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
+
 
 \end_layout
 
@@ -593,7 +603,7 @@ The initial design of the simulator relied on existing code which supported
  Multiple actors allow the user to view the environment from the perspective
  of the robot or from an independent Camera actor, it also allows Obstacle
  actors to be positioned in real-time.
- A diagram of the simulator appears in the Appendix B.
+ A diagram of the simulator appears in Appendix B.
 \end_layout
 
 \begin_layout Part*
@@ -830,7 +840,7 @@ Linear interpolation of Voltage with respect to ADC
 \begin_layout Standard
 Once the serial library and sensor conversions were implemented on a desktop
  system, the next step was to achieve this functionality on the Beagleboard.
- The Beagleboard was loaded with Ubuntu 11.10 since this OS work best with
+ The Beagleboard was loaded with Ubuntu 11.10 since this OS works best with
  ROS.
  Some of the configuration scripts for ROS require Internet access so a
  wireless internet connection was part of the Beagleboard setup.
@@ -1131,15 +1141,11 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Simulator 3d person view
+Simulator in third person view
 \end_layout
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -1269,20 +1275,8 @@ s in the wheel movement equations and rendering pipeline issues causing
  calculations manually.
 \end_layout
 
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-appendix
-\end_layout
-
-\end_inset
-
-
+\begin_layout Part*
+Appendix
 \end_layout
 
 \begin_layout Section*
@@ -1299,6 +1293,8 @@ name "sec:Appendix-A"
 \begin_layout Standard
 \begin_inset Graphics
 	filename images/DesignModel.jpg
+	lyxscale 65
+	scale 65
 
 \end_inset
 
@@ -1319,6 +1315,8 @@ name "sec:Appendix-B"
 \begin_layout Standard
 \begin_inset Graphics
 	filename images/Sim.png
+	lyxscale 65
+	scale 65
 
 \end_inset
 
