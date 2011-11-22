@@ -581,6 +581,7 @@ The design is centered around the Converter and the RobotActor classes.
  sent by the infrared and ultrasonic based on BraitenburgAvoid nodes.
  Finally, the MotorController acts as both an arbiter of motor commands
  and as a gateway back to the bridge nodes.
+ The full design diagram is in Appendix A.
 \end_layout
 
 \begin_layout Standard
@@ -592,7 +593,7 @@ The initial design of the simulator relied on existing code which supported
  Multiple actors allow the user to view the environment from the perspective
  of the robot or from an independent Camera actor, it also allows Obstacle
  actors to be positioned in real-time.
- A diagram of the simulator appears in the Appendix as Figure (3).
+ A diagram of the simulator appears in the Appendix B.
 \end_layout
 
 \begin_layout Part*
@@ -665,8 +666,8 @@ Packet format for serial library
 \end_layout
 
 \begin_layout Standard
-The sensor and motor data from the packet structure is not ideal for our
- purposes and need to be converted to useful formats.
+The sensor and motor data from the packet structure were not ideal for our
+ purposes and needed to be converted to useful formats.
  The data for the sensors needed to be handled differently for each type
  of sensor.
  The ultrasonic sensors were the most straightforward since the control
@@ -1110,17 +1111,41 @@ One of the initial challenges encountered in writing the simulator was that
 \end_layout
 
 \begin_layout Standard
-There were some problems to overcome in terms of speed and optimization.
- One of these problems was in computing a linear representation of the depth
- map because GL uses a logarithmic representation when rendering, but the
- one provided by the Kinect is linear.
- The initial implementation of this conversion required doing up to two
- million floating-point logarithm operations per frame.
- This was improved significantly by making the simulator initially render
- at the Kinect hardware's resolution, then scaling it to fit the actual
- size of the visualization window.
- Performing the conversion in this manner provided a nearly seven-fold reduction
- in the number of required operations when running in fullscreen mode.
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/3rdperson.jpeg
+	lyxscale 25
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Simulator 3d person view
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1135,6 +1160,54 @@ There were some problems to overcome in terms of speed and optimization.
  size of the visualization window.
  Performing the conversion in this manner provided a nearly seven-fold reduction
  in the number of required operations when running in fullscreen mode.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/depthmap.jpeg
+	lyxscale 25
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Simulated Kinect depth map
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There were also some modifications in what is rendered during each pass.
+ The simulator visualization targets a frame rate of 60 fps, but was unable
+ to attain that rate on the workstation.
+ Since the Sensing/Motion Controller on the actual robot only functions
+ at 10 Hz, it is only necessary to broadcast data to ROS at that rate; thus,
+ the sensor rendering passes could be skipped on 5/6ths of the frames, saving
+ processing resources and boosting frame rate.
 \end_layout
 
 \begin_layout Part*
@@ -1161,7 +1234,7 @@ Gesture recognition is one of the more immediate future plans for the robot.
 \end_layout
 
 \begin_layout Standard
-The system could be extended by adding turtlebots to create a multi-agent
+The system could be extended by adding TurtleBots to create a multi-agent
  system.
  Capture the flag could be a way to explore algorithms involved in multi-agent
  systems.
@@ -1180,7 +1253,7 @@ Another way the system could be extended is by using the Kinect for facial
 \end_layout
 
 \begin_layout Standard
-A future system could also utilize rosjava’s ability to operate on android
+A future system could also utilize rosjava’s ability to operate on Android
  to provide a user with the ability to teleoperate the robot or provide
  the robot access to the cloud.
 \end_layout
@@ -1194,6 +1267,62 @@ s in the wheel movement equations and rendering pipeline issues causing
  be computed manually by some other reliable method, and one of the primary
  motives for developing the simulator was to not have to do these tedious
  calculations manually.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+appendix
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Section A
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Appendix-A"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename images/DesignModel.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Section B
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Appendix-B"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename images/Sim.png
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
