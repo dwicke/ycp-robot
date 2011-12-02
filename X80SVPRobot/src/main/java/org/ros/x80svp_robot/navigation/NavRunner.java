@@ -1,8 +1,8 @@
 package main.java.org.ros.x80svp_robot.navigation;
 
-import main.java.org.ros.navigation.BraitenburgAvoid;
-import main.java.org.ros.navigation.MotorControl;
-import main.java.org.ros.navigation.ObstacleAvoidance;
+import main.java.org.ros.x80svp_robot.navigation.BraitenburgAvoid;
+import main.java.org.ros.x80svp_robot.navigation.MotorControl;
+import main.java.org.ros.x80svp_robot.navigation.ObstacleAvoidance;
 
 import org.ros.address.InetAddressFactory;
 import org.ros.node.DefaultNodeFactory;

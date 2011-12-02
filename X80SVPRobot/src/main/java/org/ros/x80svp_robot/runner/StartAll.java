@@ -8,9 +8,9 @@ import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMain;
 import org.ros.node.NodeRunner;
 
-import main.java.org.ros.navigation.*;
-import main.java.org.ros.robot.*;
-import main.java.org.ros.sensorfilters.*;
+import main.java.org.ros.x80svp_robot.navigation.*;
+import main.java.org.ros.x80svp_robot.robot.*;
+import main.java.org.ros.x80svp_robot.sensorfilters.*;
 
 import com.google.common.base.Preconditions;
 /**
@@ -50,11 +50,11 @@ public class StartAll implements NodeMain{
 			IRSensorFilter irSen= new IRSensorFilter();
 			NodeConfiguration irConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			irConfig.setNodeName("infrared_sensor");
-
+/*
 			PyroelectricSensorFilter pyroSen = new PyroelectricSensorFilter();
 			NodeConfiguration pyroConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			pyroConfig.setNodeName("human_sensor");
-
+*/
 
 
 			ObstacleAvoidance obsAvoid = new ObstacleAvoidance();
@@ -79,7 +79,7 @@ public class StartAll implements NodeMain{
 			ultraAvoidConfig.setNodeName("brait_ultrasonic_avoid");
 
 
-
+/*
 			HeatTrack track = new HeatTrack();
 			NodeConfiguration trackConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			trackConfig.setNodeName("heat_track");
@@ -89,7 +89,7 @@ public class StartAll implements NodeMain{
 			NodeConfiguration heatSearchConfig = NodeConfiguration.newPublic(InetAddressFactory.newNonLoopback().getHostName());
 			heatSearchConfig.setNodeName("heat_search");
 
-			
+			*/
 
 
 			nodeRunner.run(obsAvoid, obsConfig);
@@ -107,7 +107,7 @@ public class StartAll implements NodeMain{
 			// run them
 			nodeRunner.run(ultraSen, ultraConfig);
 			nodeRunner.run(irSen, irConfig);
-			nodeRunner.run(pyroSen, pyroConfig);
+			//nodeRunner.run(pyroSen, pyroConfig);
 
 			nodeRunner.run(senseListen, nodeConfig);
 
