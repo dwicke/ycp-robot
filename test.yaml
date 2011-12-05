@@ -90,7 +90,7 @@ comb_const: {brait_ultrasonic_avoid: 1.0, brait_infrared_avoid: 0.0}
 #MAX_LINEAR_VELOCITY: 0.75  # m per second
 
 MAX_ANGULAR_VELOCITY: 0.67 # rads per second (1 / .15) * linearVelocity 
-MAX_LINEAR_VELOCITY: 0.1  # m per second
+MAX_LINEAR_VELOCITY: 0.3  # m per second
 
 
 # variance in the gaussian function used for obstacle avoidance

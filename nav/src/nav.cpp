@@ -8,22 +8,22 @@
 #define USE_ULTRASONIC			1
 
 //Use infrared sensors frontLeftLeft and frontRightRight.
-#define USE_INFRARED_WIDE		1
+//#define USE_INFRARED_WIDE		1
 
 //Use infrared sensors frontLeftCenter and frontRightCenter.
-#define USE_INFRARED_NARROW	1
+//#define USE_INFRARED_NARROW	1
 
 
 ///Parameters
 
 //Threshold, in cm, that an object is "seen". Note that the max range for IR is 80 and for Ultrasonic is 255.
-#define SEE_THRESH	65
+#define SEE_THRESH	30
 
 //Threshold, in cm, that an object is too close (movement will be stopped to prevent collision)
 #define ERR_THRESH	10
 
 //Top speed, in cm/sec
-#define SPEED		30
+#define SPEED		15
 #define STUCK_TURN	47.1238898038/2.0
 
 //Time interval the motor commands should be valid for
@@ -146,9 +146,11 @@ void sensordataCallback(const robot_msgs::SensorData::ConstPtr& msg)
 	if(msg->infrared_frontRightCenter_distance	<ERR_THRESH){++trip;thresh_err("infrared_frontRightCenter_distance"	,msg->infrared_frontRightCenter_distance);}
 	if(msg->infrared_frontRightRight_distance	<ERR_THRESH){++trip;thresh_err("infrared_frontRightRight_distance"	,msg->infrared_frontRightRight_distance);}//
 	if(msg->infrared_right_distance				<ERR_THRESH){++trip;thresh_err("infrared_right_distance"			,msg->infrared_right_distance);}
+
 	if(msg->infrared_rear_distance				<ERR_THRESH){++trip;thresh_err("infrared_rear_distance"				,msg->infrared_rear_distance);}
 	if(msg->infrared_left_distance				<ERR_THRESH){++trip;thresh_err("infrared_left_distance"				,msg->infrared_left_distance);}
 	
+	trip=0;
 	if(trip)
 	{
 		ROS_INFO("Abort!");

@@ -52,40 +52,10 @@ robot_msgs::SensorData SensorMsg;  //create a message struct for publishing
 //callback for the motor Data
 //if there is new information, it needs to be converted and sent to the robot
 //motors are controlled by taking in a velocity value which is then set for the specific motor channel
-
-float lleft=-100,lright=-100;
-void motorcmd(float left,float right)
-{
-	//Sending repeat commands seems so sometimes cause the robot to stop- avoid doing that
-	if((left==lleft)&&(right==lright))
-		return;
-	lleft=left;
-	lright=right;
-	
-	//Send motor commands as one message
-	int ret=driver->sendMotorCtrlAllCmd(Velocity,Motor_Convert(left),Motor_Convert(-right),0,0,0,0,0);//last param is time, seems to be broken
-	if(ret<0)
-	{
-		ROS_INFO("motor value was not sent to the robot!");
-		//exit(1);
-	}
-}
-
-void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
-	//ROS_INFO("Motor data received: \n");
-	ROS_INFO("Motor data received: [%.0f,%.0f]:%d",msg->motor_left_velocity,msg->motor_right_velocity,msg->motor_left_time);
-	
-	motorcmd(msg->motor_left_velocity,msg->motor_right_velocity);
-	motor_time=microtime()+msg->motor_left_time;
-	
-	return;
-}
-
-/*
 void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
         ROS_INFO("Motor data received: \n");
-        ROS_INFO("motor1: %lf", msg->motor_left_velocity);
-        ROS_INFO("motor2: %lf", Motor_Convert(msg->motor_left_velocity));
+        ROS_INFO("motor1: %lf", Motor_Convert(msg->motor_left_velocity));
+        ROS_INFO("motor2: %lf", Motor_Convert(msg->motor_right_velocity));
         //send left/right values to the robot
         int motorLPASS = driver->sendMotorCtrlCmd(Velocity, 0, Motor_Convert(msg->motor_left_velocity), msg->motor_left_time);
         int motorRPASS;
@@ -98,7 +68,6 @@ void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
 	
 
 }
-*/
 
 void serialInit(){
         //initialize internal vars to default - constructor
@@ -124,21 +93,18 @@ int main(int argc, char**argv){
         ros::NodeHandle n;
 
         //create a handle to subscribe to messages, name, buffer, callback function pointer
-        ros::Subscriber motordata_sub = n.subscribe("motordata", 1, motorCallback);
+        ros::Subscriber motordata_sub = n.subscribe("motordata", 10000, motorCallback);
 
         //create a handle to publish messages, buffer name and size for args
-        ros::Publisher sensordata_pub = n.advertise<robot_msgs::SensorData>("sensordata", 1);
+        ros::Publisher sensordata_pub = n.advertise<robot_msgs::SensorData>("sensordata", 20);
 
         //check to see if the node handle returned an empty ros::Publisher
         if(!sensordata_pub) ROS_INFO("Failed to create a publisher node!MotorCtrl");
         
-        ros::Rate loop_rate(10); //10 Hz publish time
+        ros::Rate loop_rate(1); //10 Hz publish time
                         
         int count = 0; //count of how many messages were sent
         
-	//Command a stop so the initial motor state is consistent
-	motorcmd(0,0);
-	
         while(ros::ok())
         {
         
@@ -151,18 +117,18 @@ int main(int argc, char**argv){
 
                 //Ultrasonic: data is 8 bit unsigned, in cm's
                 //These sensors are switched around due to a control board issue on our specific 
-#if YCP_ROBOT
+                #if YCP_ROBOT
                 SensorMsg.ultrasonic_frontLeft_distance = rangeSensorData->usRangeSensor[5];
                 SensorMsg.ultrasonic_frontCenter_distance = rangeSensorData->usRangeSensor[4];
                 SensorMsg.ultrasonic_frontRight_distance = rangeSensorData->usRangeSensor[3];
-#else
+                #else
                 SensorMsg.ultrasonic_frontLeft_distance = rangeSensorData->usRangeSensor[0];
                 SensorMsg.ultrasonic_frontCenter_distance = rangeSensorData->usRangeSensor[1];
                 SensorMsg.ultrasonic_frontRight_distance = rangeSensorData->usRangeSensor[2];
                 SensorMsg.ultrasonic_rearRight_distance = rangeSensorData->usRangeSensor[3];
                 SensorMsg.ultrasonic_rearCenter_distance = rangeSensorData->usRangeSensor[4];
                 SensorMsg.ultrasonic_rearLeft_distance = rangeSensorData->usRangeSensor[5];
-#endif
+                #endif
                 
                 //Infrared: data is floats
                 SensorMsg.infrared_frontLeftLeft_distance = IR_Convert(rangeSensorData->irRangeSensor[0]);
@@ -204,13 +170,12 @@ int main(int argc, char**argv){
 		*/
 		
 		 //If the motor timeouts are exceeded, stop the motors
-		if(motor_time&&(motor_time<microtime()))  
-		{
-				ROS_INFO("Motor command expired.");
-				//driver->sendMotorCtrlCmd(Velocity, 0, 0, 1);
-				motorcmd(0,0);
-				motor_time=0;
-		}
+                if(motor_time&&motor_time<microtime())  
+                {
+                        ROS_INFO("Motor command expired.");
+                        driver->sendMotorCtrlCmd(Velocity, 0, 0, 1);
+                        motor_time=0;
+                }
 
 
                 //now publish the sensor data
@@ -242,7 +207,7 @@ void get_usStatistics(){
                 ROS_INFO("Ultrasonic range sensor 5 = %d\n", SensorMsg.ultrasonic_rearCenter_distance); 
                 count++;
                 //if there is a 255 seen, increase the max count
-                if(SensorMsg.ultrasonic_rearCenter_distance == 255) countmax++;
+                if(SensorMsg.ultrasonic_rearCenter_distance = 255) countmax++;
         }
 }
 
