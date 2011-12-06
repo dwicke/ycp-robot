@@ -372,13 +372,14 @@ current reading of free space is correct based on the previous range.
 \begin{equation}
 \tilde{r_{i}}(t_{k})=\begin{cases}
 r_{i}^{s}(t_{k}) & \textrm{if }r_{i}^{s}(t_{k})<r_{nr}^{s}\\
-Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s} & \textrm{if }r_{i}^{s}(t_{k})=r_{nr}^{s}\end{cases}\label{eq:USFilter}\end{equation}
+Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s}\} & \textrm{if }r_{i}^{s}(t_{k})=r_{nr}^{s}\end{cases}\label{eq:USFilter}\end{equation}
 
 
 $r_{nr}^{s}$is the max range of the sensor, $r_{i}^{s}(t_{k})$ is
 the current range measurement, $\tilde{r_{i}}(t_{k})$ is the current
 filtered range value and $\tilde{r_{i}}(t_{k-1})$ is the previous
-filtered value.
+filtered value. $r_{\triangle}$ is a constant which is used to offset
+the previous value and was chosen to be 20cm as descibed in \cite{ran2005obsavothrbraaggbehmotfus}. 
 
 One issue of using rosjava was the overhead of creating new nodes,
 since each new node started a new JVM process. After implementing

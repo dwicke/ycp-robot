@@ -1,2 +1,2 @@
-if you run rosmake Runner
+if you run rosmake --pre-clean Runner 
 rosmake will make the dependancies as well as Runner.
