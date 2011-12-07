@@ -335,12 +335,68 @@ key "braitenberg1986"
  These behaviors were thought experiments into how different emotions, such
  as fear, aggression, and love, can provoke movement based on sensor stimulation.
  Aggression behavior is caused by pairing the sensors and motors on opposite
- sides through a non-decreasing function.
+ sides through a non-decreasing function as seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Braitenberg-agression-behavior"
+
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Standard
-To implement aggression behavior for obstacle avoidance, modifications to
- use a centered sensor were made to the algorithm presented in 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/AgressionRobot.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Braitenberg-agression-behavior"
+
+\end_inset
+
+Braitenberg agression behavior.
+ Image from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "braitenberg1986"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To implement aggression behavior for obstacle avoidance, only the front
+ sensors are used and also modifications to use a centered sensor were made
+ to the algorithm presented in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ran2005obsavothrbraaggbehmotfus"
@@ -364,8 +420,9 @@ reference "eq:rotationalSpeed"
 \end_inset
 
 .
- Accounting for the center sensor separately allows the robot to avoid deadlock
- while in symmetric corners.
+ Moving the robot forward while no obstacles.
+ When an obstacle is encountered the  Accounting for the center sensor separatel
+y allows the robot to avoid deadlock while in symmetric corners.
  The value of the sensor increases as an obstacle gets farther away and
  as the velocity becomes greater in that direction, providing a smooth wandering
  movement that effectively avoids obstacles.
@@ -484,11 +541,18 @@ reference "eq:rotationalWeight"
 \end_inset
 
  are the variance chosen here to be 1400 and 350 respectively in order to
- place a greater weight on smaller angles, 
-\begin_inset Formula $\mathfrak{D}(\theta'_{i})$
+ place a greater weight on smaller angles.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Insert graph showing the weight functions.
+\end_layout
+
 \end_inset
 
-.
+
 \end_layout
 
 \begin_layout Section*

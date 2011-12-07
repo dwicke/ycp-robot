@@ -335,7 +335,61 @@ key "braitenberg1986"
  These behaviors were thought experiments into how different emotions, such
  as fear, aggression, and love, can provoke movement based on sensor stimulation.
  Aggression behavior is caused by pairing the sensors and motors on opposite
- sides through a non-decreasing function.
+ sides through a non-decreasing function as seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Braitenberg-agression-behavior"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/AgressionRobot.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Braitenberg-agression-behavior"
+
+\end_inset
+
+Braitenberg agression behavior.
+ Image from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "braitenberg1986"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -483,8 +537,19 @@ reference "eq:rotationalWeight"
 \begin_inset Formula $\sigma_{\beta}^{2}$
 \end_inset
 
- are the variance chosen here to be 1400 and 350 respectively.
+ are the variance chosen here to be 1400 and 350 respectively in order to
+ place a greater weight on smaller angles.
  
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Insert graph showing the weight functions.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section*
@@ -536,7 +601,14 @@ key "r:robustlayeredcontrolsystemmobilerobot"
 
 \begin_layout Standard
 By following the model view controller design pattern, the implementation
- is extensible.
+ is extensible
+\begin_inset CommandInset citation
+LatexCommand cite
+key "krasner:cookbookusingModelViewControlleruserinterfaceparadigmSmalltalk"
+
+\end_inset
+
+.
  Allowing for different views such as a simulator or actual robot to be
  smoothly interchanged.
  The model is based on the ROS parameter server in which the model of the
