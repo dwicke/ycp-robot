@@ -1,0 +1,1524 @@
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options false
+\language english
+\inputencoding latin9
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\float_placement H
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+YCP Robot
+\end_layout
+
+\begin_layout Author
+Tori Bare, Cory Boyle, Jason Cluck, Drew Wicke
+\end_layout
+
+\begin_layout Date
+November 21 2011
+\end_layout
+
+\begin_layout Abstract
+Using the Robot Operating System (ROS), algorithms were developed for obstacle
+ avoidance, and 3D navigation.
+ Additionally, a simulator was created in OpenGL that was used as a testbed
+ for these algorithms.
+\end_layout
+
+\begin_layout Part*
+Introduction
+\end_layout
+
+\begin_layout Subsection*
+Requirements
+\end_layout
+
+\begin_layout Standard
+One of the goals of the Robot Operating System (ROS) is to provide roboticists
+ a software platform for specific robots.
+ ROS is beneficial in this way because it creates “a wide variety of frameworks
+ to manage complexity and facilitate rapid prototyping of software for experimen
+ts, resulting in the many robotic software systems currently used in academia
+ and industry”
+\begin_inset CommandInset citation
+LatexCommand cite
+key "quigley:ROSopensourceRobotOperatingSystem"
+
+\end_inset
+
+.
+ This paper addresses the construction of a new ROS package that controls
+ the X80SVP robot.
+ The package, which already implements obstacle avoidance and wandering
+ behavior, provides low level drivers up to a robust development framework
+ that can be extended.
+\end_layout
+
+\begin_layout Standard
+Another goal of the ROS community is to provide simulation software to test
+ the robot.
+ For example, the player project consists of Player, a robot interface,
+ Stage, a two-dimensional robot simulator, and Gazebo, a three-dimensional
+ robot simulator.
+ As part of the project a new simulator for ROS was developed that can be
+ extended and provides a Kinect sensor.
+\end_layout
+
+\begin_layout Standard
+The first part provides a background detailing the devices, algorithms and
+ libraries that were used; the second part discusses the design of the system
+ following with implementation details; finally, it concludes with an overview
+ of future work.
+\end_layout
+
+\begin_layout Part*
+Background
+\end_layout
+
+\begin_layout Standard
+Various devices, technologies and algorithms were used to create an autonomous
+ robot.
+ The robot that was used was an X80SVP.
+ It was chosen because this was the robot that was being considered for
+ use in a future robotics course at YCP.
+ A Beagleboard hosted the software and acted as a bridge to the robot while
+ the Robot Operating System provided a framework for the software.
+ Braitenburg aggression behavior was used to provide obstacle avoidance
+ and a Kinect was used to provide vision.
+ Lastly, OpenGL was used to provide 3D graphics for the simulator.
+\end_layout
+
+\begin_layout Section*
+Devices
+\end_layout
+
+\begin_layout Standard
+The X80SVP Robot has a max speed of 75 cm/s, weighs 3.5 kg, has a max payload
+ of 15 kg, and has a three hour battery life.
+ The robot also has IR and ultrasonic range sensors, as well as pyro-electric
+ human motion sensors as seen in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:X80SVP-Robot"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/X80SVPRobot.png
+	lyxscale 75
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:X80SVP-Robot"
+
+\end_inset
+
+X80SVP Robot 
+\begin_inset CommandInset citation
+LatexCommand cite
+key ":XSVPQuickStartGuide"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Beagleboard XM was chosen as the computer for the X80SVP.
+ The Beagleboard has many peripheral options, a 1 GHz CPU, a DSP, and it
+ is very popular in the open source/ROS communities.
+ The initial plan accounted for the DSP being able to process the Kinect
+ vision data while the CPU handled the overhead associated with ROS.
+ The major components on the board are shown below in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Beagleboard's-Main-Components"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/beagleboardMajorComps.png
+	lyxscale 40
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Beagleboard's-Main-Components"
+
+\end_inset
+
+Beagleboard's Main Components 
+\begin_inset CommandInset citation
+LatexCommand cite
+key ":BeaglSysteReferManua"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A Kinect was used to generate maps of the robot's surroundings and to allow
+ the robot to navigate intelligently through his environment.
+ The OpenNI drivers for ROS, created by the makers of the Kinect, would
+ enable the Kinect to be used in this manner.
+ One of the main concerns with using the Kinect was the processing power
+ that it would require.
+ The Kinect produces a message that is roughly 10 MB at a rate of 30 frames
+ per second, this equates to the Kinect sending about 300 MB of data each
+ second.
+ At first, it was expected that the DSP on the Beagleboard would have been
+ able to handle the Kinect’s processing; however, due to the overhead of
+ ROS, the processing will most likely have to be offloaded to a netbook.
+ 
+\end_layout
+
+\begin_layout Section*
+ROS
+\end_layout
+
+\begin_layout Standard
+ROS is a framework that facilitates the construction and execution of applicatio
+ns for robots.
+ There are implementations of ROS in C++, Python, Lisp, and Java.
+ ROS executables are called nodes.
+ ROS provides a master node that oversees running nodes and a parameter
+ server, it also acts as the matchmaker for nodes and topics.
+ ROS nodes communicate over topics or services using ROS methods.
+ Nodes publish messages on topics which other nodes can subscribe to in
+ order to receive the information.
+ The message's fields are described in a data file using the yaml language
+ which ROS converts into a file that the targeted language can use, such
+ as a header file in C++.
+\end_layout
+
+\begin_layout Standard
+ROS also provides a hierarchy to group common elements.
+ Nodes that perform common functions are grouped into a package.
+ Packages that share a common purpose are grouped into stacks.
+ Therefore, ROS's goal is to build a complex system out of simple, single-purpos
+e parts.
+\end_layout
+
+\begin_layout Standard
+The rosjava stack is an implementation of ROS in Java; therefore, rosjava
+ nodes work with the rest of the nodes in ROS.
+ In order for rosjava nodes to communicate, ROS messages are converted to
+ classes and made into jar files; this allows for easy integration of message
+ data types into rosjava nodes.
+\end_layout
+
+\begin_layout Section*
+Obstacle Avoidance Algorithm
+\end_layout
+
+\begin_layout Standard
+There are two ways to implement obstacle avoidance.
+ One implementation is motor fusion, which uses a direct correlation between
+ sensor readings and motor velocities.
+ The second implementation, sensor fusion, uses the sensor data to reconstruct
+ the surroundings to produce motor commands.
+ For the X80SVP robot, obstacle avoidance was accomplished by a motor fusion
+ algorithm utilizing Braitenburg's aggression behavior.
+\end_layout
+
+\begin_layout Standard
+Braitenburg behaviors are a form of synthetic psychology described in Valentino
+ Braitenberg’s book
+\begin_inset CommandInset citation
+LatexCommand cite
+key "braitenberg1986"
+
+\end_inset
+
+.
+ These behaviors were thought experiments into how different emotions, such
+ as fear, aggression, and love, can provoke movement based on sensor stimulation.
+ Aggression behavior is caused by pairing the sensors and motors on opposite
+ sides through a non-decreasing function.
+\end_layout
+
+\begin_layout Standard
+To implement aggression behavior for obstacle avoidance, modifications to
+ use a centered sensor were made to the algorithm presented in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ran2005obsavothrbraaggbehmotfus"
+
+\end_inset
+
+.
+ The algorithm computes both the linear and angular velocity for the robot
+ given the normalized sensor readings as shown in equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:translationalSpeed"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:rotationalSpeed"
+
+\end_inset
+
+.
+ Accounting for the center sensor separately allows the robot to avoid deadlock
+ while in symmetric corners.
+ The value of the sensor increases as an obstacle gets farther away and
+ as the velocity becomes greater in that direction, providing a smooth wandering
+ movement that effectively avoids obstacles.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+\alpha_{S}(t_{k})=\sum_{i\in L\cup R}w_{i}^{\alpha_{S}}\hat{r}_{i}^{S}(t_{k})\label{eq:translationalSpeed}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+\beta_{S}(t_{k})=\sum_{i\in R}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})-\sum_{i\in L}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})\label{eq:rotationalSpeed}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\alpha_{S}$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta_{S}$
+\end_inset
+
+ are the normalized translational and rotational speeds in the range [0,1]
+ and [-1,1] respectivley.
+ 
+\begin_inset Formula $w_{i}^{\alpha_{S}}$
+\end_inset
+
+ and 
+\begin_inset Formula $w_{i}^{\beta_{S}}$
+\end_inset
+
+ are constant weights corresponding to the 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+sensor defined in equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:translationalWeight"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:rotationalWeight"
+
+\end_inset
+
+.
+ 
+\begin_inset Formula $\hat{r}_{i}^{S}(t_{k})$
+\end_inset
+
+ is the current normalized filtered range value of the 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+ sensor.
+ 
+\begin_inset Formula $\mathfrak{D}(\theta'_{i})=90-|\theta_{i}|$
+\end_inset
+
+ the angular distance.
+ Where 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+ is angle from the x-axis to the sensor assuming the x-axis lies on the
+ axle and y-axis divides the robot in half.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+\mathit{w}_{i}^{\alpha_{S}}=k_{i}^{\alpha}e^{-\frac{\mathfrak{D}(\theta'_{i})^{2}}{2\sigma_{\alpha}^{2}}}\label{eq:translationalWeight}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+\mathit{w}_{i}^{\beta_{S}}=k_{i}^{\beta}e^{-\frac{\mathfrak{D}(\theta'_{i})^{2}}{2\sigma_{\beta}^{2}}}\label{eq:rotationalWeight}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $k_{i}^{\alpha}$
+\end_inset
+
+ and 
+\begin_inset Formula $k_{i}^{\beta}$
+\end_inset
+
+ are normalizing constants so that the speeds are normalized.
+ 
+\begin_inset Formula $\sigma_{\alpha}^{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{\beta}^{2}$
+\end_inset
+
+ are the variance chosen here to be 1400 and 350 respectively in order to
+ place a greater weight on smaller angles, 
+\begin_inset Formula $\mathfrak{D}(\theta'_{i})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section*
+Simulator Libraries
+\end_layout
+
+\begin_layout Standard
+The simulator uses a number of libraries to make the OpenGL API more manageable.
+ FreeGLUT is used to provide the basic windowing functions for the GL applicatio
+n.
+ GLU provides utility functions for computing projection matrices, used
+ to create the perspective camera views.
+ SOIL is used to provide texture-loading capabilities.
+ The simulator also interfaces directly with the Xorg APIs for some functions
+ in handling mouse and full-screen controls.
+ A custom loader was written to load DirectX format mesh files exported
+ by Blender.
+ This allows environments as well as movable obstacles of completely arbitrary
+ design and complexity to be modelled quickly.
+\end_layout
+
+\begin_layout Part*
+Design
+\end_layout
+
+\begin_layout Standard
+The design model favors modularity and simplicity to create a complex system.
+ The goal was to follow the subsumption control architecture to create a
+ 
+\begin_inset Quotes eld
+\end_inset
+
+robust and flexible control system
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "r:robustlayeredcontrolsystemmobilerobot"
+
+\end_inset
+
+.
+ Subsumption control architecture is a layered approach to providing control.
+ Each layer adds increased functionallity without needing to change lower
+ levels of control.
+\end_layout
+
+\begin_layout Standard
+By following the model view controller design pattern, the implementation
+ is extensible
+\begin_inset CommandInset citation
+LatexCommand cite
+key "krasner:cookbookusingModelViewControlleruserinterfaceparadigmSmalltalk"
+
+\end_inset
+
+.
+ Allowing for different views such as a simulator or actual robot to be
+ smoothly interchanged.
+ The model is based on the ROS parameter server in which the model of the
+ robot and communication layout is stored.
+ The view is the world or the virtual world as created by the simulator.
+ The controller classes act to move the robot, changing the robot’s view.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Must add image that shows the MVC.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/SensorComm.png
+	lyxscale 35
+	scale 35
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename images/obstAvoid.PNG.png
+	lyxscale 45
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Simplified-Design-and"
+
+\end_inset
+
+Simplified Design and Communication Model
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The design is centered around the Converter and the RobotActor classes.
+ Converter and RobotActor are interchangeable bridges between the view and
+ the control, they publish the sensor data and send commands to actuate
+ the robot’s motors.
+ The SensorListener class subscribes to the sensor messages published by
+ a bridge class and publishes converted sensor data in the ROS standard
+ Range message type.
+ The SensorFilter classes filter the sensor data so that the data is more
+ useful and the BraitenburgAvoid class uses the filtered sensor data to
+ publish a MotorCommand message based on the Braitenburg aggression behavior
+ algorithm.
+ The ObstacleAvoidance node publishes a linear combination of the MotorCommand
+ sent by the infrared and ultrasonic based on BraitenburgAvoid nodes.
+ Finally, the MotorController acts as both an arbiter of motor commands
+ and as a gateway back to the bridge nodes.
+ The full design diagram is in Appendix A.
+\end_layout
+
+\begin_layout Standard
+The initial design of the simulator relied on existing code which supported
+ only one “Player” with one graphical view; this was adapted to support
+ an arbitrary number of “Actors”, each with any number of “Sensors”.
+ This was then used to implement each of the ultrasonic and infrared sensors
+ as well as the graphical displays.
+ Multiple actors allow the user to view the environment from the perspective
+ of the robot or from an independent Camera actor, it also allows Obstacle
+ actors to be positioned in real-time.
+ A diagram of the simulator appears in Appendix B.
+\end_layout
+
+\begin_layout Part*
+Implementation
+\end_layout
+
+\begin_layout Standard
+The implementation of the design was completed in both C++ and Java.
+ C++ was used for the simulator, sign language recognition, and the serial
+ communication between the robot and Beagleboard.
+ Java was used to implement the rest of the design which includes a converter
+ to standard ROS message datatypes, an ultrasonic sensor filter, obstacle
+ avoidance algorithm, and motor control arbiter.
+\end_layout
+
+\begin_layout Standard
+The serial library used the PMS5005 protocol which allows any processor,
+ DSP, or PC to control the robot through the Universal Asynchronous Receiver/Tra
+nsmitter (UART) communication interface.
+ The basic packet outline, shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Packet-format-for"
+
+\end_inset
+
+, handles both the sensor and motor data transmission.
+ The library that implements this interacts with ROS by subscribing to motor
+ controls and publishing sensor data.
+ Using this packet structure, a large amount of information can be processed
+ every tick.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/packet.png
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Packet-format-for"
+
+\end_inset
+
+Packet format for serial library
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The sensor and motor data from the packet structure were not ideal for our
+ purposes and needed to be converted to useful formats.
+ The data for the sensors needed to be handled differently for each type
+ of sensor.
+ The ultrasonic sensors were the most straightforward since the control
+ board returned the distance in the range of 0 - 255 cm, which is already
+ in the correct units for the message.
+ The infrared sensors needed to be converted since they return a non-linear
+ voltage value corresponding to a range of 10 - 80 cm.
+ The voltage output with respect to distance is shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Infrared-sensor-voltage"
+
+\end_inset
+
+.
+ This voltage output needed to be linearized using an interpolation equation
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key ":LinearizingSharpRangerData"
+
+\end_inset
+
+.
+ The result of such an equation with respect to Analog/Digital Converter
+ (ADC) values is shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Linear-interpolation-of"
+
+\end_inset
+
+.
+ After testing the human sensors, it was decided that these will not be
+ used at this point due to unreliable results.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/voltageOutput.png
+	lyxscale 60
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Infrared-sensor-voltage"
+
+\end_inset
+
+Infrared sensor voltage output 
+\begin_inset CommandInset citation
+LatexCommand cite
+key ":SharpGPYAY"
+
+\end_inset
+
+ values 
+\begin_inset CommandInset citation
+LatexCommand cite
+key ":LinearizingSharpRangerData"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/ADCValues.png
+	lyxscale 60
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Linear-interpolation-of"
+
+\end_inset
+
+Linear interpolation of Voltage with respect to ADC
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once the serial library and sensor conversions were implemented on a desktop
+ system, the next step was to achieve this functionality on the Beagleboard.
+ The Beagleboard was loaded with Ubuntu 11.10 since this OS works best with
+ ROS.
+ Some of the configuration scripts for ROS require Internet access so a
+ wireless internet connection was part of the Beagleboard setup.
+ ROS was compiled from source on the Beagleboard because cross compiling
+ is not recommended for ROS yet.
+ After configuring the installation, it quickly became apparent that the
+ overhead associated with ROS was more than expected.
+ At the moment, the Beagleboard is unable to support ROS at 10 Hz and further
+ testing will conclude whether this can be fixed or not.
+\end_layout
+
+\begin_layout Subsection*
+High Level Software
+\end_layout
+
+\begin_layout Standard
+The obstacle avoidance algorithm produces linear and angular velocity values,
+ but the robot requires left and right wheel velocities which can be converted
+ using the differential drive kinematics equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:LeftVelocity"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:RightVelocity"
+
+\end_inset
+
+.
+ Note that 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\alpha_{S}(t_{k})$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta_{S}(t_{k})$
+\end_inset
+
+ are normalized linear and angular velocities and d is the wheel base of
+ the robot.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+V_{L}=\frac{2\alpha_{S}(t_{k})+d\beta_{S}(t_{k})}{2}\label{eq:LeftVelocity}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+V_{R}=V_{L}-d\beta_{S}(t_{k})\label{eq:RightVelocity}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Ultrasonic sensors were used to provide obstacle avoidance, however the
+ sensors can overestimate the distance to a flat wall due to specular reflection
+ as seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Specular-reflection-of"
+
+\end_inset
+
+.
+ Over estimation can happen when the sonar bounces off the wall and never
+ returns back to the sensor causing the robot to believe that there is free
+ space in front of it.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/sensorReflection.png
+	lyxscale 75
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Specular-reflection-of"
+
+\end_inset
+
+Specular reflection of ultrasonic sensor.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+These readings can be improved by applying an incremental filter (Equation
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:USFilter"
+
+\end_inset
+
+) as described in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ran2005obsavothrbraaggbehmotfus"
+
+\end_inset
+
+.
+ The filter works by acting as a short term memory to ensure that a current
+ reading of free space is correct based on the previous range.
+ For example, consider a robot that is approaching a wall as in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Specular-reflection-of"
+
+\end_inset
+
+ and the readings are all less than the max range of the sensor.
+ Then specular reflection occurs causing a max range reading.
+ The filter in equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:USFilter"
+
+\end_inset
+
+ will recognize the false max reading and use the previous filtered range
+ value instead.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+\tilde{r_{i}}(t_{k})=\begin{cases}
+r_{i}^{s}(t_{k}) & \textrm{if }r_{i}^{s}(t_{k})<r_{nr}^{s}\\
+Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s}\} & \textrm{if }r_{i}^{s}(t_{k})=r_{nr}^{s}\end{cases}\label{eq:USFilter}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+\begin_inset Formula $r_{nr}^{s}$
+\end_inset
+
+is the max range of the sensor, 
+\begin_inset Formula $r_{i}^{s}(t_{k})$
+\end_inset
+
+ is the current range measurement, 
+\begin_inset Formula $\tilde{r_{i}}(t_{k})$
+\end_inset
+
+ is the current filtered range value and 
+\begin_inset Formula $\tilde{r_{i}}(t_{k-1})$
+\end_inset
+
+ is the previous filtered value.
+ 
+\begin_inset Formula $r_{\triangle}$
+\end_inset
+
+ is a constant which is used to offset the previous value and was chosen
+ to be 20cm as 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+descibed in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ran2005obsavothrbraaggbehmotfus"
+
+\end_inset
+
+.
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+ 
+\end_layout
+
+\begin_layout Standard
+One issue of using rosjava was the overhead of creating new nodes, since
+ each new node started a new JVM process.
+ After implementing the design of the rosjava nodes, rosjava released documentat
+ion detailing how using a NodeRunner object can start the nodes as threads
+ rather than as new processes.
+ This significantly reduced the memory overhead and launch time of the rosjava
+ nodes.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Rewrite explaining how solution mitigated problem.
+ ?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+RGBDSLAM was selected as the main algorithm to implement mapping.
+ In order to take advantage of RGBDSLAM, the entire project had to be downgraded
+ from using ROS Electric to ROS Diamondback and from using Ubuntu 11.04 to
+ Ubuntu 10.10.
+ RGBDSLAM allows a point cloud of the environment to be created from the
+ Kinect data as seen in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:RGBD-point-cloud"
+
+\end_inset
+
+.
+ Once a point cloud was generated, it could be converted to an OctoMap as
+ seen in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Octomap"
+
+\end_inset
+
+, a 3D occupancy grid map that is developed from an octree.
+ The OctoMap is then sent to the 3D navigation algorithm so that the robot
+ can utilize the map.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/rgbdslam point cloud fig 1.png
+	lyxscale 30
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:RGBD-point-cloud"
+
+\end_inset
+
+RGBD point cloud
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/octomap fig 2.png
+	lyxscale 30
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Octomap"
+
+\end_inset
+
+Octomap
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The original goal was to have the robot using a static OctoMap to navigate
+ his environment, and eventually implement dynamic mapping so the robot
+ would have been able to map his environment while he wandered.
+ Due to issues with ROS running in a timely matter on the Beagleboard, it
+ is unsure as to whether the OctoMaps will be usable.
+ At this point, a sign language feature may be replacing the OctoMaps, but
+ that will be more-so determined in the final paper.
+\end_layout
+
+\begin_layout Standard
+One of the initial challenges encountered in writing the simulator was that
+ the position of the robot was represented as a point on an X-Y plane, but
+ the input coming in from ROS would be in the form of differential wheel
+ movement commands.
+ Finding the necessary equations proved to be a challenge.
+ It was also difficult to test initially since the ROS interface had not
+ yet been implemented to a working degree.
+ Some revisions and corrections had to be done once it was possible to send
+ specific commands from ROS and to observe whether the resultant location
+ of the robot in the simulation was correct.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/3rdperson.jpeg
+	lyxscale 20
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Simulator in third person view
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There were some problems to overcome in terms of speed and optimization.
+ One of these problems was in computing a linear representation of the depth
+ map because GL uses a logarithmic representation when rendering, but the
+ one provided by the Kinect is linear.
+ The initial implementation of this conversion required doing up to two
+ million floating-point logarithm operations per frame.
+ This was improved significantly by making the simulator initially render
+ at the Kinect hardware's resolution, then scaling it to fit the actual
+ size of the visualization window.
+ Performing the conversion in this manner provided a nearly seven-fold reduction
+ in the number of required operations when running in fullscreen mode.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images/depthmap.jpeg
+	lyxscale 20
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Simulated Kinect depth map
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There were also some modifications in what is rendered during each pass.
+ The simulator visualization targets a frame rate of 60 fps, but was unable
+ to attain that rate on the workstation.
+ Since the Sensing/Motion Controller on the actual robot only functions
+ at 10 Hz, it is only necessary to broadcast data to ROS at that rate; thus,
+ the sensor rendering passes could be skipped on 5/6ths of the frames, saving
+ processing resources and boosting frame rate.
+\end_layout
+
+\begin_layout Part*
+Future Work
+\end_layout
+
+\begin_layout Standard
+In the future, there are plans to implement features such as more advanced
+ gesture recognition, a multi-agent system of physical robots, and using
+ rosjava on Android to teleoperate the robot.
+\end_layout
+
+\begin_layout Standard
+Gesture recognition is one of the more immediate future plans for the robot.
+ A ROS stack called hand_interaction, created by the Massachusetts Institute
+ of Technology, appears to be the best option for implementing this feature.
+ Using hand_interaction, the location of the hands can be determined.
+ As a gesture is made, the movement of the hands will be tracked and used
+ to control the robot's behavior.
+\end_layout
+
+\begin_layout Standard
+The system could be extended by adding robots, such as TurtleBots, to create
+ a multi-agent system.
+ Capture the flag could be a way to explore algorithms involved in multi-agent
+ systems.
+ However, due to the limited processing power of the Beagleboard, there
+ would be considerable challenges implementing efficient navigation, SLAM,
+ and learning algorithms.
+ One solution would be to use a remote computer to perform these features.
+\end_layout
+
+\begin_layout Standard
+Another way the system could be extended is by using the Kinect for facial
+ and object recognition.
+ This would allow for high level behavior and learning rather than the current
+ reactive-based system; however, the processing capabilities of an on-board
+ computer may be overwhelmed.
+\end_layout
+
+\begin_layout Standard
+A future system could also utilize rosjava’s ability to operate on Android
+ to provide a user with the ability to teleoperate the robot or provide
+ the robot access to the cloud.
+\end_layout
+
+\begin_layout Part*
+Appendix
+\end_layout
+
+\begin_layout Section*
+Section A
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Appendix-A"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Updated design model shows how messages and nodes relate.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename images/DesignModel.jpg
+	lyxscale 65
+	scale 65
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Section B
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Appendix-B"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The User can select to control any Actor's position.
+ The specific sensor the CameraView is rendered from can also be selected.
+ Data from ROS is also used to control the RobotActor's position and the
+ Sensors are output back to ROS.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename images/Sim.png
+	lyxscale 65
+	scale 65
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+btprint "btPrintAll"
+bibfiles "bibliography"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

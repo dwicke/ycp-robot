@@ -66,8 +66,8 @@ Using the Robot Operating System (ROS), algorithms were developed for obstacle
 Introduction
 \end_layout
 
-\begin_layout Standard
-The project 
+\begin_layout Subsection*
+Requirements
 \end_layout
 
 \begin_layout Standard
@@ -517,7 +517,7 @@ The design model favors modularity and simplicity to create a complex system.
 \begin_inset Quotes eld
 \end_inset
 
-robust and flexible system
+robust and flexible control system
 \begin_inset Quotes erd
 \end_inset
 
@@ -529,13 +529,31 @@ key "r:robustlayeredcontrolsystemmobilerobot"
 \end_inset
 
 .
- By following the model view controller design pattern, the implementation
+ Subsumption control architecture is a layered approach to providing control.
+ Each layer adds increased functionallity without needing to change lower
+ levels of control.
+\end_layout
+
+\begin_layout Standard
+By following the model view controller design pattern, the implementation
  is extensible.
+ Allowing for different views such as a simulator or actual robot to be
+ smoothly interchanged.
  The model is based on the ROS parameter server in which the model of the
  robot and communication layout is stored.
  The view is the world or the virtual world as created by the simulator.
  The controller classes act to move the robot, changing the robot’s view.
  
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Must add image that shows the MVC.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -627,11 +645,11 @@ Implementation
 
 \begin_layout Standard
 The implementation of the design was completed in both C++ and Java.
- C++ was used for the simulator and the serial communication between the
- robot and Beagleboard.
+ C++ was used for the simulator, sign language recognition, and the serial
+ communication between the robot and Beagleboard.
  Java was used to implement the rest of the design which includes a converter
- to standard ROS message datatypes, an ultrasonic sensor filter, motor control
- 
+ to standard ROS message datatypes, an ultrasonic sensor filter, obstacle
+ avoidance algorithm, and motor control arbiter.
 \end_layout
 
 \begin_layout Standard
