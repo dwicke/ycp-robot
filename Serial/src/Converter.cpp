@@ -1,13 +1,3 @@
-/*******************************************************************************
-Converter.cpp
-This is a program that will initialize the serial library, and then convert the data into
-the proper format for ROS.  Subscribes to the motor data, publishes the sensor data
-
-JMC
-9/29/11
-********************************************************************************/
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
