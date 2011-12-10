@@ -66,10 +66,6 @@ Using the Robot Operating System (ROS), algorithms were developed for obstacle
 Introduction
 \end_layout
 
-\begin_layout Subsection*
-Requirements
-\end_layout
-
 \begin_layout Standard
 One of the goals of the Robot Operating System (ROS) is to provide roboticists
  a software platform for specific robots.
@@ -96,7 +92,17 @@ Another goal of the ROS community is to provide simulation software to test
  the robot.
  For example, the player project consists of Player, a robot interface,
  Stage, a two-dimensional robot simulator, and Gazebo, a three-dimensional
- robot simulator.
+ robot simulator
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Put into context
+\end_layout
+
+\end_inset
+
+.
  As part of the project a new simulator for ROS was developed that can be
  extended and provides a Kinect sensor.
 \end_layout
@@ -106,6 +112,24 @@ The first part provides a background detailing the devices, algorithms and
  libraries that were used; the second part discusses the design of the system
  following with implementation details; finally, it concludes with an overview
  of future work.
+\end_layout
+
+\begin_layout Subsection*
+Requirements
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+maybe insert something about the requirements of the system to better introduce
+ it
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Part*
@@ -284,7 +308,17 @@ ns for robots.
  ROS executables are called nodes.
  ROS provides a master node that oversees running nodes and a parameter
  server, it also acts as the matchmaker for nodes and topics.
- ROS nodes communicate over topics or services using ROS methods.
+ ROS nodes communicate over topics or services 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Make this clear the distinction between topics and services
+\end_layout
+
+\end_inset
+
+ using ROS methods.
  Nodes publish messages on topics which other nodes can subscribe to in
  order to receive the information.
  The message's fields are described in a data file using the yaml language
@@ -293,11 +327,22 @@ ns for robots.
 \end_layout
 
 \begin_layout Standard
-ROS also provides a hierarchy to group common elements.
+ROS also provides a hierarchial packaging based structure to group common
+ elements.
  Nodes that perform common functions are grouped into a package.
  Packages that share a common purpose are grouped into stacks.
  Therefore, ROS's goal is to build a complex system out of simple, single-purpos
 e parts.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Diagram of the hierarchy maybe a set diagram circles within circles
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -306,6 +351,16 @@ The rosjava stack is an implementation of ROS in Java; therefore, rosjava
  In order for rosjava nodes to communicate, ROS messages are converted to
  classes and made into jar files; this allows for easy integration of message
  data types into rosjava nodes.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Why choose rosjava?
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section*
@@ -764,6 +819,15 @@ Simplified Design and Communication Model
 \end_layout
 
 \begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Insert relevant UML to illustrate the model
+\end_layout
+
+\end_inset
+
 The design is centered around the Converter and the RobotActor classes.
  Converter and RobotActor are interchangeable bridges between the view and
  the control, they publish the sensor data and send commands to actuate
@@ -1288,7 +1352,19 @@ status open
 
 \begin_layout Plain Layout
 Rewrite explaining how solution mitigated problem.
- ?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Maybe insert a paragraph about the priority based arbiter for motor commands.
 \end_layout
 
 \end_inset
