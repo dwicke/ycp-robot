@@ -313,18 +313,70 @@ Obstacle Avoidance Algorithm
 \end_layout
 
 \begin_layout Standard
-There are two ways to implement obstacle avoidance.
- One implementation is motor fusion, which uses a direct correlation between
- sensor readings and motor velocities.
- The second implementation, sensor fusion, uses the sensor data to reconstruct
- the surroundings to produce motor commands.
- For the X80SVP robot, obstacle avoidance was accomplished by a motor fusion
- algorithm utilizing Braitenburg's aggression behavior.
+There are two main ways to implement obstacle avoidance, motor fusion and
+ sensor fusion.
+ Motor fusion also termed reactive control uses a direct correlation from
+ sensor readings to motor velocities without any intermediate representation,
+ such as a map
+\begin_inset CommandInset citation
+LatexCommand cite
+key "driankov2001fuzzy"
+
+\end_inset
+
+.
+ The main advantage to using motor fusion is its ability to function well
+ in real time systems.
+ Motor fusion or 
+\begin_inset Quotes eld
+\end_inset
+
+reactivity is essential for any system operating in a dynamic, uncertain
+ environment
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rosenblatt2007centralized"
+
+\end_inset
+
+.
+ However, when a robot has many sensors which map to a motor command the
+ processing time increases decreasing the usefulness of motor fusion.
+ 
 \end_layout
 
 \begin_layout Standard
-Braitenburg behaviors are a form of synthetic psychology described in Valentino
- Braitenberg’s book
+Sensor fusion uses the sensor data to reconstruct the surroundings to produce
+ motor commands.
+ This method provides a  
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Pro/Con of sensor fusion
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+For the X80SVP robot, obstacle avoidance was accomplished by a motor fusion
+ algorithm utilizing Braitenburg's aggression behavior.
+ Motor fusion was chosen because the robot's sensors were unreliable and
+ homogeneous therefore making the sensor fusion model inappropriate.
+ Also, Braitenburg's algorithm does not rely on the type or variety of range
+ sensors to provide obstacle avoidance.
+ 
+\end_layout
+
+\begin_layout Standard
+Braitenburg behaviors are a form of synthetic psychology described in
 \begin_inset CommandInset citation
 LatexCommand cite
 key "braitenberg1986"
@@ -343,7 +395,6 @@ reference "fig:Braitenberg-agression-behavior"
 \end_inset
 
 .
- 
 \end_layout
 
 \begin_layout Standard
@@ -376,7 +427,7 @@ Braitenberg agression behavior.
  Image from 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "braitenberg1986"
+key "ran2005obsavothrbraaggbehmotfus"
 
 \end_inset
 
@@ -421,8 +472,18 @@ reference "eq:rotationalSpeed"
 
 .
  Moving the robot forward while no obstacles.
- When an obstacle is encountered the  Accounting for the center sensor separatel
-y allows the robot to avoid deadlock while in symmetric corners.
+ When an obstacle is encountered the
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Continue to explain
+\end_layout
+
+\end_inset
+
+ Accounting for the center sensor separately allows the robot to avoid deadlock
+ while in symmetric corners.
  The value of the sensor increases as an obstacle gets farther away and
  as the velocity becomes greater in that direction, providing a smooth wandering
  movement that effectively avoids obstacles.
@@ -541,7 +602,7 @@ reference "eq:rotationalWeight"
 \end_inset
 
  are the variance chosen here to be 1400 and 350 respectively in order to
- place a greater weight on smaller angles.
+ place a greater weight on small angles and less weight on greater angles.
  
 \begin_inset Note Note
 status open
