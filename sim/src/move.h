@@ -176,6 +176,10 @@ int actor_active=1;//?
 
 
 
+
+
+
+
 //movement factors
 #ifdef _WIN32
 #define MOUSE_SCALE	.2	//in degrees per pixel
@@ -294,6 +298,33 @@ void keydown(unsigned char key,int x, int y)
 		case '`':
 			toggleFullscreen();
 			break;
+		
+		//ROS modes
+		case 'J':
+			switch(rostopic_sensors_mode)
+			{
+				case ENABLE:	rostopic_sensors_mode=DISABLE;	break;
+				case DISABLE:	rostopic_sensors_mode=FORCE;	break;
+				case FORCE:		rostopic_sensors_mode=ENABLE;
+			}
+			break;
+		case 'K':
+			switch(rostopic_video_mode)
+			{
+				case ENABLE:	rostopic_video_mode=DISABLE;	break;
+				case DISABLE:	rostopic_video_mode=FORCE;	break;
+				case FORCE:		rostopic_video_mode=ENABLE;
+			}
+			break;
+		case 'L':
+			switch(rostopic_pointcloud_mode)
+			{
+				case ENABLE:	rostopic_pointcloud_mode=DISABLE;	break;
+				case DISABLE:	rostopic_pointcloud_mode=FORCE;	break;
+				case FORCE:		rostopic_pointcloud_mode=ENABLE;
+			}
+			break;
+		
 		case VK_ESCAPE:
 			exit(0);
 	}

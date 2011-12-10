@@ -17,6 +17,7 @@ void raster();
 void raster_flipped();
 void orthographic();
 void perspective(Actor actor,Sensor sensor);
+void perspective_flipped(Actor actor,Sensor sensor);
 
 //global because its used to display HUD
 robot_msgs::SensorData sensordata;
@@ -88,6 +89,41 @@ void render_hud(int ttime)
 				enable_motors?"on":"off");
 			break;
 		case 4:
+			const char *sensors,*points,*video;
+			switch(rostopic_sensors_mode)
+			{
+				case ENABLE:
+					sensors="E";
+					break;
+				case DISABLE:
+					sensors="D";
+					break;
+				case FORCE:
+					sensors="F";
+			}
+			switch(rostopic_pointcloud_mode)
+			{
+				case ENABLE:
+					points="E";
+					break;
+				case DISABLE:
+					points="D";
+					break;
+				case FORCE:
+					points="F";
+			}
+			switch(rostopic_video_mode)
+			{
+				case ENABLE:
+					video="E";
+					break;
+				case DISABLE:
+					video="D";
+					break;
+				case FORCE:
+					video="F";
+			}
+			
 			raster();
 			glColor3f(OSD_COLOR);
 			glxPrintf(4,24,
@@ -99,6 +135,7 @@ void render_hud(int ttime)
 				"%s: %.2fx%.2f %.1f\n"
 				"Noise: %s x%.1f\n"
 				"Motors: %s%s%+03.0f | %s%+03.0f\n"
+				"ROS: Sensors [%s (%d)] | Video [%s (%d,%d,%d)] | Points [%s (%d)]%c\n"	//NOTE: This uses a null charactor to conditionally terminate at this point. Bad Things will happen if the following lines are reordered!
 				"Ultrasonic: front[%03d,%03d,%03d]|rear[%03d,%03d,%03d]\n"
 				"Infrared: front[%04.1f,%04.1f,%04.1f,%04.1f]|middle[%04.1f,%04.1f]|rear[%04.1f]\n"
 				
@@ -118,6 +155,12 @@ void render_hud(int ttime)
 				wheel_r_end>ttime?"":"X",
 				wheel_r_velocity*100,
 			 
+				sensors,rostopic_sensors_subscribed,
+				video,rostopic_rgb_subscribed,rostopic_depth_raw_subscribed,rostopic_depth_float_subscribed,
+				points,rostopic_pointcloud_subscribed,
+				
+				(rostopic_sensors_mode==FORCE || (rostopic_sensors_mode==ENABLE&&rostopic_sensors_subscribed))?' ':0,
+				
 				sensordata.ultrasonic_frontLeft_distance,
 				sensordata.ultrasonic_frontCenter_distance,
 				sensordata.ultrasonic_frontRight_distance,
@@ -228,37 +271,31 @@ void drawConvergence()
 	}
 }
 
-float kinect_depthmap[SENSOR_WINDOW_WIDTH*SENSOR_WINDOW_HEIGHT],
-	  kinect_rgb[SENSOR_WINDOW_WIDTH*SENSOR_WINDOW_HEIGHT*3];
 
 //Read depthmap
-void read_depthmap()
+void read_depthmap_gl()
 {
-	glReadPixels(0,0,SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT,GL_DEPTH_COMPONENT,GL_FLOAT,kinect_depthmap);
-	
-	for(int i=0;i<SENSOR_WINDOW_WIDTH*SENSOR_WINDOW_HEIGHT;i++)
-	{
-		kinect_depthmap[i]=1.0- (-1.0/log((kinect_depthmap[i]))/11.0/20.0);
-	}
+	glReadPixels(0,0,SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT,GL_DEPTH_COMPONENT,GL_FLOAT,kinect_depthmap_gl);
 }
 
 void read_rgb()
 {
-	glReadPixels(0,0,SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT,GL_RGB,GL_FLOAT,kinect_rgb);
+	glReadPixels(0,0,SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,kinect_rgb);
 }
+
 
 //Render depthmap
 void draw_depthmap()
 {
 	glBindTexture(GL_TEXTURE_2D,0);
 	
-	glPixelZoom((float)winx/(float)SENSOR_WINDOW_WIDTH,(float)winy/(float)SENSOR_WINDOW_HEIGHT);
-	
+	//Set up the viewport
+	glPixelZoom((float)winx/(float)SENSOR_WINDOW_WIDTH,-(float)winy/(float)SENSOR_WINDOW_HEIGHT);
 	raster_flipped();
-	//raster();
-	glRasterPos2f(0,0);
+	glRasterPos2f(0,winy);
+	
 	glDisable(GL_DEPTH_TEST);
-	glDrawPixels(SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT,GL_LUMINANCE,GL_FLOAT,kinect_depthmap);
+	glDrawPixels(SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT,GL_LUMINANCE,GL_FLOAT,kinect_depthmap_view);
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -266,14 +303,80 @@ void draw_rgb()
 {
 	glBindTexture(GL_TEXTURE_2D,0);
 	
-	glPixelZoom((float)winx/(float)SENSOR_WINDOW_WIDTH,(float)winy/(float)SENSOR_WINDOW_HEIGHT);
-	
+	//Set up the viewport
+	glPixelZoom((float)winx/(float)SENSOR_WINDOW_WIDTH,-(float)winy/(float)SENSOR_WINDOW_HEIGHT);
 	raster_flipped();
-	//raster();
-	glRasterPos2f(0,0);
+	glRasterPos2f(0,winy);
+	
 	glDisable(GL_DEPTH_TEST);
-	glDrawPixels(SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT,GL_RGB,GL_FLOAT,kinect_rgb);
+	glDrawPixels(SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,kinect_rgb);
 	glEnable(GL_DEPTH_TEST);
+}
+
+
+//Convert depthmap for view
+void convert_depthmap(float *depth_data,float *depth_out_view_buffer,uint16_t *depth_out_raw_buffer,float *depth_out_float_buffer)
+{
+	for(int i=0;i<SENSOR_WINDOW_WIDTH*SENSOR_WINDOW_HEIGHT;i++)
+	{
+		float depth=(-1.0/log(depth_data[i]))*100;
+		
+		//Clipping
+		if(depth>9757)
+			depth=9757;
+		if(depth<480)
+			depth=0;
+		
+		//Transform depth buffers
+		if(depth_out_view_buffer)
+		{
+			depth_out_view_buffer[i]=depth/9757.0;
+		}
+		if(depth_out_raw_buffer)
+		{
+			depth_out_raw_buffer[i]=depth;
+		}
+		if(depth_out_float_buffer)
+		{
+			//TODO: Not Implemented!
+		}
+	}
+}
+
+//Routines for switching viewport between fixed size and restoring
+bool viewport_fixed=false;
+int unfixed_winx,unfixed_winy;
+float unfixed_aspect;
+void fix_viewport()
+{
+	//Don't do it twice
+	if(viewport_fixed)
+		return;
+	viewport_fixed=true;
+	
+	//store the old values
+	unfixed_winx=winx;
+	unfixed_winy=winy;
+	unfixed_aspect=aspect;
+	
+	//Fix the viewport size
+	glViewport(0,0,SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT);
+	aspect=((GLfloat)SENSOR_WINDOW_WIDTH)/((GLfloat)SENSOR_WINDOW_HEIGHT);
+	winx=SENSOR_WINDOW_WIDTH;
+	winy=SENSOR_WINDOW_HEIGHT;
+}
+
+void restore_viewport()
+{
+	//Only if fixed
+	if(!viewport_fixed)
+		return;
+	viewport_fixed=false;
+	
+	winx=unfixed_winx;
+	winy=unfixed_winy;
+	aspect=unfixed_aspect;
+	glViewport(0,0,winx,winy);
 }
 
 // Display routine
@@ -296,11 +399,10 @@ void display()
 	ltime=ttime;
 	
 	//ROS stuff
-	
-	if( sensor_elapsed>=(1000/ROS_HZ)//Send data at ROS_HZ rate- speed up slightly if framerate is low to compensate for 
-		-(1000/(fps+.0001)/2)		 //Speed up slightly if framerate is low to compensate for the delay (this makes it send slightly faster than normal, rather than significantly slower than normal)
-		&& fps)		 //Don't start transmitting ROS data until framerate is stabilized
+	if(	sensor_elapsed>=(1000/ROS_HZ)//Send data at ROS_HZ rate- speed up slightly if framerate is low to compensate for 
+		-(1000/(fps+.0001)/2))		 //Speed up slightly if framerate is low to compensate for the delay (this makes it send slightly faster than normal, rather than significantly slower than normal)
 	{
+		//Compute FPS statistics and warn on computer-too-slow
 		if(sensor_elapsed>=(1000/ROS_HZ)*1.5 && roshz_timebase)
 		{
 			printf("WARNING: ROS sensor pass was missed- computer is too slow, simulation won't be accurate! [%d]\n",sensor_elapsed);
@@ -312,192 +414,261 @@ void display()
 			roshz_timebase = ttime;
 			roshz_counter = 0;
 		}
-
 		sensor_elapsed=0;
-		//send_sensor_dummy();
-		Actor actor=actors[ACTOR_ROBOT];
-		Sensor *sensors=actor.sensors;
 		
-		glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
-		glDisable(GL_LIGHTING);
-		glDisable(GL_TEXTURE_2D);
-		glDisable(GL_NORMALIZE);
-		
-		//Use consistent size
-		int owinx=winx,owiny=winy;
-		float oaspect=aspect;
-		
-		glViewport(0,0,SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT);
-		aspect=((GLfloat)SENSOR_WINDOW_WIDTH)/((GLfloat)SENSOR_WINDOW_HEIGHT);
-		winx=SENSOR_WINDOW_WIDTH;
-		winy=SENSOR_WINDOW_HEIGHT;
-		
-		bool data_bad=0;
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_ultrasonic_frontLeft]);
-		render_scene();
-		sensordata.ultrasonic_frontLeft_distance=us_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_ultrasonic_frontCenter]);
-		render_scene();
-		sensordata.ultrasonic_frontCenter_distance=us_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_ultrasonic_frontRight]);
-		render_scene();
-		sensordata.ultrasonic_frontRight_distance=us_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_ultrasonic_rearRight]);
-		render_scene();
-		sensordata.ultrasonic_rearRight_distance=us_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_ultrasonic_rearCenter]);
-		render_scene();
-		sensordata.ultrasonic_rearCenter_distance=us_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_ultrasonic_rearLeft]);
-		render_scene();
-		sensordata.ultrasonic_rearLeft_distance=us_sim(getConvergence(data_bad));
+		//Run sensor render passes
+		if( ( (rostopic_sensors_mode==FORCE || (rostopic_sensors_mode==ENABLE&&rostopic_sensors_subscribed)) )//Only if ROS enabled and subscribed
 
-		
-		//IR//////////////
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_infrared_frontLeftLeft]);
-		render_scene();
-		sensordata.infrared_frontLeftLeft_distance=ir_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_infrared_frontLeftCenter]);
-		render_scene();
-		sensordata.infrared_frontLeftCenter_distance=ir_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_infrared_frontRightCenter]);
-		render_scene();
-		sensordata.infrared_frontRightCenter_distance=ir_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_infrared_frontRightRight]);
-		render_scene();
-		sensordata.infrared_frontRightRight_distance=ir_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_infrared_right]);
-		render_scene();
-		sensordata.infrared_right_distance=ir_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_infrared_rear]);
-		render_scene();
-		sensordata.infrared_rear_distance=ir_sim(getConvergence(data_bad));
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensors[sensor_infrared_left]);
-		render_scene();
-		sensordata.infrared_left_distance=ir_sim(getConvergence(data_bad));
+			&& fps)		//Don't start transmitting ROS data until framerate is stabilized
+		{
+			
+			Actor actor=actors[ACTOR_ROBOT];
+			Sensor *sensors=actor.sensors;
+			
+			//Disable features that aren't needed (should speed up rendering)
+			glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
+			glDisable(GL_LIGHTING);
+			glDisable(GL_TEXTURE_2D);
+			glDisable(GL_NORMALIZE);
+			
+			//Use consistent size
+			fix_viewport();
+			
+			bool data_bad=0;
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_ultrasonic_frontLeft]);
+			render_scene();
+			sensordata.ultrasonic_frontLeft_distance=us_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_ultrasonic_frontCenter]);
+			render_scene();
+			sensordata.ultrasonic_frontCenter_distance=us_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_ultrasonic_frontRight]);
+			render_scene();
+			sensordata.ultrasonic_frontRight_distance=us_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_ultrasonic_rearRight]);
+			render_scene();
+			sensordata.ultrasonic_rearRight_distance=us_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_ultrasonic_rearCenter]);
+			render_scene();
+			sensordata.ultrasonic_rearCenter_distance=us_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_ultrasonic_rearLeft]);
+			render_scene();
+			sensordata.ultrasonic_rearLeft_distance=us_sim(getConvergence(data_bad));
 
-		sensordata.human_left_motion=HUMAN_NULL;
-		sensordata.human_left_presence=HUMAN_NULL;
-		sensordata.human_right_motion=HUMAN_NULL;
-		sensordata.human_right_presence=HUMAN_NULL;
+			
+			//IR//////////////
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_infrared_frontLeftLeft]);
+			render_scene();
+			sensordata.infrared_frontLeftLeft_distance=ir_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_infrared_frontLeftCenter]);
+			render_scene();
+			sensordata.infrared_frontLeftCenter_distance=ir_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_infrared_frontRightCenter]);
+			render_scene();
+			sensordata.infrared_frontRightCenter_distance=ir_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_infrared_frontRightRight]);
+			render_scene();
+			sensordata.infrared_frontRightRight_distance=ir_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_infrared_right]);
+			render_scene();
+			sensordata.infrared_right_distance=ir_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_infrared_rear]);
+			render_scene();
+			sensordata.infrared_rear_distance=ir_sim(getConvergence(data_bad));
+			
+			glClear(GL_DEPTH_BUFFER_BIT);
+			perspective(actor,sensors[sensor_infrared_left]);
+			render_scene();
+			sensordata.infrared_left_distance=ir_sim(getConvergence(data_bad));
+
+			sensordata.human_left_motion=HUMAN_NULL;
+			sensordata.human_left_presence=HUMAN_NULL;
+			sensordata.human_right_motion=HUMAN_NULL;
+			sensordata.human_right_presence=HUMAN_NULL;
+			
+			
+			if(!data_bad)
+				ros_send_sensordata(sensordata);
+			
+			//restore mask
+			glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
+			glEnable(GL_LIGHTING);
+			glEnable(GL_TEXTURE_2D);
+			glEnable(GL_NORMALIZE);
+		}
 		
-		
-		if(!data_bad)
-			send_sensordata(sensordata);
-		
-		//restore viewport
-		winx=owinx;
-		winy=owiny;
-		aspect=oaspect;
-		glViewport(0,0,winx,winy);
-		
-		//restore mask
-		glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
-		glEnable(GL_LIGHTING);
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_NORMALIZE);
-	
+		//Process ROS callbacks
+		ros_do_callbacks();
 	}
 	
 	Actor actor=actors[actor_active];
 	Sensor sensor=actor.sensors[actor.sensor_active];
 	
+	//Do Kinect/video render passes
+	{
+		ros_get_subscribers();
+		
+		//Figure out what to do
+		bool need_render				=false,
+			 
+			 need_rgb					=false,
+			 need_depth_gl				=false,
+			 need_depth_view			=false,
+			 need_depth_raw				=false,
+			 need_depth_float			=false,
+			 need_pointcloud			=false,
+			 
+			 need_publish_rgb			=false,
+			 need_publish_depth_raw		=false,
+			 need_publish_depth_float	=false,
+			 need_publish_pointcloud	=false;
+		
+		need_publish_rgb		=rostopic_video_mode		==FORCE || (rostopic_video_mode		==ENABLE&&rostopic_rgb_subscribed);
+		need_publish_depth_raw	=rostopic_video_mode		==FORCE || (rostopic_video_mode		==ENABLE&&rostopic_depth_raw_subscribed);
+		need_publish_depth_float=rostopic_video_mode		==FORCE || (rostopic_video_mode		==ENABLE&&rostopic_depth_float_subscribed);
+		need_publish_pointcloud	=rostopic_pointcloud_mode	==FORCE || (rostopic_pointcloud_mode==ENABLE&&rostopic_pointcloud_subscribed);
+		
+		if(need_publish_pointcloud)
+		{
+			need_render		=true;
+			need_pointcloud	=true;
+			need_depth_gl	=true;
+			need_rgb		=true;
+		}
+		else if(sensor.type==SENSOR_TYPE_KINECT_RGB || need_publish_rgb)
+		{
+			need_render		=true;
+			need_rgb		=true;
+		}
+		
+		if(sensor.type==SENSOR_TYPE_KINECT_DEPTHMAP)
+		{
+			need_render		=true;
+			need_depth_gl	=true;
+			need_depth_view	=true;
+		}
+		
+		if(need_publish_depth_raw)
+		{
+			need_render		=true;
+			need_depth_gl	=true;
+			need_depth_raw	=true;
+		}
+		if(need_publish_depth_float)
+		{
+			need_render		=true;
+			need_depth_gl	=true;
+			need_depth_float=true;
+		}
+		
+		
+		//Do what needs done
+		if(need_render)
+		{
+			//Use consistent size
+			fix_viewport();
+			
+			//Do render pass
+			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+			Actor actor=actors[ACTOR_ROBOT];
+			Sensor *sensors=actor.sensors;
+			perspective_flipped(actor,sensors[sensor_kinect_rgb]);
+			render_scene();
+			
+			//Read raw images
+			if(need_depth_gl)
+			{
+				read_depthmap_gl();
+			}
+			if(need_rgb)
+			{
+				read_rgb();
+			}
+			
+			
+			//Figure out what depthmap modes need computed from the GL depthmap
+			float		*depth_view	=0;
+			uint16_t	*depth_raw	=0;
+			float		*depth_float=0;
+			
+			if(need_depth_view)	depth_view	=kinect_depthmap_view;
+			if(need_depth_raw)	depth_raw	=kinect_depthmap_raw;
+			if(need_depth_float)depth_float	=kinect_depthmap_float;
+			
+			
+			//Compute depthmap and pointcloud data
+			if(need_pointcloud)
+			{
+				//Depthmaps are computed in send_pointcloud() for efficiency. This also sends the pointcloud.
+				send_pointcloud(kinect_depthmap_gl,kinect_rgb,depth_view,depth_raw,depth_float);
+			}
+			else if(need_depth_view||need_depth_raw||need_depth_float)
+			{
+				//do conversion if it wasn't done above
+				convert_depthmap(kinect_depthmap_gl,depth_view,depth_raw,depth_float);
+			}
+			
+			//Publish rgb
+			if(need_publish_rgb)
+			{
+				ros_publish_rgb();
+			}
+			
+			//Publish the depthmaps
+			if(need_publish_depth_raw)
+			{
+				ros_publish_depth_raw();
+			}
+			if(need_publish_depth_float)
+			{
+				ros_publish_depth_float();
+			}
+		}
+	}
+	
+	//restore viewport
+	restore_viewport();
+	
+	//Do the actual display of scene
 	if(sensor.type==SENSOR_TYPE_KINECT_DEPTHMAP)
 	{
-		glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
-		glDisable(GL_LIGHTING);
-		glDisable(GL_TEXTURE_2D);
-		glDisable(GL_NORMALIZE);
-		
-		//Use consistent size
-		int owinx=winx,owiny=winy;
-		float oaspect=aspect;
-		
-		glViewport(0,0,SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT);
-		aspect=((GLfloat)SENSOR_WINDOW_WIDTH)/((GLfloat)SENSOR_WINDOW_HEIGHT);
-		winx=SENSOR_WINDOW_WIDTH;
-		winy=SENSOR_WINDOW_HEIGHT;
-		
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensor);
-		render_scene();
-		read_depthmap();
-		
-		//restore viewport
-		winx=owinx;
-		winy=owiny;
-		aspect=oaspect;
-		glViewport(0,0,winx,winy);
-		
-		//restore mask
-		glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
-		glEnable(GL_LIGHTING);
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_NORMALIZE);
-		
 		draw_depthmap();
 	}
 	else if(sensor.type==SENSOR_TYPE_KINECT_RGB)
 	{
-		//Use consistent size
-		int owinx=winx,owiny=winy;
-		float oaspect=aspect;
-		
-		glViewport(0,0,SENSOR_WINDOW_WIDTH,SENSOR_WINDOW_HEIGHT);
-		aspect=((GLfloat)SENSOR_WINDOW_WIDTH)/((GLfloat)SENSOR_WINDOW_HEIGHT);
-		winx=SENSOR_WINDOW_WIDTH;
-		winy=SENSOR_WINDOW_HEIGHT;
-		
-		
-		glClear(GL_DEPTH_BUFFER_BIT);
-		perspective(actor,sensor);
-		render_scene();
-		read_rgb();
-		
-		//restore viewport
-		winx=owinx;
-		winy=owiny;
-		aspect=oaspect;
-		glViewport(0,0,winx,winy);
-		
 		draw_rgb();
 	}
 	else
 	{
-
-		
+		//Render the regular scene
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		perspective(actor,sensor);
 		render_scene();
 	}
 	
-	//FIXME: Doesn't draw consistently sized pixels
+	//FIXME: Doesn't draw consistently sized pixels(might be fixed now?)
 	if(sensor.type==SENSOR_TYPE_INFRARED||sensor.type==SENSOR_TYPE_ULTRASONIC)
 		drawConvergence();
 	//else if(sensor.type==SENSOR_TYPE_KINECT)
@@ -515,7 +686,9 @@ void display()
 	glDisable(GL_LIGHTING);
 #endif
 	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_TEXTURE_2D);
 	render_hud(ttime);
+	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
 #ifndef	NO_LIGHTING
 	glEnable(GL_LIGHTING);
@@ -538,7 +711,6 @@ if ((errCode = glGetError()) != GL_NO_ERROR) {
 	
 	// Swap buffers
 	glutSwapBuffers();
-	//glutPostRedisplay();
 }
 
 void timer(int id)
@@ -615,6 +787,41 @@ void perspective(Actor actor,Sensor sensor)
 			0,0,0,	//camera location
 			0,1,0,	//target location
 			0,0,1);	//up vector
+	//glLoadIdentity();
+	
+	//Apply camera tilt (last)
+	if(sensor.type==SENSOR_TYPE_CAMERA)//only for camera
+		glRotatef(actor.xtheta,1,0,0);
+	
+	//Apply sensor transforms (2nd)
+	glRotatef(sensor.xtheta,1,0,0);
+	glRotatef(sensor.ztheta,0,0,1);
+	glTranslatef(-sensor.x/100.0,-sensor.y/100.0,-sensor.z/100.0);//note: conversion cm->m
+	
+	//Apply actor origin transforms (1st)
+	//glRotatef(actor.xtheta,1,0,0);//done above, in weird order
+	glRotatef(actor.ztheta,0,0,1);
+	glTranslatef(-actor.x,-actor.y,-actor.z);
+	
+}
+
+void perspective_flipped(Actor actor,Sensor sensor)
+{
+	// Select projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	
+	//glFrustum(-1,1,-1,1,1,8);
+	//gluPerspective(90,1,1,4);
+	gluPerspective(45,aspect,.1,100);//fov,aspect,nearclip,far
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	
+	gluLookAt(
+			0,0,0,	//camera location
+			0,1,0,	//target location
+			0,0,1);	//up vector
+	glScalef(1,1,-1);
 	//glLoadIdentity();
 	
 	//Apply camera tilt (last)

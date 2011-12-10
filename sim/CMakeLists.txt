@@ -38,4 +38,7 @@ rosbuild_add_executable(simtest src/simtest.cpp)
 #rosbuild_add_executable(simtesthuman src/simtesthuman.cpp)
 
 rosbuild_add_executable(sim src/sim.cpp)
-target_link_libraries(sim GLEW glut SOIL GLU)
+target_link_libraries(sim glut SOIL GLU)
+
+rosbuild_add_executable(viewer src/viewer.cpp)
+target_link_libraries(viewer GLEW glut SOIL GLU)

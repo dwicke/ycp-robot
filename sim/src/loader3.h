@@ -261,16 +261,19 @@ void parse_texture_coords(FILE * f,int &count,uvcoords * &v)
 
 int load_texture(char * texture)
 {
-	printf("\t\tLoading texture %s...",texture);
+	//printf("\t\tLoading texture %s...",texture);
 	
 	for(int i=0;i<texture_cache_n;i++)
 	{
 		if(strcmp(texture_cache_v[i].texture,texture)==0)
 		{
-			printf("CACHED id=%d\n",texture_cache_v[i].tex_id);
+			//printf("CACHED id=%d\n",texture_cache_v[i].tex_id);
 			return texture_cache_v[i].tex_id;
 		}
 	}
+	
+	printf("\t\tLoading texture %s...",texture);
+	
 	int tex_id = SOIL_load_OGL_texture(texture, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
 	
 	if (tex_id==0)lerr("Texture load failed");

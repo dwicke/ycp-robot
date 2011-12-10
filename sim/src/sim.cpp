@@ -15,6 +15,8 @@ const char* HELP_STRING=
 "B: Toggle bounds\n"
 "N: Toggle noise\n"
 "M: Toggle motors\n"
+"J,K,L: Toggle Sensor, Video, and Pointcloud topics\n"
+"            between Enabled, Disabled, and Forced states.\n"
 "`: Toggle fullscreen (FPS mode)\n"
 "\n"
 "--Mouse--\n"
@@ -23,6 +25,29 @@ const char* HELP_STRING=
 "Middle click: Select sensor next\n"
 "Right click: Select mesh next\n";
 
+//TODO:
+/*
+* Need to calibrate depth scale and PC constants in pointcloud.h. Should probably use to calibrate ROS sensors too?
+* More to-scale room environment
+* Compute and publish depthmap_float data
+*/
+
+//Comment out to use other names (e.g., so it doesn't conflict if kinect attached)
+#define USE_KINECT_TOPIC_NAMES
+
+#ifdef USE_KINECT_TOPIC_NAMES
+	#define ROSTOPIC_RGB_NAME			"/camera/rgb/image_color"
+	#define ROSTOPIC_DEPTH_RAW_NAME		"/camera/depth/image_raw"
+	#define ROSTOPIC_DEPTH_FLOAT_NAME	"/camera/depth/image"
+	#define ROSTOPIC_POINTCLOUD_NAME	"/camera/rgb/points"
+	#define TF_POINTCLOUD_FRAME_ID		"/openni_rgb_optical_frame"
+#else
+	#define ROSTOPIC_RGB_NAME			"/sim/rgb"
+	#define ROSTOPIC_DEPTH_RAW_NAME		"/sim/depth_raw"
+	#define ROSTOPIC_DEPTH_FLOAT_NAME	"/sim/depth_float"
+	#define ROSTOPIC_POINTCLOUD_NAME	"/sim/points"
+	#define TF_POINTCLOUD_FRAME_ID		"/sim_rgb_optical_frame"
+#endif
 
 //Resolution to render sensors at. Also sets minimum window size and resolution for virtual Kinect.
 #define SENSOR_WINDOW_WIDTH		640
@@ -34,7 +59,8 @@ const char* HELP_STRING=
 
 //Target FPS. MUST be a multiple of ROS_HZ greater than ROS_HZ*2.
 //Comment out to run at max speed.
-#define	FPS		60
+//This also sets the output rate for Kinect/video output
+#define	FPS		30
 
 //Number of times per second to process ROS messages
 #define ROS_HZ	10
@@ -43,7 +69,7 @@ const char* HELP_STRING=
 #define OSD_COLOR	0,1,1
 
 //Max length of most strings- lines/words/filenames
-#define MAX_LEN	512
+#define MAX_LEN	1024
 //Max textures to allocate. Increase if texture error occurs.
 #define MAX_TEXTURES	20
 
@@ -54,7 +80,6 @@ const char* HELP_STRING=
 //Disable lighting (will crash Intel GMA950 gfx if not set)
 //This does NOT work in this revision
 //#define NO_LIGHTING	1
-
 
 
 
@@ -71,13 +96,20 @@ const char* HELP_STRING=
 
 //ROS *MUST* be included first for some reason
 #include "ros/ros.h"
-#include "robot_msgs/SensorData.h"
-#include "robot_msgs/MotorData.h"
+
+//needed for pointcloud.h
+#include "sensor_msgs/Image.h"
+#include "sensor_msgs/PointCloud2.h"
+#include "sensor_msgs/image_encodings.h"
+
+#include <pcl_ros/point_cloud.h>
+#include <pcl/point_types.h>
+
 
 #ifdef OSX
 	#include <GLUT/glut.h>
 #else
-	#include <GL/glew.h>
+//	#include <GL/glew.h>
 	#include <GL/glut.h>
 #endif
 
@@ -107,13 +139,19 @@ const char* HELP_STRING=
 #include "loader3.h"
 
 
+float kinect_depthmap_gl[SENSOR_WINDOW_WIDTH*SENSOR_WINDOW_HEIGHT];
+float kinect_depthmap_view[SENSOR_WINDOW_WIDTH*SENSOR_WINDOW_HEIGHT];
+float kinect_depthmap_float[SENSOR_WINDOW_WIDTH*SENSOR_WINDOW_HEIGHT];
+uint16_t kinect_depthmap_raw[SENSOR_WINDOW_WIDTH*SENSOR_WINDOW_HEIGHT];
+
+unsigned char kinect_rgb[SENSOR_WINDOW_WIDTH*SENSOR_WINDOW_HEIGHT*3];
+
 //ROS stuff
 #include "sensors.h"
 #include "roscomm.h"
 
 #include "move.h"
 #include "display.h"
-
 
 
 
@@ -139,31 +177,35 @@ void load_res()
 	
 	if(chdir("res"))
 		lerr("Resource directory missing!\n");
-
-	mesh * m=load_meshfile("room.x");
-	//mesh * m=load_meshfile("robot.x");
 	
-	load_mesh(m,"robot",robot);
+	//Load mesh files
+	mesh *actors=load_meshfile("actors.x");
+	mesh *environment=load_meshfile("environment.x");
+	//mesh *environment=load_meshfile("kinecttest.x");
+	
+	//main actors
+	load_mesh(actors,"camera",camera);
+	
+	//assemble robot (multipart mesh)
+	load_mesh(actors,"robot",robot);
 	robot.child=&US_block;
 	robot.sibling=&wheels;
-	load_mesh(m,"wheels",wheels);
+	load_mesh(actors,"wheels",wheels);
 	
-	load_mesh(m,"US_block",US_block);
+	load_mesh(actors,"US_block",US_block);
 	US_block.sibling=&IR_block;
-	load_mesh(m,"IR_block",IR_block);
+	load_mesh(actors,"IR_block",IR_block);
 	
-	
-	load_mesh(m,"null",nullmesh);
+	//obstacles
+	load_mesh(actors,"null",nullmesh);
 	nullmesh.list=0;
-	load_mesh(m,"box",box);
-	load_mesh(m,"fence",fence);
-	load_mesh(m,"table",table);
-	load_mesh(m,"suzanne",suzanne);
+	load_mesh(actors,"box",box);
+	load_mesh(actors,"fence",fence);
+	load_mesh(actors,"table",table);
+	load_mesh(actors,"suzanne",suzanne);
 	
-	load_mesh(m,"camera",camera);
 	
-	load_mesh(m,"",root);
-	return;
+	load_mesh(environment,"",root);
 }
 
 int main(int argc, char *argv[])
@@ -185,7 +227,7 @@ int main(int argc, char *argv[])
 
 #ifndef OSX
 	// Initialize GLEW - MUST BE DONE AFTER CREATING GLUT WINDOW
-	glewInit();
+	//glewInit();
 #endif
 
 	//set event handlers
@@ -220,13 +262,9 @@ int main(int argc, char *argv[])
 	glEnable(GL_LIGHTING);
 	
 	glRotatef(50,1,0,0);
-	//set_light(GL_LIGHT1,&white_light);
-	//set_spot(GL_LIGHT1,light1_pos,light1_dir,light_cutoff,light_exp);
-	//glEnable(GL_LIGHT1);
 	
 	glEnable(GL_NORMALIZE);
-
-
+	
 	GLfloat v[4];
 	v[0]=.8;
 	v[1]=.8;

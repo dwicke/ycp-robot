@@ -183,7 +183,10 @@ int
 	sensor_infrared_frontRightRight,
 	sensor_infrared_right,
 	sensor_infrared_rear,
-	sensor_infrared_left;
+	sensor_infrared_left,
+	
+	sensor_kinect_depthmap,
+	sensor_kinect_rgb;
 
 Sensor* load_X80SVP_sensors()
 {
@@ -209,7 +212,7 @@ Sensor* load_X80SVP_sensors()
 	sensors[i].xtheta=	+30;
 	sensors[i].ztheta=	  0;
 	
-	i++;
+	sensor_kinect_depthmap=++i;
 	sensors[i].type=	SENSOR_TYPE_KINECT_DEPTHMAP;
 	sensors[i].name=	"Kinect Depthmap";
 	sensors[i].x=		  0;
@@ -218,7 +221,7 @@ Sensor* load_X80SVP_sensors()
 	sensors[i].xtheta=	  0;
 	sensors[i].ztheta=	  0;
 	
-	i++;
+	sensor_kinect_rgb=++i;
 	sensors[i].type=	SENSOR_TYPE_KINECT_RGB;
 	sensors[i].name=	"Kinect RGB";
 	sensors[i].x=		  0;
