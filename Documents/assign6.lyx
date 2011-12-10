@@ -1,21 +1,29 @@
-#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
-\lyxformat 345
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
 \begin_document
 \begin_header
 \textclass article
 \use_default_options false
+\maintain_unincluded_children false
 \language english
+\language_package default
 \inputencoding latin9
+\fontencoding global
 \font_roman default
 \font_sans default
 \font_typewriter default
 \font_default_family default
+\use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
 
 \graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
 \float_placement H
 \paperfontsize default
 \spacing single
@@ -24,21 +32,31 @@
 \use_geometry false
 \use_amsmath 1
 \use_esint 1
+\use_mhchem 1
+\use_mathdots 1
 \cite_engine basic
 \use_bibtopic false
+\use_indices false
 \paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
-\defskip medskip
+\paragraph_indentation default
 \quotes_language english
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
 \tracking_changes false
 \output_changes false
-\author "" 
-\author "" 
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
 \end_header
 
 \begin_body
@@ -60,6 +78,16 @@ Using the Robot Operating System (ROS), algorithms were developed for obstacle
  avoidance, and 3D navigation.
  Additionally, a simulator was created in OpenGL that was used as a testbed
  for these algorithms.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Be sure to spellcheck this, it had loads of typos in it..
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Part*
@@ -288,9 +316,19 @@ A Kinect was used to generate maps of the robot's surroundings and to allow
  enable the Kinect to be used in this manner.
  One of the main concerns with using the Kinect was the processing power
  that it would require.
- The Kinect produces a message that is roughly 10 MB at a rate of 30 frames
- per second, this equates to the Kinect sending about 300 MB of data each
- second.
+ The Kinect produces a message that is roughly 1 MB at a rate of 30 frames
+ per second, this equates to the Kinect sending about 30 MB of data each
+ second
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Check this!
+\end_layout
+
+\end_inset
+
+.
  At first, it was expected that the DSP on the Beagleboard would have been
  able to handle the Kinect’s processing; however, due to the overhead of
  ROS, the processing will most likely have to be offloaded to a netbook.
@@ -327,7 +365,7 @@ Make this clear the distinction between topics and services
 \end_layout
 
 \begin_layout Standard
-ROS also provides a hierarchial packaging based structure to group common
+ROS also provides a hierarchical packaging based structure to group common
  elements.
  Nodes that perform common functions are grouped into a package.
  Packages that share a common purpose are grouped into stacks.
@@ -497,7 +535,7 @@ name "fig:Braitenberg-agression-behavior"
 
 \end_inset
 
-Braitenberg agression behavior.
+Braitenberg aggression behavior.
  Image from 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -564,8 +602,10 @@ Continue to explain
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula \begin{equation}
-\alpha_{S}(t_{k})=\sum_{i\in L\cup R}w_{i}^{\alpha_{S}}\hat{r}_{i}^{S}(t_{k})\label{eq:translationalSpeed}\end{equation}
+\begin_inset Formula 
+\begin{equation}
+\alpha_{S}(t_{k})=\sum_{i\in L\cup R}w_{i}^{\alpha_{S}}\hat{r}_{i}^{S}(t_{k})\label{eq:translationalSpeed}
+\end{equation}
 
 \end_inset
 
@@ -573,8 +613,10 @@ Continue to explain
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula \begin{equation}
-\beta_{S}(t_{k})=\sum_{i\in R}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})-\sum_{i\in L}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})\label{eq:rotationalSpeed}\end{equation}
+\begin_inset Formula 
+\begin{equation}
+\beta_{S}(t_{k})=\sum_{i\in R}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})-\sum_{i\in L}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})\label{eq:rotationalSpeed}
+\end{equation}
 
 \end_inset
 
@@ -590,7 +632,7 @@ Continue to explain
 \end_inset
 
  are the normalized translational and rotational speeds in the range [0,1]
- and [-1,1] respectivley.
+ and [-1,1] respectively.
  
 \begin_inset Formula $w_{i}^{\alpha_{S}}$
 \end_inset
@@ -641,8 +683,10 @@ reference "eq:rotationalWeight"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula \begin{equation}
-\mathit{w}_{i}^{\alpha_{S}}=k_{i}^{\alpha}e^{-\frac{\mathfrak{D}(\theta'_{i})^{2}}{2\sigma_{\alpha}^{2}}}\label{eq:translationalWeight}\end{equation}
+\begin_inset Formula 
+\begin{equation}
+\mathit{w}_{i}^{\alpha_{S}}=k_{i}^{\alpha}e^{-\frac{\mathfrak{D}(\theta'_{i})^{2}}{2\sigma_{\alpha}^{2}}}\label{eq:translationalWeight}
+\end{equation}
 
 \end_inset
 
@@ -650,8 +694,10 @@ reference "eq:rotationalWeight"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula \begin{equation}
-\mathit{w}_{i}^{\beta_{S}}=k_{i}^{\beta}e^{-\frac{\mathfrak{D}(\theta'_{i})^{2}}{2\sigma_{\beta}^{2}}}\label{eq:rotationalWeight}\end{equation}
+\begin_inset Formula 
+\begin{equation}
+\mathit{w}_{i}^{\beta_{S}}=k_{i}^{\beta}e^{-\frac{\mathfrak{D}(\theta'_{i})^{2}}{2\sigma_{\beta}^{2}}}\label{eq:rotationalWeight}
+\end{equation}
 
 \end_inset
 
@@ -691,22 +737,37 @@ Insert graph showing the weight functions.
 \end_layout
 
 \begin_layout Section*
-Simulator Libraries
+Simulator
+\end_layout
+
+\begin_layout Standard
+A simulator was developed to fulfill the use case of being able to test
+ the navigation algorithms in a clean virtual environment before deploying
+ them to the actual robot.
+ The simulator uses OpenGL to model the robot and environment.
+ OpenGL generates a depth-map as part of its rendering process and this
+ is used to compute distances from the robot in any direction to other objects
+ in the environment.
+ This makes it possible to simulate virtual versions of the real sensors
+ by rendering the viewport from the perspective of the sensors and reading
+ the depth-map to determine the simulated sensor value.
 \end_layout
 
 \begin_layout Standard
 The simulator uses a number of libraries to make the OpenGL API more manageable.
- FreeGLUT is used to provide the basic windowing functions for the GL applicatio
-n.
- GLU provides utility functions for computing projection matrices, used
- to create the perspective camera views.
- SOIL is used to provide texture-loading capabilities.
- The simulator also interfaces directly with the Xorg APIs for some functions
- in handling mouse and full-screen controls.
- A custom loader was written to load DirectX format mesh files exported
+ The Free OpenGL Utility Toolkit (freeglut) is used to provide the basic
+ windowing functions for the GL application.
+ The OpenGL Utility Library (GLU) provides utility functions for computing
+ projection matrices, used to create the perspective camera views.
+ The Simple OpenGL Image Library (SOIL) is used to provide texture-loading
+ capabilities.
+ The simulator also interfaces directly with the X.Org Server APIs for some
+ functions in handling mouse and full-screen controls.
+ A custom loader was written to load DirectX format mesh files as exported
  by Blender.
  This allows environments as well as movable obstacles of completely arbitrary
- design and complexity to be modelled quickly.
+ design and complexity to be modeled quickly, thus it can be adapted for
+ different testing scenarios
 \end_layout
 
 \begin_layout Part*
@@ -733,7 +794,7 @@ key "r:robustlayeredcontrolsystemmobilerobot"
 
 .
  Subsumption control architecture is a layered approach to providing control.
- Each layer adds increased functionallity without needing to change lower
+ Each layer adds increased functionality without needing to change lower
  levels of control.
 \end_layout
 
@@ -867,7 +928,7 @@ The implementation of the design was completed in both C++ and Java.
  C++ was used for the simulator, sign language recognition, and the serial
  communication between the robot and Beagleboard.
  Java was used to implement the rest of the design which includes a converter
- to standard ROS message datatypes, an ultrasonic sensor filter, obstacle
+ to standard ROS message data-types, an ultrasonic sensor filter, obstacle
  avoidance algorithm, and motor control arbiter.
 \end_layout
 
@@ -938,7 +999,18 @@ The sensor and motor data from the packet structure were not ideal for our
  board returned the distance in the range of 0 - 255 cm, which is already
  in the correct units for the message.
  The infrared sensors needed to be converted since they return a non-linear
- voltage value corresponding to a range of 10 - 80 cm.
+ voltage value corresponding to a range of 10 - 80 cm
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Specs I read when implementing ranges in simulator said 4 - 255 for US and
+ 7.5 - 80 cm for IR -- is this correct?
+\end_layout
+
+\end_inset
+
+.
  The voltage output with respect to distance is shown in Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -982,6 +1054,7 @@ hor_pos "c"
 has_inner_box 1
 inner_pos "t"
 use_parbox 0
+use_makebox 0
 width "45col%"
 special "none"
 height "1in"
@@ -1045,6 +1118,7 @@ hor_pos "c"
 has_inner_box 1
 inner_pos "t"
 use_parbox 0
+use_makebox 0
 width "45col%"
 special "none"
 height "1in"
@@ -1150,8 +1224,10 @@ reference "eq:RightVelocity"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula \begin{equation}
-V_{L}=\frac{2\alpha_{S}(t_{k})+d\beta_{S}(t_{k})}{2}\label{eq:LeftVelocity}\end{equation}
+\begin_inset Formula 
+\begin{equation}
+V_{L}=\frac{2\alpha_{S}(t_{k})+d\beta_{S}(t_{k})}{2}\label{eq:LeftVelocity}
+\end{equation}
 
 \end_inset
 
@@ -1159,8 +1235,10 @@ V_{L}=\frac{2\alpha_{S}(t_{k})+d\beta_{S}(t_{k})}{2}\label{eq:LeftVelocity}\end{
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula \begin{equation}
-V_{R}=V_{L}-d\beta_{S}(t_{k})\label{eq:RightVelocity}\end{equation}
+\begin_inset Formula 
+\begin{equation}
+V_{R}=V_{L}-d\beta_{S}(t_{k})\label{eq:RightVelocity}
+\end{equation}
 
 \end_inset
 
@@ -1269,10 +1347,13 @@ reference "eq:USFilter"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula \begin{equation}
+\begin_inset Formula 
+\begin{equation}
 \tilde{r_{i}}(t_{k})=\begin{cases}
 r_{i}^{s}(t_{k}) & \textrm{if }r_{i}^{s}(t_{k})<r_{nr}^{s}\\
-Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s}\} & \textrm{if }r_{i}^{s}(t_{k})=r_{nr}^{s}\end{cases}\label{eq:USFilter}\end{equation}
+Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s}\} & \textrm{if }r_{i}^{s}(t_{k})=r_{nr}^{s}
+\end{cases}\label{eq:USFilter}
+\end{equation}
 
 \end_inset
 
@@ -1319,7 +1400,7 @@ is the max range of the sensor,
 \bar default
 \noun default
 \color inherit
-descibed in 
+described in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ran2005obsavothrbraaggbehmotfus"
@@ -1412,6 +1493,7 @@ hor_pos "c"
 has_inner_box 1
 inner_pos "t"
 use_parbox 0
+use_makebox 0
 width "45col%"
 special "none"
 height "1in"
@@ -1461,6 +1543,7 @@ hor_pos "c"
 has_inner_box 1
 inner_pos "t"
 use_parbox 0
+use_makebox 0
 width "45col%"
 special "none"
 height "1in"
@@ -1564,17 +1647,24 @@ Simulator in third person view
 \end_layout
 
 \begin_layout Standard
-There were some problems to overcome in terms of speed and optimization.
+There were also additional problems to address with respect to speed and
+ optimizing conversions of depthmap and point cloud data.
  One of these problems was in computing a linear representation of the depth
- map because GL uses a logarithmic representation when rendering, but the
- one provided by the Kinect is linear.
- The initial implementation of this conversion required doing up to two
- million floating-point logarithm operations per frame.
- This was improved significantly by making the simulator initially render
- at the Kinect hardware's resolution, then scaling it to fit the actual
- size of the visualization window.
- Performing the conversion in this manner provided a nearly seven-fold reduction
- in the number of required operations when running in fullscreen mode.
+ map because GL uses a logarithmic representation when rendering, while
+ the Kinect provides a linear one.
+ The initial implementation was very inefficient in that it did the per-pixel
+ transformations once for each needed source, including the visual display,
+ and ROS topics for depth maps in two formats and the point cloud.
+ This was improved significantly by making the simulator render the scene
+ once, at the Kinect hardware's resolution.
+ The conversion was done to this and scaled to fit the size of the visualization
+ window rather than doing the render and conversion another time.
+ There was also a large performance penalty to doing the conversions for
+ each output in separate loops.
+ This required a major refactor of the code to merge all of the conversion
+ loops.
+ The final version was further optimized by tracking what ROS topics are
+ in use and only computing the data necessary to publish them.
 \end_layout
 
 \begin_layout Standard
@@ -1617,12 +1707,18 @@ Simulated Kinect depth map
 
 \begin_layout Standard
 There were also some modifications in what is rendered during each pass.
- The simulator visualization targets a frame rate of 60 fps, but was unable
- to attain that rate on the workstation.
- Since the Sensing/Motion Controller on the actual robot only functions
- at 10 Hz, it is only necessary to broadcast data to ROS at that rate; thus,
- the sensor rendering passes could be skipped on 5/6ths of the frames, saving
- processing resources and boosting frame rate.
+ The simulator visualization targets a frame rate of 30 fps, which is necessary
+ for the visual output and Kinect video data simulation, but was unable
+ to attain that rate on the workstation with all rendering passes active.
+ Since the Sensing/Motion Controller on the robot only functions at 10 Hz,
+ it is only necessary to broadcast sensor data to ROS at that rate; thus,
+ the rendering passes needed for computing sensor data could be skipped
+ on 2/3rds of the frames, saving processing resources and boosting frame
+ rate.
+ A useful optimization here would be the ability to do the rendering passes
+ asynchronously, which would allow for less jitter in the frame rate caused
+ by the combined passes doing inequal amounts of work, however this would
+ require a machine with dual graphics cards.
 \end_layout
 
 \begin_layout Part*
