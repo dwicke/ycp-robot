@@ -32,7 +32,9 @@ int count = 0;
 int countmax = 0;
 long motor_time = 0;
 int motor_count = 0;
-int motor_threshold = 0;
+int motor_threshold = 5;
+float motor_left_velocity_prev = 0;
+float motor_right_velocity_prev = 0;
 using namespace DrRobot_MotionSensorDriver;
 
 
@@ -40,14 +42,17 @@ using namespace DrRobot_MotionSensorDriver;
 //if there is new information, it needs to be converted and sent to the robot
 //motors are controlled by taking in a velocity value which is then set for the specific motor channel
 void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
-	//send every 10th motor value	
-	if((motor_count % 10) == 0){ 
+	//send every 10th motor value and check to see if new value is outside of threshold value range	
+	if((motor_count % 10) == 0 && (msg->motor_left_velocity < motor_left_velocity_prev - motor_threshold || msg->motor_left_velocity > motor_left_velocity_prev + motor_threshold ||
+		msg->motor_right_velocity < motor_right_velocity_prev - motor_threshold || msg->motor_right_velocity > motor_right_velocity_prev + motor_threshold)){ 
 		ROS_INFO("Motor data received: \n");
 		ROS_INFO("motor1: %lf", msg->motor_left_velocity);
 		ROS_INFO("motor2: %lf", msg->motor_left_velocity);
 		//send left/right values to the robot
 		int motorPASS = driver->sendMotorCtrlAllCmd(Velocity, Motor_Convert(msg->motor_left_velocity), Motor_Convert(-1*msg->motor_right_velocity), 0,0,0,0,100);
-	       	if(motorPASS < 0) ROS_INFO("Motor data was not sent to the Robot!");	
+	       	if(motorPASS < 0) ROS_INFO("Motor data was not sent to the Robot!");
+		motor_left_velocity_prev = msg->motor_left_velocity;
+		motor_right_velocity_prev = msg->motor_right_velocity;
 	}
 	count++;
 }
