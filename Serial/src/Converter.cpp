@@ -31,6 +31,8 @@ long microtime(void);
 int count = 0;
 int countmax = 0;
 long motor_time = 0;
+int motor_count = 0;
+int motor_threshold = 0;
 using namespace DrRobot_MotionSensorDriver;
 
 
@@ -38,12 +40,16 @@ using namespace DrRobot_MotionSensorDriver;
 //if there is new information, it needs to be converted and sent to the robot
 //motors are controlled by taking in a velocity value which is then set for the specific motor channel
 void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
-        ROS_INFO("Motor data received: \n");
-        ROS_INFO("motor1: %lf", msg->motor_left_velocity);
-        ROS_INFO("motor2: %lf", msg->motor_left_velocity);
-	//send left/right values to the robot
-	int motorPASS = driver->sendMotorCtrlAllCmd(Velocity, Motor_Convert(msg->motor_left_velocity), Motor_Convert(-1*msg->motor_right_velocity), 0,0,0,0,100);
-       	if(motorPASS < 0) ROS_INFO("Motor data was not sent to the Robot!");
+	//send every 10th motor value	
+	if((motor_count % 10) == 0){ 
+		ROS_INFO("Motor data received: \n");
+		ROS_INFO("motor1: %lf", msg->motor_left_velocity);
+		ROS_INFO("motor2: %lf", msg->motor_left_velocity);
+		//send left/right values to the robot
+		int motorPASS = driver->sendMotorCtrlAllCmd(Velocity, Motor_Convert(msg->motor_left_velocity), Motor_Convert(-1*msg->motor_right_velocity), 0,0,0,0,100);
+	       	if(motorPASS < 0) ROS_INFO("Motor data was not sent to the Robot!");	
+	}
+	count++;
 }
 
 //callback for the motor Data
@@ -56,7 +62,7 @@ void motorcmd(float left,float right)
         //Sending repeat commands seems so sometimes cause the robot to stop- avoid doing that
         if((left==lleft)&&(right==lright))
                 return;
-        lleft=left;
+        lleft=left;count++;
         lright=right;
         
         //Send motor commands as one message
