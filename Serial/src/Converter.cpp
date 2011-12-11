@@ -15,7 +15,7 @@
 #define RIGHT_MOTOR_OFFSET 18
 
 //prototypes
-int IR_Convert(int IRValue);
+float IR_Convert(int IRValue);
 double Motor_Convert(double motor_val);
 void print_ultrasonic();
 void print_infrared();
@@ -145,13 +145,13 @@ int main(int argc, char**argv){
 		
 		
 		//print infrareds, 1 is stored in the range sensor, other is in custom data
-		ROS_INFO("Infrared range sensor 1 = %d\n",  (rangeSensorData->irRangeSensor[0]));
-        	ROS_INFO("Infrared range sensor 2 = %d\n",  (customSensorData->customADData[2]));
-  	     	ROS_INFO("Infrared range sensor 3 = %d\n",  (customSensorData->customADData[3]));
-		ROS_INFO("Infrared range sensor 4 = %d\n",  (customSensorData->customADData[4]));
-        	ROS_INFO("Infrared range sensor 5 = %d\n",  (customSensorData->customADData[5]));
-  	     	ROS_INFO("Infrared range sensor 6 = %d\n",  (customSensorData->customADData[6]));
-		ROS_INFO("Infrared range sensor 7 = %d\n",  (customSensorData->customADData[7]));
+		ROS_INFO("Infrared range sensor 1 = %f\n",  IR_Convert(rangeSensorData->irRangeSensor[0]));
+        	ROS_INFO("Infrared range sensor 2 = %f\n",  IR_Convert(customSensorData->customADData[2]));
+  	     	ROS_INFO("Infrared range sensor 3 = %f\n",  IR_Convert(customSensorData->customADData[3]));
+		ROS_INFO("Infrared range sensor 4 = %f\n",  IR_Convert(customSensorData->customADData[4]));
+        	ROS_INFO("Infrared range sensor 5 = %f\n",  IR_Convert(customSensorData->customADData[5]));
+  	     	ROS_INFO("Infrared range sensor 6 = %f\n",  IR_Convert(customSensorData->customADData[6]));
+		ROS_INFO("Infrared range sensor 7 = %f\n",  IR_Convert(customSensorData->customADData[7]));
 
 
                 //now publish the sensor data
@@ -189,18 +189,18 @@ void print_ultrasonic(){
 
 /*Convert the IR Sensor to a value in cm.  Note that this is currently not too accurate,
 it is just an approximation for the voltage slope*/
-int IR_Convert(int IRValue){
+float IR_Convert(int IRValue){
         double temp = 0;
     	double IRAD2Distance = 0;
     	temp = 21.6 / ((double)IRValue * 3 / 4028 - 0.17);
 
 	// IR range 10-80cm
 	if ((temp > 80) || (temp < 0))
-		IRAD2Distance = 0.81;
+		IRAD2Distance = 80;
 	else if ((temp < 10) && (temp > 0))
-		IRAD2Distance = 0.09;
+		IRAD2Distance = 7.5;
 	else
-		IRAD2Distance = temp / 100;
+		IRAD2Distance = temp;
 	return IRAD2Distance;
 }
 /*Convert the Motor encoder values into cm/s values.

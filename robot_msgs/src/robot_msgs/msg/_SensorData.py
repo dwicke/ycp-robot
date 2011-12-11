@@ -26,6 +26,7 @@ uint16 human_left_motion
 uint16 human_left_presence
 uint16 human_right_motion
 uint16 human_right_presence
+
 """
   __slots__ = ['ultrasonic_frontLeft_distance','ultrasonic_frontCenter_distance','ultrasonic_frontRight_distance','ultrasonic_rearRight_distance','ultrasonic_rearCenter_distance','ultrasonic_rearLeft_distance','infrared_frontLeftLeft_distance','infrared_frontLeftCenter_distance','infrared_frontRightCenter_distance','infrared_frontRightRight_distance','infrared_right_distance','infrared_rear_distance','infrared_left_distance','human_left_motion','human_left_presence','human_right_motion','human_right_presence']
   _slot_types = ['uint8','uint8','uint8','uint8','uint8','uint8','float32','float32','float32','float32','float32','float32','float32','uint16','uint16','uint16','uint16']
