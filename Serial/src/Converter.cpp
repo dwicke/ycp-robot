@@ -35,12 +35,14 @@ int countmax = 0;
 long motor_time = 0;
 int motor_count = 0;
 
-float motor_left_velocity_buffer[10];
-float motor_right_velocity_buffer[10];
+//float motor_left_velocity_buffer[10];
+//float motor_right_velocity_buffer[10];
 float motor_left_velocity_prev = 0;
 float motor_right_velocity_prev = 0;
 
 using namespace DrRobot_MotionSensorDriver;
+
+
 
 
 //callback for the motor Data
@@ -53,28 +55,29 @@ void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
 		msg->motor_right_velocity < motor_right_velocity_prev - MOTOR_THRESHOLD || msg->motor_right_velocity > motor_right_velocity_prev + MOTOR_THRESHOLD)){ 
 		
 		//average the motor velocities for the new value
-		int leftsum = 0, rightsum = 0;
-		for(int i = 0; i < MOTOR_DIVIDER; i++){
-			leftsum += motor_left_velocity_buffer[i];
-			rightsum += motor_right_velocity_buffer[i];
-		}
+		//int leftsum = 0, rightsum = 0;
+		//for(int i = 0; i < MOTOR_DIVIDER; i++){
+		//	leftsum += motor_left_velocity_buffer[i];
+		//	rightsum += motor_right_velocity_buffer[i];
+		//}
 		
-		float left_velocity = leftsum/MOTOR_DIVIDER;
-		float right_velocity = rightsum/MOTOR_DIVIDER;		
+		//float left_velocity = leftsum/MOTOR_DIVIDER;
+		//float right_velocity = rightsum/MOTOR_DIVIDER;		
 
 		ROS_INFO("Motor data received: \n");
-		ROS_INFO("motor1: %lf", left_velocity);
-		ROS_INFO("motor2: %lf", right_velocity);
+		ROS_INFO("motor1: %lf", msg->motor_left_velocity);
+		ROS_INFO("motor2: %lf", msg->motor_right_velocity);
 		//send left/right values to the robot
-		int motorPASS = driver->sendMotorCtrlAllCmd(Velocity, Motor_Convert(left_velocity), Motor_Convert(-1*right_velocity), 0,0,0,0,100);
+		int motorPASS = driver->sendMotorCtrlAllCmd(Velocity, Motor_Convert(msg->motor_left_velocity), Motor_Convert(-1*msg->motor_right_velocity), 0,0,0,0,100);
 	       	if(motorPASS < 0) ROS_INFO("Motor data was not sent to the Robot!");
-		motor_left_velocity_prev = left_velocity;
-		motor_right_velocity_prev = right_velocity;
+		motor_left_velocity_prev = msg->motor_left_velocity;
+		motor_right_velocity_prev = msg->motor_right_velocity;
 	}
 	//Fill up the buffers for the next average	
-	motor_left_velocity_buffer[count%MOTOR_DIVIDER] = msg->motor_left_velocity;
-	motor_right_velocity_buffer[count%MOTOR_DIVIDER] = msg->motor_right_velocity;
+	//motor_left_velocity_buffer[count%MOTOR_DIVIDER] = msg->motor_left_velocity;
+	//motor_right_velocity_buffer[count%MOTOR_DIVIDER] = msg->motor_right_velocity;
 	
+	// Else, just wait and keep going in the current direction
 	count++;
 }
 
