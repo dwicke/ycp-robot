@@ -11,6 +11,8 @@
 #define PORT "/dev/ttyUSB0"
 #define BAUD 115200
 
+#define MOTOR_DIVIDER 5
+#define MOTOR_THRESHOLD 5
 //prototypes
 float IR_Convert(int IRValue);
 double Motor_Convert(double motor_val);
@@ -32,7 +34,7 @@ int count = 0;
 int countmax = 0;
 long motor_time = 0;
 int motor_count = 0;
-int motor_threshold = 10;
+
 float motor_left_velocity_buffer[10];
 float motor_right_velocity_buffer[10];
 float motor_left_velocity_prev = 0;
@@ -46,19 +48,19 @@ using namespace DrRobot_MotionSensorDriver;
 //motors are controlled by taking in a velocity value which is then set for the specific motor channel
 void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
 	
-	//send every 10th motor value and check to see if new value is outside of threshold value range	
-	if((motor_count % 10) == 0 && (msg->motor_left_velocity < motor_left_velocity_prev - motor_threshold || msg->motor_left_velocity > motor_left_velocity_prev + motor_threshold ||
-		msg->motor_right_velocity < motor_right_velocity_prev - motor_threshold || msg->motor_right_velocity > motor_right_velocity_prev + motor_threshold)){ 
+	//send every MOTOR_DIVIDERth motor value and check to see if new value is outside of threshold value range	
+	if((motor_count % MOTOR_DIVIDER) == 0 && (msg->motor_left_velocity < motor_left_velocity_prev - MOTOR_THRESHOLD || msg->motor_left_velocity > motor_left_velocity_prev + MOTOR_THRESHOLD ||
+		msg->motor_right_velocity < motor_right_velocity_prev - MOTOR_THRESHOLD || msg->motor_right_velocity > motor_right_velocity_prev + MOTOR_THRESHOLD)){ 
 		
 		//average the motor velocities for the new value
 		int leftsum = 0, rightsum = 0;
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < MOTOR_DIVIDER; i++){
 			leftsum += motor_left_velocity_buffer[i];
 			rightsum += motor_right_velocity_buffer[i];
 		}
 		
-		float left_velocity = leftsum/10;
-		float right_velocity = rightsum/10;		
+		float left_velocity = leftsum/MOTOR_DIVIDER;
+		float right_velocity = rightsum/MOTOR_DIVIDER;		
 
 		ROS_INFO("Motor data received: \n");
 		ROS_INFO("motor1: %lf", left_velocity);
@@ -70,8 +72,8 @@ void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
 		motor_right_velocity_prev = right_velocity;
 	}
 	//Fill up the buffers for the next average	
-	motor_left_velocity_buffer[count%10] = msg->motor_left_velocity;
-	motor_right_velocity_buffer[count%10] = msg->motor_right_velocity;
+	motor_left_velocity_buffer[count%MOTOR_DIVIDER] = msg->motor_left_velocity;
+	motor_right_velocity_buffer[count%MOTOR_DIVIDER] = msg->motor_right_velocity;
 	
 	count++;
 }
