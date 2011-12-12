@@ -32,9 +32,12 @@ int count = 0;
 int countmax = 0;
 long motor_time = 0;
 int motor_count = 0;
-int motor_threshold = 5;
+int motor_threshold = 10;
+float motor_left_velocity_buffer[10];
+float motor_right_velocity_buffer[10];
 float motor_left_velocity_prev = 0;
 float motor_right_velocity_prev = 0;
+
 using namespace DrRobot_MotionSensorDriver;
 
 
@@ -42,52 +45,36 @@ using namespace DrRobot_MotionSensorDriver;
 //if there is new information, it needs to be converted and sent to the robot
 //motors are controlled by taking in a velocity value which is then set for the specific motor channel
 void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
+	
 	//send every 10th motor value and check to see if new value is outside of threshold value range	
 	if((motor_count % 10) == 0 && (msg->motor_left_velocity < motor_left_velocity_prev - motor_threshold || msg->motor_left_velocity > motor_left_velocity_prev + motor_threshold ||
 		msg->motor_right_velocity < motor_right_velocity_prev - motor_threshold || msg->motor_right_velocity > motor_right_velocity_prev + motor_threshold)){ 
+		
+		//average the motor velocities for the new value
+		int leftsum = 0, rightsum = 0;
+		for(int i = 0; i < 10; i++){
+			leftsum += motor_left_velocity_buffer[i];
+			rightsum += motor_right_velocity_buffer[i];
+		}
+		
+		float left_velocity = leftsum/10;
+		float right_velocity = rightsum/10;		
+
 		ROS_INFO("Motor data received: \n");
-		ROS_INFO("motor1: %lf", msg->motor_left_velocity);
-		ROS_INFO("motor2: %lf", msg->motor_left_velocity);
+		ROS_INFO("motor1: %lf", left_velocity);
+		ROS_INFO("motor2: %lf", right_velocity);
 		//send left/right values to the robot
-		int motorPASS = driver->sendMotorCtrlAllCmd(Velocity, Motor_Convert(msg->motor_left_velocity), Motor_Convert(-1*msg->motor_right_velocity), 0,0,0,0,100);
+		int motorPASS = driver->sendMotorCtrlAllCmd(Velocity, Motor_Convert(left_velocity), Motor_Convert(-1*right_velocity), 0,0,0,0,100);
 	       	if(motorPASS < 0) ROS_INFO("Motor data was not sent to the Robot!");
-		motor_left_velocity_prev = msg->motor_left_velocity;
-		motor_right_velocity_prev = msg->motor_right_velocity;
+		motor_left_velocity_prev = left_velocity;
+		motor_right_velocity_prev = right_velocity;
 	}
+	//Fill up the buffers for the next average	
+	motor_left_velocity_buffer[count%10] = msg->motor_left_velocity;
+	motor_right_velocity_buffer[count%10] = msg->motor_right_velocity;
+	
 	count++;
 }
-
-//callback for the motor Data
-//if there is new information, it needs to be converted and sent to the robot
-//motors are controlled by taking in a velocity value which is then set for the specific motor channel
-
-/*float lleft=-100,lright=-100;
-void motorcmd(float left,float right)
-{
-        //Sending repeat commands seems so sometimes cause the robot to stop- avoid doing that
-        if((left==lleft)&&(right==lright))
-                return;
-        lleft=left;count++;
-        lright=right;
-        
-        //Send motor commands as one message
-        int ret=driver->sendMotorCtrlAllCmd(Velocity,Motor_Convert(left),Motor_Convert(-right),0,0,0,0,0);//last param is time, seems to be broken
-        if(ret<0)
-        {
-                ROS_INFO("motor value was not sent to the robot!");
-                //exit(1);
-        }
-}
-
-void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
-        //ROS_INFO("Motor data received: \n");
-        ROS_INFO("Motor data received: [%.0f,%.0f]:%d",msg->motor_left_velocity,msg->motor_right_velocity,msg->motor_left_time);
-        
-        motorcmd(msg->motor_left_velocity,msg->motor_right_velocity);
-        motor_time=microtime()+msg->motor_left_time;
-        
-        return;
-}*/
 
 void serialInit(){
         //initialize internal vars to default - constructor
@@ -160,8 +147,8 @@ int main(int argc, char**argv){
                 SensorMsg.human_right_presence = standardSensorData->humanSensorData[3];
                 
 		//print sensor data for debug        
-		print_ultrasonic();
-		print_infrared();
+		//print_ultrasonic();
+		//print_infrared();
 
                 //now publish the sensor data
                 sensordata_pub.publish(SensorMsg);
