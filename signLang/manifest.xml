@@ -1,0 +1,19 @@
+<package>
+  <description brief="Sign Language Implementation">
+
+     Sign language implementation that takes in a gesture and then sends the appropriate motor commands.
+
+  </description>
+  <author>Tori</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/signLang</url>
+  <depend package="roscpp"/>
+  <depend package="body_msgs"/>
+  <depend package="sensor_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="MotorControlMsg"/>
+
+</package>
+
+
