@@ -904,7 +904,7 @@ status open
 \begin_inset Graphics
 	filename images/linearWeight.png
 	lyxscale 60
-	scale 60
+	scale 40
 
 \end_inset
 
@@ -964,7 +964,7 @@ status open
 \begin_inset Graphics
 	filename images/angularWeight.png
 	lyxscale 60
-	scale 60
+	scale 40
 
 \end_inset
 
@@ -1179,6 +1179,20 @@ The design is centered around the Converter and the RobotActor classes.
  Finally, the MotorController acts as both an arbiter of motor commands
  and as a gateway back to the bridge nodes.
  The full design diagram is in Appendix A.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+explain through data flow with figure not just showing uml but which classes
+ pass what info
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1700,28 +1714,16 @@ key "ran2005obsavothrbraaggbehmotfus"
 \end_layout
 
 \begin_layout Standard
-One issue of using rosjava was the overhead of creating new nodes, since
- each new node started a new JVM process.
- After implementing the design of the rosjava nodes, rosjava released documentat
-ion detailing how using a NodeRunner object can start the nodes as threads
- rather than as new processes.
- This significantly reduced the memory overhead and launch time of the rosjava
+For every ROS node a new process is created, since a node is an executable.
+ Therefore, in the initial implementation of the project, every rosjava
+ node started a new process.
+ However, the creation of new rosjava nodes poses a problem due to the overhead
+ of creating a new Java Virtual Machine (JVM) for each node.
+ A later implementation of rosjava implemented the solution to the problem,
+ which was to use a thread for each node, rather than creating a new process.
+ By using threads to encapsulate nodes, only one JVM was started.
+ Therefore, decreasing both the launch time and overhead of starting the
  nodes.
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Rewrite explaining how solution mitigated problem.
- So say how the current implementation mitigates prob.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The rosjava node
 \end_layout
 
 \begin_layout Standard

@@ -904,7 +904,7 @@ status open
 \begin_inset Graphics
 	filename images/linearWeight.png
 	lyxscale 60
-	scale 60
+	scale 40
 
 \end_inset
 
@@ -928,11 +928,11 @@ name "fig:LinearWeight"
  
 \begin_inset CommandInset citation
 LatexCommand cite
-key "braitenberg1986"
+key "ran2005obsavothrbraaggbehmotfus"
 
 \end_inset
 
-
+.
 \end_layout
 
 \end_inset
@@ -964,7 +964,7 @@ status open
 \begin_inset Graphics
 	filename images/angularWeight.png
 	lyxscale 60
-	scale 60
+	scale 40
 
 \end_inset
 
@@ -988,11 +988,11 @@ Weights for
  
 \begin_inset CommandInset citation
 LatexCommand cite
-key "braitenberg1986"
+key "ran2005obsavothrbraaggbehmotfus"
 
 \end_inset
 
-
+.
 \end_layout
 
 \end_inset
@@ -1179,6 +1179,20 @@ The design is centered around the Converter and the RobotActor classes.
  Finally, the MotorController acts as both an arbiter of motor commands
  and as a gateway back to the bridge nodes.
  The full design diagram is in Appendix A.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+explain through data flow with figure not just showing uml but which classes
+ pass what info
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1721,7 +1735,12 @@ Rewrite explaining how solution mitigated problem.
 \end_layout
 
 \begin_layout Standard
-The rosjava node
+For every ROS node a new process is created, since a node is an executable.
+ However, the creation of new rosjava nodes poses a problem due to the overhead
+ of creating a new Java Virtual Machine (JVM) for each node.
+ The solution to the problem was to use a thread for each node.
+ By using threads only one JVM would be started and the launch time and
+ overhead was greatly decreased.
 \end_layout
 
 \begin_layout Standard

@@ -690,15 +690,14 @@ name "fig:Braitenberg-agression-behavior"
 
 \end_inset
 
-Braitenberg aggression behavior.
- Image from 
+Braitenberg aggression behavior 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ran2005obsavothrbraaggbehmotfus"
 
 \end_inset
 
-
+.
 \end_layout
 
 \end_inset
@@ -864,7 +863,21 @@ reference "eq:rotationalWeight"
 
  are the variance chosen here to be 1400 and 350 respectively in order to
  place a greater weight on small angles and less weight on greater angles
- as can be seen in figure 
+ as can be seen in figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:LinearWeight"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:AngularWeight"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -889,9 +902,9 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename images/voltageOutput.png
+	filename images/linearWeight.png
 	lyxscale 60
-	scale 60
+	scale 40
 
 \end_inset
 
@@ -904,25 +917,22 @@ status open
 \begin_layout Plain Layout
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:Infrared-sensor-voltage-1"
+name "fig:LinearWeight"
 
 \end_inset
 
-Infrared sensor voltage output 
+ Weights for 
+\begin_inset Formula $\alpha_{S}(t_{k})$
+\end_inset
+
+ 
 \begin_inset CommandInset citation
 LatexCommand cite
-key ":SharpGPYAY"
+key "ran2005obsavothrbraaggbehmotfus"
 
 \end_inset
 
- values 
-\begin_inset CommandInset citation
-LatexCommand cite
-key ":LinearizingSharpRangerData"
-
-\end_inset
-
-
+.
 \end_layout
 
 \end_inset
@@ -952,9 +962,9 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename images/ADCValues.png
+	filename images/angularWeight.png
 	lyxscale 60
-	scale 60
+	scale 40
 
 \end_inset
 
@@ -967,11 +977,22 @@ status open
 \begin_layout Plain Layout
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:Linear-interpolation-of-1"
+name "fig:AngularWeight"
 
 \end_inset
 
-Linear interpolation of Voltage with respect to ADC
+Weights for 
+\begin_inset Formula $\beta_{S}(t_{k})$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ran2005obsavothrbraaggbehmotfus"
+
+\end_inset
+
+.
 \end_layout
 
 \end_inset
@@ -1158,6 +1179,20 @@ The design is centered around the Converter and the RobotActor classes.
  Finally, the MotorController acts as both an arbiter of motor commands
  and as a gateway back to the bridge nodes.
  The full design diagram is in Appendix A.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+explain through data flow with figure not just showing uml but which classes
+ pass what info
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1700,7 +1735,15 @@ Rewrite explaining how solution mitigated problem.
 \end_layout
 
 \begin_layout Standard
-The rosjava node
+For every ROS node a new process is created, since a node is an executable.
+ Therefore, in the initial implementation, every rosjava node started a
+ new process.
+ However, the creation of new rosjava nodes poses a problem due to the overhead
+ of creating a new Java Virtual Machine (JVM) for each node.
+ A later implementation of rosjava implemented the solution to the problem,
+ which was to use a thread for each node, rather than creating a new process.
+ By using threads to encapsulate nodes, only one JVM was started decreasing
+ both the launch time and overhead of starting the nodes was greatly decreased.
 \end_layout
 
 \begin_layout Standard
