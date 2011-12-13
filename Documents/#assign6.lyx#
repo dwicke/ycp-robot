@@ -341,14 +341,14 @@ key "ros"
 \end_inset
 
 .
- There are implementations of ROS in C++, Python, Lisp, and Java.
+ There are implementations of ROS in C++, Python, Lisp, Octave, and Java.
  
 \end_layout
 
 \begin_layout Standard
 ROS executables are called nodes.
- ROS provides a master node that oversees running nodes and a parameter
- server, it also acts as the matchmaker for nodes and topics.
+ ROS provides a master node called Ros Master that oversees running nodes
+ and a parameter server, it also acts as the matchmaker for nodes and topics.
  ROS nodes can communicate using topics, which are similar to named busses.
  Nodes publish messages on topics which other nodes can subscribe to in
  order to receive the information being published.
@@ -383,12 +383,15 @@ status open
 
 \begin_layout Plain Layout
 1.
- The talker node lets the ROS Master know that it wants to publish to the
- words topic and starts publishing to words.
+ The Talker node lets the ROS Master know that it wants to publish to the
+ words topic and then Talker starts publishing to words.
  2.
  Listener lets Ros Master know that it wants to subscribe to the words topic.
  3.
- Ros Master 
+ Ros Master pairs Talker and Listener so that Listener can start recieving
+ messages on the words topic.
+ The Parameter Server is similar to a registry in that it stores information
+ about 
 \end_layout
 
 \end_inset
