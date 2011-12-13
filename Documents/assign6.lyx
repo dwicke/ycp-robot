@@ -690,15 +690,14 @@ name "fig:Braitenberg-agression-behavior"
 
 \end_inset
 
-Braitenberg aggression behavior.
- Image from 
+Braitenberg aggression behavior 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ran2005obsavothrbraaggbehmotfus"
 
 \end_inset
 
-
+.
 \end_layout
 
 \end_inset
@@ -929,11 +928,11 @@ name "fig:LinearWeight"
  
 \begin_inset CommandInset citation
 LatexCommand cite
-key "braitenberg1986"
+key "ran2005obsavothrbraaggbehmotfus"
 
 \end_inset
 
-
+.
 \end_layout
 
 \end_inset
@@ -989,11 +988,11 @@ Weights for
  
 \begin_inset CommandInset citation
 LatexCommand cite
-key "braitenberg1986"
+key "ran2005obsavothrbraaggbehmotfus"
 
 \end_inset
 
-
+.
 \end_layout
 
 \end_inset
