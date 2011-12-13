@@ -533,25 +533,33 @@ An illustration of the hierarchical structure of ROS.
 \begin_layout Standard
 Java's object oriented structure complements ROS's goal of complexity out
  of simplicity.
- The rosjava stack is an implementation of ROS in Java.
- It was chosen to allow future students in Robotics the ease of use that
- Java provides.
- However, in order to integrate with the other languages In order for rosjava
- nodes to communicate, ROS messages are converted to classes and made into
- jar files.
- Therefore, the message data types can be imported into Java classes allows
- for easy integration of message data types into rosjava nodes.
- The reason for choosing rosjava was due to 
-\begin_inset Note Note
-status open
+ The rosjava stack is the first implementation of ROS in Java and 
+\begin_inset Quotes eld
+\end_inset
 
-\begin_layout Plain Layout
-Why choose rosjava?
-\end_layout
+developed at Google in cooperation with Willow Garage
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rosjava"
 
 \end_inset
 
-
+.
+ It was chosen to allow future students in robotics the ease of use that
+ Java provides, as well as for Java's cross platform capability.
+ The rosjava implementation is similar to the other ROS implementations
+ in that it provides the same communication framework and packaging structure.
+ However, in order to integrate with other languages ROS messages are converted
+ to classes and stored into Java jar files.
+ The jar files can then be imported a class and the messages data types
+ can then be used in communication over topics.
+ Unlike other implementations, rosjava also provides its own ROS master
+ allowing it to run on devices that only allow Java, such as an Android
+ phone.
 \end_layout
 
 \begin_layout Section*
@@ -599,14 +607,18 @@ key "rosenblatt2007centralized"
 \begin_layout Standard
 Sensor fusion uses the sensor data to reconstruct the surroundings to produce
  motor commands.
- This method provides a 
+ The reconstruction could be in the form of a map of the environment which
+ can then be used to avoid obstacles and possibly provide for higher level
+ goals.
+ Therefore, sensor fusion provides higher level functionallity than motor
+ fusion.
+ However, the main disadvantage of sensor fusion is due to translating the
+ sensor data from various sensor sources which 
 \begin_inset Quotes eld
 \end_inset
 
-Understandably, this general debate has been projected onto the area of
- sensor fusion, since sensory-data interpretation from several different
- subsystems further complicates the selection of methods, uncertainty representa
-tions, and assessments of performance
+further complicates the selection of methods, uncertainty representations,
+ and assessments of performance
 \begin_inset Quotes erd
 \end_inset
 
@@ -618,24 +630,13 @@ key "kam1997sensor"
 \end_inset
 
 .
- 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Pro/Con of sensor fusion
-\end_layout
-
-\end_inset
-
- 
 \end_layout
 
 \begin_layout Standard
 For the X80SVP robot, obstacle avoidance was accomplished by a motor fusion
  algorithm utilizing Braitenburg's aggression behavior.
  Motor fusion was chosen because the robot's sensors were unreliable and
- homogeneous therefore making the sensor fusion model inappropriate.
+ limited therefore making the sensor fusion model inappropriate.
  Also, Braitenburg's algorithm does not rely on the type or variety of range
  sensors to provide obstacle avoidance.
  
@@ -862,13 +863,147 @@ reference "eq:rotationalWeight"
 \end_inset
 
  are the variance chosen here to be 1400 and 350 respectively in order to
- place a greater weight on small angles and less weight on greater angles.
- 
-\begin_inset Note Note
+ place a greater weight on small angles and less weight on greater angles
+ as can be seen in figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:LinearWeight"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:AngularWeight"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
 status open
 
 \begin_layout Plain Layout
-Insert graph showing the weight functions.
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/linearWeight.png
+	lyxscale 60
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:LinearWeight"
+
+\end_inset
+
+ Weights for 
+\begin_inset Formula $\alpha_{S}(t_{k})$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "braitenberg1986"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/angularWeight.png
+	lyxscale 60
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:AngularWeight"
+
+\end_inset
+
+Weights for 
+\begin_inset Formula $\beta_{S}(t_{k})$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "braitenberg1986"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1323,9 +1458,10 @@ High Level Software
 \end_layout
 
 \begin_layout Standard
-The obstacle avoidance algorithm produces linear and angular velocity values,
- but the robot requires left and right wheel velocities which can be converted
- using the differential drive kinematics equations 
+The Braitenburg obstacle avoidance algorithm produces linear and angular
+ velocity values, but the robot requires left and right wheel velocities
+ which can be converted using the differential drive kinematics equations
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:LeftVelocity"
@@ -1357,8 +1493,21 @@ reference "eq:RightVelocity"
 \begin_inset Formula $\beta_{S}(t_{k})$
 \end_inset
 
- are normalized linear and angular velocities and d is the wheel base of
- the robot.
+ are normalized linear and angular velocities defined in equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:translationalSpeed"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:rotationalSpeed"
+
+\end_inset
+
+ and d is the wheel base of the robot.
 \end_layout
 
 \begin_layout Standard
@@ -1564,6 +1713,7 @@ status open
 
 \begin_layout Plain Layout
 Rewrite explaining how solution mitigated problem.
+ So say how the current implementation mitigates prob.
 \end_layout
 
 \end_inset
@@ -1572,16 +1722,7 @@ Rewrite explaining how solution mitigated problem.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Maybe insert a paragraph about the priority based arbiter for motor commands.
-\end_layout
-
-\end_inset
-
-
+The rosjava node
 \end_layout
 
 \begin_layout Standard
