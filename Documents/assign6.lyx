@@ -1073,7 +1073,7 @@ key "r:robustlayeredcontrolsystemmobilerobot"
 \end_layout
 
 \begin_layout Standard
-By following the model view controller design pattern, the implementation
+By following the model view controller (MVC) design pattern, the implementation
  is extensible
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -1082,18 +1082,64 @@ key "krasner:cookbookusingModelViewControlleruserinterfaceparadigmSmalltalk"
 \end_inset
 
 .
- Allowing for different views such as a simulator or actual robot to be
- smoothly interchanged.
- The model is based on the ROS parameter server in which the model of the
+ As seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:MVC"
+
+\end_inset
+
+ the model is based on the ROS parameter server in which the model of the
  robot and communication layout is stored.
- The view is the world or the virtual world as created by the simulator.
- The controller classes act to move the robot, changing the robot’s view.
- 
-\begin_inset Note Note
+ Therefore, allowing different robot settings to be changed without affecting
+ any of the view or control code.
+ By following MVC different views, such as a simulated environment or the
+ real world to be smoothly interchanged.
+ The controller classes compose the design model.
+ These act to move the robot, changing the robot’s view.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
 status open
 
 \begin_layout Plain Layout
-Must add image that shows the MVC.
+\align center
+\begin_inset Graphics
+	filename images/MVC.png
+	lyxscale 60
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:MVC"
+
+\end_inset
+
+The model of the system is stored in the parameter server.
+ The view can be either the world or the simulator.
+ The controller portion is described by the classes in the design model.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \end_inset
@@ -1170,7 +1216,56 @@ The design is centered around the Converter and the RobotActor classes.
  The SensorListener class subscribes to the sensor messages published by
  a bridge class and publishes converted sensor data in the ROS standard
  Range message type.
- The SensorFilter classes filter the sensor data so that the data is more
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/SensorFilterPackage.png
+	lyxscale 80
+	scale 80
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:SensorFilter"
+
+\end_inset
+
+Diagram of the Sensor Filter package.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The SensorFilter classes filter the sensor data so that the data is more
  useful and the BraitenburgAvoid class uses the filtered sensor data to
  publish a MotorCommand message based on the Braitenburg aggression behavior
  algorithm.
@@ -1178,7 +1273,51 @@ The design is centered around the Converter and the RobotActor classes.
  sent by the infrared and ultrasonic based on BraitenburgAvoid nodes.
  Finally, the MotorController acts as both an arbiter of motor commands
  and as a gateway back to the bridge nodes.
- The full design diagram is in Appendix A.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/NavigationPackage.png
+	lyxscale 80
+	scale 80
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:NavigationPackage"
+
+\end_inset
+
+Diagram of the Navigation package.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1193,6 +1332,10 @@ explain through data flow with figure not just showing uml but which classes
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection*
+Simulator Design
 \end_layout
 
 \begin_layout Standard
@@ -1352,8 +1495,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/voltageOutput.png
-	lyxscale 60
-	scale 60
+	lyxscale 55
+	scale 55
 
 \end_inset
 
@@ -1370,14 +1513,14 @@ name "fig:Infrared-sensor-voltage"
 
 \end_inset
 
-Infrared sensor voltage output 
+Infrared sensor voltage output from 
 \begin_inset CommandInset citation
 LatexCommand cite
 key ":SharpGPYAY"
 
 \end_inset
 
- values 
+ values from 
 \begin_inset CommandInset citation
 LatexCommand cite
 key ":LinearizingSharpRangerData"
@@ -1415,8 +1558,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/ADCValues.png
-	lyxscale 60
-	scale 60
+	lyxscale 65
+	scale 65
 
 \end_inset
 
@@ -2042,32 +2185,6 @@ Appendix
 
 \begin_layout Section*
 Section A
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Appendix-A"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Updated design model shows how messages and nodes relate.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename images/DesignModel.jpg
-	lyxscale 65
-	scale 65
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section*
-Section B
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Appendix-B"
