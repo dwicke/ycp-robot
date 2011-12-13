@@ -1,4 +1,4 @@
-#LyX 2.0.0 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -14,6 +14,7 @@
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
+
 \graphics default
 \float_placement H
 \paperfontsize default
@@ -29,12 +30,15 @@
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
+\defskip medskip
 \quotes_language english
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
 \tracking_changes false
 \output_changes false
+\author "" 
+\author "" 
 \end_header
 
 \begin_body
@@ -320,32 +324,105 @@ ROS
 \begin_layout Standard
 ROS is a framework that facilitates the construction and execution of applicatio
 ns for robots.
- There are implementations of ROS in C++, Python, Lisp, and Java.
- ROS executables are called nodes.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+It provides hardware abstraction, device drivers, libraries, visualizers,
+ message-passing, package management, and more
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ros"
+
+\end_inset
+
+.
+ There are implementations of ROS in C++, Python, Lisp, Octave, and Java.
+ 
+\end_layout
+
+\begin_layout Standard
+ROS executables are called nodes.
  ROS provides a master node that oversees running nodes and a parameter
  server, it also acts as the matchmaker for nodes and topics.
- ROS nodes communicate over topics or services 
-\begin_inset Note Note
+ ROS nodes can communicate using topics, which are similar to named busses.
+ Nodes publish messages on topics which other nodes can subscribe to in
+ order to receive the information being published.
+ However, the nodes do not know who the other node is only the name of the
+ topic.
+ A message's fields are described using the YAML language which ROS converts
+ into a file that the targeted language can use, such as a header file in
+ C++.
+ ROS uses this communication model because it is generic and 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
 status open
 
 \begin_layout Plain Layout
-Make this clear the distinction between topics and services
+\align center
+\begin_inset Graphics
+	filename images/RosMaster.png
+	lyxscale 35
+	scale 35
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+1.
+ The talker node lets the ROS Master know that it wants to publish to the
+ words topic and starts publishing to words.
+ 2.
+ Listener lets Ros Master know that it wants to subscribe to the words topic.
+ 3.
+ Ros Master 
 \end_layout
 
 \end_inset
 
- using ROS methods.
- Nodes publish messages on topics which other nodes can subscribe to in
- order to receive the information.
- The message's fields are described in a data file using the yaml language
- which ROS converts into a file that the targeted language can use, such
- as a header file in C++.
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Nodes can also communicate using services which can be thought of as a remote
+ procedure call.
+ 
 \end_layout
 
 \begin_layout Standard
 ROS also provides a hierarchical packaging based structure to group common
- elements.
- Nodes that perform common functions are grouped into a package.
+ elements as seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:RosStackHierarchy"
+
+\end_inset
+
+.
+ Nodes, the executables that perform common functions, are grouped into
+ a package.
  Packages that share a common purpose are grouped into stacks.
  Therefore, ROS's goal is to build a complex system out of simple, single-purpos
 e parts.
@@ -362,11 +439,60 @@ Diagram of the hierarchy maybe a set diagram circles within circles
 \end_layout
 
 \begin_layout Standard
-The rosjava stack is an implementation of ROS in Java; therefore, rosjava
- nodes work with the rest of the nodes in ROS.
- In order for rosjava nodes to communicate, ROS messages are converted to
- classes and made into jar files; this allows for easy integration of message
- data types into rosjava nodes.
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/ColorRos.png
+	lyxscale 35
+	scale 35
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:RosStackHierarchy"
+
+\end_inset
+
+Illustrates the hierarchical structure of ROS.
+ There are no limits on the number of packages per stack and no limit on
+ the number of nodes per package.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The rosjava stack is an implementation of ROS in Java.
+ However, in order to integrate with the other languagesIn order for rosjava
+ nodes to communicate, ROS messages are converted to classes and made into
+ jar files.
+ Therefore, the message datatypes can be imported into Java classes allows
+ for easy integration of message data types into rosjava nodes.
+ The reason for chosing rosjava was due to 
 \begin_inset Note Note
 status open
 
@@ -561,29 +687,21 @@ reference "eq:rotationalSpeed"
 \end_inset
 
 .
- Moving the robot forward while no obstacles.
- When an obstacle is encountered the
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Continue to explain
-\end_layout
-
-\end_inset
-
+ For example, when the no obstacles are present the robot will move forward
+ at max velocity.
+ However, if there is an obstacle that is closer to one side of the robot
+ then the motor on that side will spike causing the robot to rotate and
+ avoid the obstacle.
  Accounting for the center sensor separately allows the robot to avoid deadlock
  while in symmetric corners.
- The value of the sensor increases as an obstacle gets farther away and
- as the velocity becomes greater in that direction, providing a smooth wandering
+ The value of a sensor increases as an obstacle gets farther away and as
+ the velocity becomes greater in that direction, providing a smooth wandering
  movement that effectively avoids obstacles.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\alpha_{S}(t_{k})=\sum_{i\in L\cup R}w_{i}^{\alpha_{S}}\hat{r}_{i}^{S}(t_{k})\label{eq:translationalSpeed}
-\end{equation}
+\begin_inset Formula \begin{equation}
+\alpha_{S}(t_{k})=\sum_{i\in L\cup R}w_{i}^{\alpha_{S}}\hat{r}_{i}^{S}(t_{k})\label{eq:translationalSpeed}\end{equation}
 
 \end_inset
 
@@ -591,10 +709,8 @@ Continue to explain
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\beta_{S}(t_{k})=\sum_{i\in R}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})-\sum_{i\in L}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})\label{eq:rotationalSpeed}
-\end{equation}
+\begin_inset Formula \begin{equation}
+\beta_{S}(t_{k})=\sum_{i\in R}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})-\sum_{i\in L}w_{i}^{\beta_{S}}\mathfrak{D}(\theta'_{i})\hat{r}_{i}^{S}(t_{k})\label{eq:rotationalSpeed}\end{equation}
 
 \end_inset
 
@@ -661,10 +777,8 @@ reference "eq:rotationalWeight"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\mathit{w}_{i}^{\alpha_{S}}=k_{i}^{\alpha}e^{-\frac{\mathfrak{D}(\theta'_{i})^{2}}{2\sigma_{\alpha}^{2}}}\label{eq:translationalWeight}
-\end{equation}
+\begin_inset Formula \begin{equation}
+\mathit{w}_{i}^{\alpha_{S}}=k_{i}^{\alpha}e^{-\frac{\mathfrak{D}(\theta'_{i})^{2}}{2\sigma_{\alpha}^{2}}}\label{eq:translationalWeight}\end{equation}
 
 \end_inset
 
@@ -672,10 +786,8 @@ reference "eq:rotationalWeight"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\mathit{w}_{i}^{\beta_{S}}=k_{i}^{\beta}e^{-\frac{\mathfrak{D}(\theta'_{i})^{2}}{2\sigma_{\beta}^{2}}}\label{eq:rotationalWeight}
-\end{equation}
+\begin_inset Formula \begin{equation}
+\mathit{w}_{i}^{\beta_{S}}=k_{i}^{\beta}e^{-\frac{\mathfrak{D}(\theta'_{i})^{2}}{2\sigma_{\beta}^{2}}}\label{eq:rotationalWeight}\end{equation}
 
 \end_inset
 
@@ -1200,10 +1312,8 @@ reference "eq:RightVelocity"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-V_{L}=\frac{2\alpha_{S}(t_{k})+d\beta_{S}(t_{k})}{2}\label{eq:LeftVelocity}
-\end{equation}
+\begin_inset Formula \begin{equation}
+V_{L}=\frac{2\alpha_{S}(t_{k})+d\beta_{S}(t_{k})}{2}\label{eq:LeftVelocity}\end{equation}
 
 \end_inset
 
@@ -1211,10 +1321,8 @@ V_{L}=\frac{2\alpha_{S}(t_{k})+d\beta_{S}(t_{k})}{2}\label{eq:LeftVelocity}
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-V_{R}=V_{L}-d\beta_{S}(t_{k})\label{eq:RightVelocity}
-\end{equation}
+\begin_inset Formula \begin{equation}
+V_{R}=V_{L}-d\beta_{S}(t_{k})\label{eq:RightVelocity}\end{equation}
 
 \end_inset
 
@@ -1323,13 +1431,10 @@ reference "eq:USFilter"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
+\begin_inset Formula \begin{equation}
 \tilde{r_{i}}(t_{k})=\begin{cases}
 r_{i}^{s}(t_{k}) & \textrm{if }r_{i}^{s}(t_{k})<r_{nr}^{s}\\
-Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s}\} & \textrm{if }r_{i}^{s}(t_{k})=r_{nr}^{s}
-\end{cases}\label{eq:USFilter}
-\end{equation}
+Min\{\tilde{r_{i}}(t_{k-1})+r_{\triangle},r_{nr}^{s}\} & \textrm{if }r_{i}^{s}(t_{k})=r_{nr}^{s}\end{cases}\label{eq:USFilter}\end{equation}
 
 \end_inset
 
