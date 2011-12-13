@@ -443,7 +443,7 @@ name "fig:RosMaster"
  2.
  Listener lets Ros Master know that it wants to subscribe to the words topic.
  3.
- Ros Master pairs Talker and Listener so that Listener can start recieving
+ Ros Master pairs Talker and Listener so that Listener can start receiving
  messages on the words topic.
  The Parameter Server is similar to a registry in that it stores state informati
 on which nodes can access.
@@ -531,23 +531,35 @@ An illustration of the hierarchical structure of ROS.
 \end_layout
 
 \begin_layout Standard
-The rosjava stack is an implementation of ROS in Java.
- However, in order to integrate with the other languagesIn order for rosjava
- nodes to communicate, ROS messages are converted to classes and made into
- jar files.
- Therefore, the message datatypes can be imported into Java classes allows
- for easy integration of message data types into rosjava nodes.
- The reason for chosing rosjava was due to 
-\begin_inset Note Note
-status open
+Java's object oriented structure complements ROS's goal of complexity out
+ of simplicity.
+ The rosjava stack is the first implementation of ROS in Java and 
+\begin_inset Quotes eld
+\end_inset
 
-\begin_layout Plain Layout
-Why choose rosjava?
-\end_layout
+developed at Google in cooperation with Willow Garage
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "rosjava"
 
 \end_inset
 
-
+.
+ It was chosen to allow future students in robotics the ease of use that
+ Java provides, as well as for Java's cross platform capability.
+ The rosjava implementation is similar to the other ROS implementations
+ in that it provides the same communication framework and packaging structure.
+ However, in order to integrate with other languages ROS messages are converted
+ to classes and stored into Java jar files.
+ The jar files can then be imported a class and the messages data types
+ can then be used in communication over topics.
+ Unlike other implementations, rosjava also provides its own ROS master
+ allowing it to run on devices that only allow Java, such as an Android
+ phone.
 \end_layout
 
 \begin_layout Section*
@@ -1842,7 +1854,7 @@ There were also some modifications in what is rendered during each pass.
  rate.
  A useful optimization here would be the ability to do the rendering passes
  asynchronously, which would allow for less jitter in the frame rate caused
- by the combined passes doing inequal amounts of work, however this would
+ by the combined passes doing unequal amounts of work, however this would
  require a machine with dual graphics cards.
 \end_layout
 

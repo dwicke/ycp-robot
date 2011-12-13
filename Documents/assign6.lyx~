@@ -443,7 +443,7 @@ name "fig:RosMaster"
  2.
  Listener lets Ros Master know that it wants to subscribe to the words topic.
  3.
- Ros Master pairs Talker and Listener so that Listener can start recieving
+ Ros Master pairs Talker and Listener so that Listener can start receiving
  messages on the words topic.
  The Parameter Server is similar to a registry in that it stores state informati
 on which nodes can access.
@@ -470,7 +470,7 @@ reference "fig:RosStackHierarchy"
 
 .
  Nodes, the executables, that have similar roles are grouped into a package.
- Packages that share a common purpose are grouped into stacks.
+ Packages that share a common purpose are grouped into a stack.
  Stacks can contain one or more packages.
  Therefore, ROS's goal is to build a complex system out of simple, single-purpos
 e parts
@@ -531,13 +531,17 @@ An illustration of the hierarchical structure of ROS.
 \end_layout
 
 \begin_layout Standard
-The rosjava stack is an implementation of ROS in Java.
- However, in order to integrate with the other languagesIn order for rosjava
+Java's object oriented structure complements ROS's goal of complexity out
+ of simplicity.
+ The rosjava stack is an implementation of ROS in Java.
+ It was chosen to allow future students in Robotics the ease of use that
+ Java provides.
+ However, in order to integrate with the other languages In order for rosjava
  nodes to communicate, ROS messages are converted to classes and made into
  jar files.
- Therefore, the message datatypes can be imported into Java classes allows
+ Therefore, the message data types can be imported into Java classes allows
  for easy integration of message data types into rosjava nodes.
- The reason for chosing rosjava was due to 
+ The reason for choosing rosjava was due to 
 \begin_inset Note Note
 status open
 
@@ -1842,7 +1846,7 @@ There were also some modifications in what is rendered during each pass.
  rate.
  A useful optimization here would be the ability to do the rendering passes
  asynchronously, which would allow for less jitter in the frame rate caused
- by the combined passes doing inequal amounts of work, however this would
+ by the combined passes doing unequal amounts of work, however this would
  require a machine with dual graphics cards.
 \end_layout
 
