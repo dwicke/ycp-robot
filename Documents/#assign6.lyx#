@@ -342,22 +342,71 @@ key "ros"
 
 .
  There are implementations of ROS in C++, Python, Lisp, Octave, and Java.
- 
+ ROS was chosen to act as the framework for the project because it provides
+ a good communication model, a well structured programming environment,
+ and an implementation in Java.
 \end_layout
 
 \begin_layout Standard
-ROS executables are called nodes.
+ROS executables are called nodes and are the main source of communication.
  ROS provides a master node called Ros Master that oversees running nodes
- and a parameter server, it also acts as the matchmaker for nodes and topics.
- ROS nodes can communicate using topics, which are similar to named busses.
+ and a parameter server, it also acts as the matchmaker for nodes and topics
+ as seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:RosMaster"
+
+\end_inset
+
+.
+ ROS nodes can communicate using topics, which are similar to named busses
+ which offer a publisher/subscriber type communication model.
  Nodes publish messages on topics which other nodes can subscribe to in
  order to receive the information being published.
- However, the nodes do not know who the other node is only the name of the
- topic.
- A message's fields are described using the YAML language which ROS converts
- into a file that the targeted language can use, such as a header file in
- C++.
- ROS uses this communication model because it is generic and 
+ However, the nodes only know the name of the topic and not the name of
+ the other node as seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:RosMaster"
+
+\end_inset
+
+.
+ A message's fields are described using the YAML language, a 
+\begin_inset Quotes eld
+\end_inset
+
+human friendly data serialization standard for all programming languages
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "::YYAML"
+
+\end_inset
+
+.
+ ROS can then convert the message file into a file that the targeted language
+ can use, such as a header file in C++.
+ ROS uses this message passing communication model because it is language
+ independent and allows for 
+\begin_inset Quotes eld
+\end_inset
+
+unidirectional, streaming communication
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ros"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -382,6 +431,12 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:RosMaster"
+
+\end_inset
+
 1.
  The Talker node lets the ROS Master know that it wants to publish to the
  words topic and then Talker starts publishing to words.
@@ -390,16 +445,12 @@ status open
  3.
  Ros Master pairs Talker and Listener so that Listener can start recieving
  messages on the words topic.
- The Parameter Server is similar to a registry in that it stores information
- about 
+ The Parameter Server is similar to a registry in that it stores state informati
+on which nodes can access.
 \end_layout
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -411,7 +462,7 @@ status open
 \begin_layout Standard
 Nodes can also communicate using services which can be thought of as a remote
  procedure call.
- 
+ When using this method of communication a ROS node will 
 \end_layout
 
 \begin_layout Standard
@@ -424,21 +475,18 @@ reference "fig:RosStackHierarchy"
 \end_inset
 
 .
- Nodes, the executables that perform common functions, are grouped into
- a package.
+ Nodes, the executables, that have similar roles are grouped into packages.
  Packages that share a common purpose are grouped into stacks.
+ Stacks can contain one or more packages.
  Therefore, ROS's goal is to build a complex system out of simple, single-purpos
-e parts.
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Diagram of the hierarchy maybe a set diagram circles within circles
-\end_layout
+e parts
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ros"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Standard
@@ -469,7 +517,7 @@ name "fig:RosStackHierarchy"
 
 \end_inset
 
-Illustrates the hierarchical structure of ROS.
+Illustration of the hierarchical structure of ROS.
  There are no limits on the number of packages per stack and no limit on
  the number of nodes per package.
 \end_layout
