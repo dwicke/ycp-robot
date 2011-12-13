@@ -493,8 +493,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/ColorRos.png
-	lyxscale 35
-	scale 35
+	lyxscale 25
+	scale 25
 
 \end_inset
 
@@ -674,6 +674,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/AgressionRobot.png
+	lyxscale 80
+	scale 80
 
 \end_inset
 
@@ -1711,8 +1713,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/sensorReflection.png
-	lyxscale 75
-	scale 75
+	lyxscale 55
+	scale 55
 
 \end_inset
 

@@ -493,8 +493,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/ColorRos.png
-	lyxscale 35
-	scale 35
+	lyxscale 25
+	scale 25
 
 \end_inset
 
@@ -674,6 +674,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/AgressionRobot.png
+	lyxscale 80
+	scale 80
 
 \end_inset
 
@@ -1200,16 +1202,8 @@ Simplified Design and Communication Model
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Insert relevant UML to illustrate the model
-\end_layout
-
-\end_inset
-
-The design is centered around the Converter and the RobotActor classes.
+The design is centered around the Converter and the RobotActor classes as
+ s.
  Converter and RobotActor are interchangeable bridges between the view and
  the control, they publish the sensor data and send commands to actuate
  the robot’s motors.
@@ -1313,20 +1307,6 @@ Diagram of the Navigation package.
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-explain through data flow with figure not just showing uml but which classes
- pass what info
 \end_layout
 
 \end_inset
@@ -1711,8 +1691,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/sensorReflection.png
-	lyxscale 75
-	scale 75
+	lyxscale 55
+	scale 55
 
 \end_inset
 
