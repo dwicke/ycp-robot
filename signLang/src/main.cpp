@@ -22,6 +22,10 @@ double leftHand_z = 0.0;
 bool spinRobot_start = false;
 bool spinRobot_inc = false;
 bool sendSpin = false;
+bool spinSent = false;
+bool stopSpin = false;
+bool stopSpin_start = false;
+bool stopSpin_dec = false;
 
 ros::Publisher gesture_pub;
 
@@ -58,13 +62,22 @@ void gestureRecog(double curLeftHand_x){
 	if(curLeftHand_x <= -0.2){
 		spinRobot_start = true;
 		lastLeftHand_x = curLeftHand_x;
-		ROS_INFO("starting.");
+		ROS_INFO("starting spin.");
+	}
+	
+	//make sure hand made it past -0.2 threshold by making sure meets first condition of spinning
+	else if(stopSpin_dec && spinRobot_start){
+		stopSpin = true;
+		
+		stopSpin_start = false;
+		stopSpin_dec = false;
+		spinRobot_start = false;
 	}
 	
 	//if left hand is increasing, then set second condition to true
 	else if(spinRobot_start && curLeftHand_x > lastLeftHand_x && curLeftHand_x < 0.1){
 		spinRobot_inc = true;
-		ROS_INFO("increasing");
+		ROS_INFO("increasing spin.");
 	}
 	
 	//if left hand reaches 0.1, gesture complete, send command
@@ -77,6 +90,22 @@ void gestureRecog(double curLeftHand_x){
 		spinRobot_start = false;
 		spinRobot_inc = false;
 	}
+	
+	//if spinning and left hand is greater than 0.1, first stop condition met
+	else if(spinSent && curLeftHand_x >= 0.1){
+		stopSpin_start = true;
+		
+		//update last hand position
+		lastLeftHand_x = curLeftHand_x;
+		ROS_INFO("stopping spin.");
+	}
+	
+	//if left hand is going in decreasing direction, second condition true
+	else if(stopSpin_start && curLeftHand_x <= lastLeftHand_x){
+		stopSpin_dec = true;
+		ROS_INFO("decreasing spin.");
+	}
+	
 }
 
 //get the values from the topics and store them for use
@@ -107,13 +136,16 @@ int main(int argc, char**argv){
 	
 	//if this doesn't work, send it to the Converter without Braitenburg
 	//gesture_pub = nh.advertise<MotorControlMsg::MotorCommand>("Motor_Command", 1000);
-	gesture_pub = nh.advertise<robot_msgs::MotorData>("motordata",100);
+	gesture_pub = nh.advertise<robot_msgs::MotorData>("motordata",200);
 	
 	ros::Rate loop_rate(10);
 	while(ros::ok()){
-		//ROS_INFO("I'm at the start of the loop.");
+		//all spinning conditions met, send the command
 		if(sendSpin){
-			/*ROS_INFO("Robot is spinning.");
+			/*
+			
+			This was the version that was to be sent to Braitenburg.
+			
 			MotorControlMsg::MotorCommand GestureMsg;
 		
 			GestureMsg.precedence = -1;
@@ -122,7 +154,10 @@ int main(int argc, char**argv){
 			GestureMsg.angular_velocity = -0.25;
 		
 			gesture_pub.publish(GestureMsg);
-			sendSpin = false;*/
+			sendSpin = false;
+			*/
+			
+			//create message to send to Converter
 			robot_msgs::MotorData GestureMsg;
 	
 			GestureMsg.motor_left_velocity = 25;
@@ -131,9 +166,19 @@ int main(int argc, char**argv){
 			GestureMsg.motor_right_time = 100;
 			
 			//publish message 5 times because of fix in Converter for Braitenburg
-			for(int i=0; i<5; i++){
+			for(int i=0; i<100; i++){
 				gesture_pub.publish(GestureMsg);
 			}
+			
+			sendSpin = false;
+			spinSent = true;
+			
+			ROS_INFO("SUCCESS!!! Motor Command sent.");
+		}
+		
+		else if(stopSpin){
+		
+			robot_msgs::MotorData GestureMsg;
 			
 			//send zeroes to stop the spinning
 			GestureMsg.motor_left_velocity = 0;
@@ -142,11 +187,12 @@ int main(int argc, char**argv){
 			GestureMsg.motor_right_time = 100;
 			
 			//publish message 5 times because of fix in Converter for Braitenburg
-			for(int i=0; i<5; i++){
+			for(int i=0; i<10; i++){
 				gesture_pub.publish(GestureMsg);
 			}
 			
-			sendSpin = false;
+			stopSpin = false;
+			
 			ROS_INFO("SUCCESS!!! Motor Command sent.");
 		}
 	
