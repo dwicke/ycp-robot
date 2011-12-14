@@ -82,12 +82,12 @@ human_topics:
  
   
 
-comb_const: {brait_ultrasonic_avoid: 0.8, brait_infrared_avoid: 0.2}
+comb_const: {brait_ultrasonic_avoid: 0.2, brait_infrared_avoid: 0.8}
 
 
 
 MAX_ANGULAR_VELOCITY: 5.0 # rads per second
-MAX_LINEAR_VELOCITY: 0.75  # m per second
+MAX_LINEAR_VELOCITY: 0.40  # m per second
 
 #MAX_ANGULAR_VELOCITY: 0.67 # rads per second (1 / .15) * linearVelocity 
 #MAX_LINEAR_VELOCITY: 0.3  # m per second

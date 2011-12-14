@@ -54,16 +54,6 @@ void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
 	if((motor_count % MOTOR_DIVIDER) == 0 && (msg->motor_left_velocity < motor_left_velocity_prev - MOTOR_THRESHOLD || msg->motor_left_velocity > motor_left_velocity_prev + MOTOR_THRESHOLD ||
 		msg->motor_right_velocity < motor_right_velocity_prev - MOTOR_THRESHOLD || msg->motor_right_velocity > motor_right_velocity_prev + MOTOR_THRESHOLD)){ 
 		
-		//average the motor velocities for the new value
-		//int leftsum = 0, rightsum = 0;
-		//for(int i = 0; i < MOTOR_DIVIDER; i++){
-		//	leftsum += motor_left_velocity_buffer[i];
-		//	rightsum += motor_right_velocity_buffer[i];
-		//}
-		
-		//float left_velocity = leftsum/MOTOR_DIVIDER;
-		//float right_velocity = rightsum/MOTOR_DIVIDER;		
-
 		ROS_INFO("Motor data received: \n");
 		ROS_INFO("motor1: %lf", msg->motor_left_velocity);
 		ROS_INFO("motor2: %lf", msg->motor_right_velocity);
@@ -73,11 +63,6 @@ void motorCallback(const robot_msgs::MotorData::ConstPtr& msg){
 		motor_left_velocity_prev = msg->motor_left_velocity;
 		motor_right_velocity_prev = msg->motor_right_velocity;
 	}
-	//Fill up the buffers for the next average	
-	//motor_left_velocity_buffer[count%MOTOR_DIVIDER] = msg->motor_left_velocity;
-	//motor_right_velocity_buffer[count%MOTOR_DIVIDER] = msg->motor_right_velocity;
-	
-	// Else, just wait and keep going in the current direction
 	count++;
 }
 
