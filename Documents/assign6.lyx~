@@ -1144,13 +1144,13 @@ The model of the system is stored in the parameter server.
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Figure 
 \end_layout
 
 \begin_layout Standard
@@ -1209,7 +1209,51 @@ The design is centered around the Converter and the RobotActor classes.
  The SensorListener class subscribes to the sensor messages published by
  a bridge class and publishes converted sensor data in the ROS standard
  Range message type.
- 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/mainClasses.png
+	lyxscale 75
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:MainClasses"
+
+\end_inset
+
+SensorListener class uses sensor data from either RobotActor or Converter.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1264,7 +1308,7 @@ The SensorFilter classes filter the sensor data so that the data is more
  algorithm.
  The ObstacleAvoidance node publishes a linear combination of the MotorCommand
  sent by the infrared and ultrasonic based on BraitenburgAvoid nodes.
- Finally, the MotorController acts as both an arbiter of motor commands
+ Finally, the MotorControl class acts as both an arbiter of motor commands
  and as a gateway back to the bridge nodes.
 \end_layout
 

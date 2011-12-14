@@ -1144,13 +1144,20 @@ The model of the system is stored in the parameter server.
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Simplified-Design-and"
+
+\end_inset
+
+ illustrate how the classes in the design communicate.
 \end_layout
 
 \begin_layout Standard
@@ -1188,7 +1195,77 @@ name "fig:Simplified-Design-and"
 
 \end_inset
 
-Simplified Design and Communication Model
+Simplified communication model between classes.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The design is centered around the Converter and the RobotActor classes seen
+ in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:MainClasses"
+
+\end_inset
+
+.
+ Converter and RobotActor are interchangeable bridges between the view and
+ the control.
+ Converter is used when the robot is running in the real world and RobotActor
+ is used when in the simulator.
+ They both publish SensorData messages as seen in the first image in figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Simplified-Design-and"
+
+\end_inset
+
+ and they also respond to the MotorData message by sending a command to
+ actuate the robot’s motors.
+ The SensorListener class subscribes to the sensor messages published by
+ a bridge class and publishes converted sensor data in the ROS standard
+ Range message type.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/mainClasses.png
+	lyxscale 75
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:MainClasses"
+
+\end_inset
+
+SensorListener class uses sensor data from either RobotActor or Converter.
 \end_layout
 
 \end_inset
@@ -1203,17 +1280,6 @@ Simplified Design and Communication Model
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-The design is centered around the Converter and the RobotActor classes.
- Converter and RobotActor are interchangeable bridges between the view and
- the control, they publish the sensor data and send commands to actuate
- the robot’s motors.
- The SensorListener class subscribes to the sensor messages published by
- a bridge class and publishes converted sensor data in the ROS standard
- Range message type.
- 
 \end_layout
 
 \begin_layout Standard
@@ -1268,7 +1334,7 @@ The SensorFilter classes filter the sensor data so that the data is more
  algorithm.
  The ObstacleAvoidance node publishes a linear combination of the MotorCommand
  sent by the infrared and ultrasonic based on BraitenburgAvoid nodes.
- Finally, the MotorController acts as both an arbiter of motor commands
+ Finally, the MotorControl class acts as both an arbiter of motor commands
  and as a gateway back to the bridge nodes.
 \end_layout
 
