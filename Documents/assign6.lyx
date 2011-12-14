@@ -56,7 +56,15 @@ November 21 2011
 \end_layout
 
 \begin_layout Abstract
-Using the Robot Operating System (ROS), algorithms were developed for obstacle
+The objective of the project was to build software to make X80SVP robot
+ autonomous.
+ To produce autonomy, the software controls the robot by avoiding obstacles
+ and producing a wandering type behavior.
+ Software was also writen to utilize Microsoft's Kinect to provide gesture
+ recognition to operate the robot.
+ Finally, in order to provide a suitable test environment a 3D virtual simulator
+ was created that can simulate a robot with sensor and motor funcionallity.
+ Using the Robot Operating System (ROS), algorithms were developed for obstacle
  avoidance, and 3D navigation.
  Additionally, a simulator was created in OpenGL that was used as a testbed
  for these algorithms.
@@ -74,6 +82,15 @@ Be sure to spellcheck this, it had loads of typos in it..
 
 \begin_layout Part*
 Introduction
+\end_layout
+
+\begin_layout Standard
+The objective of the project was to build software to make a robot autonomous.
+ To produce autonomy the software controls the robot by avoiding obstacles
+ and producing a wandering type behavior.
+ The next goal achieved was to control the robot using gesture recognition.
+ Finally, in order to provide a suitable test environment a 3D virtual simulator
+ was created that can simulate a robot and its sensor and motor funcionallity.
 \end_layout
 
 \begin_layout Standard
@@ -95,6 +112,19 @@ key "quigley:ROSopensourceRobotOperatingSystem"
  The package, which already implements obstacle avoidance and wandering
  behavior, provides low level drivers up to a robust development framework
  that can be extended.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Little paragraph about why choosing Kinect maybe.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -122,24 +152,6 @@ The first part provides a background detailing the devices, algorithms and
  libraries that were used; the second part discusses the design of the system
  following with implementation details; finally, it concludes with an overview
  of future work.
-\end_layout
-
-\begin_layout Subsection*
-Requirements
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-maybe insert something about the requirements of the system to better introduce
- it
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Part*
@@ -1101,8 +1113,9 @@ reference "fig:MVC"
  any of the view or control code.
  By following MVC, different views, such as a simulated environment or the
  real world, can be smoothly interchanged.
- The controller classes compose the design model.
- These classes act to move the robot, changing the robot’s view.
+ The controller classes, for example a class that actuates the motors, compose
+ the design model.
+ The controller classes act to operate the robot, changing the robot’s view.
 \end_layout
 
 \begin_layout Standard
@@ -1157,7 +1170,9 @@ reference "fig:Simplified-Design-and"
 
 \end_inset
 
- illustrate how the classes in the design communicate.
+ illustrate how the classes in the design communicate using ROS messages.
+ The communication begins with the Converter or RobotActor class obtaining
+ sensor readings and ending with the robot's motors moving.
 \end_layout
 
 \begin_layout Standard
@@ -1221,7 +1236,7 @@ reference "fig:MainClasses"
  Converter and RobotActor are interchangeable bridges between the view and
  the control.
  Converter is used when the robot is running in the real world and RobotActor
- is used when in the simulator.
+ is used when using the simulator.
  They both publish SensorData messages as seen in the first image in figure
  
 \begin_inset CommandInset ref
@@ -1230,8 +1245,10 @@ reference "fig:Simplified-Design-and"
 
 \end_inset
 
- and they both respond to the MotorData message by sending a command to
- actuate the robot’s motors seen in the second image of figure 
+.
+ SensorData messages include the range values of each of the robot's sensors.
+ Also, both classes respond to the MotorData message by sending a command
+ to actuate the robot’s motors seen in the second image of figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:Simplified-Design-and"
@@ -1239,9 +1256,10 @@ reference "fig:Simplified-Design-and"
 \end_inset
 
 .
+ The MotorData message contains the required left and right motor velocity.
  The SensorListener class subscribes to the SensorData messages being published
- by a bridge class, such as RobotActor, and publishes converted sensor data
- in the ROS standard Range message type.
+ by a bridge class, such as RobotActor, and publishes converted SensorData
+ messages in the ROS standard Range message type.
 \end_layout
 
 \begin_layout Standard
@@ -1254,8 +1272,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename images/mainClasses.png
-	lyxscale 75
-	scale 75
+	lyxscale 65
+	scale 65
 
 \end_inset
 
@@ -1272,7 +1290,8 @@ name "fig:MainClasses"
 
 \end_inset
 
-SensorListener class uses sensor data from either RobotActor or Converter.
+SensorListener class uses SensorData messages from either RobotActor or
+ Converter.
 \end_layout
 
 \end_inset
@@ -1287,6 +1306,21 @@ SensorListener class uses sensor data from either RobotActor or Converter.
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+SensorFilter is an abstract class that defines the methods for functionality
+ that any sensor filter should have.
+ Therefore, for each of the sensor types on the robot a filtering class
+ is defined as seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:SensorFilter"
+
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1335,15 +1369,30 @@ Diagram of the Sensor Filter package.
 \end_layout
 
 \begin_layout Standard
-SensorFilter is an abstract class that defines the methods for functionality
- that any sensor filter should have.
- classes filter the sensor data so that the data is more useful and the
- BraitenburgAvoid class uses the filtered sensor data to publish a MotorCommand
- message based on the Braitenburg aggression behavior algorithm.
- The ObstacleAvoidance node publishes a linear combination of the MotorCommand
- sent by the infrared and ultrasonic based on BraitenburgAvoid nodes.
- Finally, the MotorControl class acts as both an arbiter of motor commands
- and as a gateway back to the bridge nodes.
+As shown in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Simplified-Design-and"
+
+\end_inset
+
+ the IRSensorFilter and UltrasonicSensorFilter classes publish a filtered
+ Range message.
+ Next, the ultrasonic and infrared instances of the BraitenburgAvoid class
+ subscribe to the corresponding filtered Range messages.
+ The filtered Range data is used to publish a MotorCommand message to avoid
+ obstacles based on the Braitenburg aggression behavior algorithm.
+ The MotorCommand message describes the linear and angular velocity of the
+ robot, as well as contains a priority field.
+ The ObstacleAviodance class subscribes to the MotorCommand messages sent
+ by the infrared and ultrasonic instances of the BraitenburgAvoid class.
+ ObstacleAvoidance class uses those MotorCommand messages and combines them
+ into a single MotorCommand.
+ Finally, the MotorControl class subscribes to MotorCommand messages published
+ by ObstacleAvoidance and converts them into a MotorData message.
+ MotorControl also acts as an arbiter by only publishing the highest priority
+ MotorData message and as a gateway back to the Converter or RobotActor
+ classes.
 \end_layout
 
 \begin_layout Standard
@@ -1382,10 +1431,6 @@ Diagram of the Navigation package.
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -1397,14 +1442,67 @@ Simulator Design
 
 \begin_layout Standard
 The initial design of the simulator relied on existing code which supported
- only one “Player” with one graphical view; this was adapted to support
- an arbitrary number of “Actors”, each with any number of “Sensors”.
- This was then used to implement each of the ultrasonic and infrared sensors
- as well as the graphical displays.
+ only one Player with one graphical view; this code was later adapted to
+ support an arbitrary number of Actors, each with any number of Sensors
+ as seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:SimDiagFig"
+
+\end_inset
+
+.
+ Each of the ultrasonic and infrared sensors as well as the graphical displays
+ were added into the new system as individual instances of the Sensors attached
+ to the Actor.
  Multiple actors allow the user to view the environment from the perspective
- of the robot or from an independent Camera actor, it also allows Obstacle
+ of the robot or from an independent Camera actor; they also allow Obstacle
  actors to be positioned in real-time.
- A diagram of the simulator appears in Appendix B.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/Sim.eps
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:SimDiagFig"
+
+\end_inset
+
+The User can select to control any Actor's position.
+ The specific sensor the CameraView is rendered from can also be selected.
+ Data from ROS is also used to control the RobotActor's position and the
+ Sensors are output back to ROS.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Part*
@@ -1413,8 +1511,8 @@ Implementation
 
 \begin_layout Standard
 The implementation of the design was completed in both C++ and Java.
- C++ was used for the simulator, sign language recognition, and the serial
- communication between the robot and Beagleboard.
+ C++ was used for the simulator, gesture recognition, and the serial communicati
+on between the robot and Beagleboard.
  Java was used to implement the rest of the design which includes a converter
  to standard ROS message data-types, an ultrasonic sensor filter, obstacle
  avoidance algorithm, and motor control arbiter.
@@ -1794,10 +1892,6 @@ Specular reflection of ultrasonic sensor.
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -2167,10 +2261,6 @@ Simulated Kinect depth map
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -2236,34 +2326,8 @@ A future system could also utilize rosjava’s ability to operate on Android
  the robot access to the cloud.
 \end_layout
 
-\begin_layout Part*
-Appendix
-\end_layout
-
-\begin_layout Section*
-Section A
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Appendix-B"
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Standard
-The User can select to control any Actor's position.
- The specific sensor the CameraView is rendered from can also be selected.
- Data from ROS is also used to control the RobotActor's position and the
- Sensors are output back to ROS.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Graphics
-	filename images/Sim.png
-	lyxscale 65
-	scale 65
-
+\begin_inset Newpage pagebreak
 \end_inset
 
 
