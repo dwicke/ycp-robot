@@ -1151,6 +1151,13 @@ The model of the system is stored in the parameter server.
 
 \begin_layout Standard
 Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Simplified-Design-and"
+
+\end_inset
+
+ illustrate how the classes in the design communicate.
 \end_layout
 
 \begin_layout Standard
@@ -1202,12 +1209,38 @@ Simplified communication model between classes.
 \end_layout
 
 \begin_layout Standard
-The design is centered around the Converter and the RobotActor classes.
+The design is centered around the Converter and the RobotActor classes seen
+ in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:MainClasses"
+
+\end_inset
+
+.
  Converter and RobotActor are interchangeable bridges between the view and
- the control, they publish the sensor data and send commands to actuate
- the robot’s motors.
- The SensorListener class subscribes to the sensor messages published by
- a bridge class and publishes converted sensor data in the ROS standard
+ the control.
+ Converter is used when the robot is running in the real world and RobotActor
+ is used when in the simulator.
+ They both publish SensorData messages as seen in the first image in figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Simplified-Design-and"
+
+\end_inset
+
+ and they both respond to the MotorData message by sending a command to
+ actuate the robot’s motors seen in the second image of figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Simplified-Design-and"
+
+\end_inset
+
+.
+ The SensorListener class subscribes to the SensorData messages being published
+ by a bridge class and publishes converted sensor data in the ROS standard
  Range message type.
 \end_layout
 

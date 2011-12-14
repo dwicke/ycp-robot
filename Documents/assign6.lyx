@@ -1240,8 +1240,8 @@ reference "fig:Simplified-Design-and"
 
 .
  The SensorListener class subscribes to the SensorData messages being published
- by a bridge class and publishes converted sensor data in the ROS standard
- Range message type.
+ by a bridge class, such as RobotActor, and publishes converted sensor data
+ in the ROS standard Range message type.
 \end_layout
 
 \begin_layout Standard
@@ -1335,10 +1335,11 @@ Diagram of the Sensor Filter package.
 \end_layout
 
 \begin_layout Standard
-The SensorFilter classes filter the sensor data so that the data is more
- useful and the BraitenburgAvoid class uses the filtered sensor data to
- publish a MotorCommand message based on the Braitenburg aggression behavior
- algorithm.
+SensorFilter is an abstract class that defines the methods for functionality
+ that any sensor filter should have.
+ classes filter the sensor data so that the data is more useful and the
+ BraitenburgAvoid class uses the filtered sensor data to publish a MotorCommand
+ message based on the Braitenburg aggression behavior algorithm.
  The ObstacleAvoidance node publishes a linear combination of the MotorCommand
  sent by the infrared and ultrasonic based on BraitenburgAvoid nodes.
  Finally, the MotorControl class acts as both an arbiter of motor commands
