@@ -438,11 +438,13 @@ name "fig:RosMaster"
 \end_inset
 
 1.
- The Talker node lets the ROS Master know that it wants to publish to the
- words topic and then Talker starts publishing to words.
+ The Talker node tells ROS Master that it wants to publish to the words
+ topic.
  2.
- Listener lets Ros Master know that it wants to subscribe to the words topic.
+ Then Talker starts publishing to the words topic.
  3.
+ Listener tells Ros Master that it wants to subscribe to the words topic.
+ 4.
  Ros Master pairs Talker and Listener so that Listener can start receiving
  messages on the words topic.
  The Parameter Server is similar to a registry in that it stores state informati
@@ -1072,10 +1074,12 @@ key "r:robustlayeredcontrolsystemmobilerobot"
  Subsumption control architecture is a layered approach to providing control.
  Each layer adds increased functionality without needing to change lower
  levels of control.
+ The following design provides a basis so that additional layers can be
+ added.
 \end_layout
 
 \begin_layout Standard
-By following the model view controller (MVC) design pattern, the implementation
+By following the model-view-controller (MVC) design pattern, the implementation
  is extensible
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -1091,14 +1095,14 @@ reference "fig:MVC"
 
 \end_inset
 
- the model is based on the ROS parameter server in which the model of the
+, the model is based on the ROS parameter server in which the model of the
  robot and communication layout is stored.
- Therefore, allowing different robot settings to be changed without affecting
+ Therefore, allowing different robot settings to be changed without changing
  any of the view or control code.
- By following MVC different views, such as a simulated environment or the
- real world to be smoothly interchanged.
+ By following MVC, different views, such as a simulated environment or the
+ real world, can be smoothly interchanged.
  The controller classes compose the design model.
- These act to move the robot, changing the robot’s view.
+ These classes act to move the robot, changing the robot’s view.
 \end_layout
 
 \begin_layout Standard
@@ -1137,10 +1141,6 @@ The model of the system is stored in the parameter server.
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -1184,15 +1184,11 @@ name "fig:Simplified-Design-and"
 
 \end_inset
 
-Simplified Design and Communication Model
+Simplified communication model between classes.
 \end_layout
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -1202,8 +1198,7 @@ Simplified Design and Communication Model
 \end_layout
 
 \begin_layout Standard
-The design is centered around the Converter and the RobotActor classes as
- s.
+The design is centered around the Converter and the RobotActor classes.
  Converter and RobotActor are interchangeable bridges between the view and
  the control, they publish the sensor data and send commands to actuate
  the robot’s motors.
