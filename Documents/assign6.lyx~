@@ -1442,9 +1442,9 @@ Simulator Design
 
 \begin_layout Standard
 The initial design of the simulator relied on existing code which supported
- only one Player with one graphical view; this was adapted to support an
- arbitrary number of Actors, each with any number of Sensors as seen in
- figure 
+ only one Player with one graphical view; this code was later adapted to
+ support an arbitrary number of Actors, each with any number of Sensors
+ as seen in figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:SimDiagFig"
@@ -1452,10 +1452,11 @@ reference "fig:SimDiagFig"
 \end_inset
 
 .
- The multiple-actor functionality was then used to implement each of the
- ultrasonic and infrared sensors as well as the graphical displays.
+ Each of the ultrasonic and infrared sensors as well as the graphical displays
+ were added into the new system as individual instances of the Sensors attached
+ to the Actor.
  Multiple actors allow the user to view the environment from the perspective
- of the robot or from an independent Camera actor, it also allows Obstacle
+ of the robot or from an independent Camera actor; they also allow Obstacle
  actors to be positioned in real-time.
  
 \end_layout

@@ -60,10 +60,10 @@ The objective of the project was to build software to make X80SVP robot
  autonomous.
  To produce autonomy, the software controls the robot by avoiding obstacles
  and producing a wandering type behavior.
- Software was also writen to utilize Microsoft's Kinect to provide gesture
+ Software was also written to utilize Microsoft's Kinect to provide gesture
  recognition to operate the robot.
  Finally, in order to provide a suitable test environment a 3D virtual simulator
- was created that can simulate a robot with sensor and motor funcionallity.
+ was created that can simulate a robot with sensor and motor functionality.
  Using the Robot Operating System (ROS), algorithms were developed for obstacle
  avoidance, and 3D navigation.
  Additionally, a simulator was created in OpenGL that was used as a testbed
@@ -90,7 +90,7 @@ The objective of the project was to build software to make a robot autonomous.
  and producing a wandering type behavior.
  The next goal achieved was to control the robot using gesture recognition.
  Finally, in order to provide a suitable test environment a 3D virtual simulator
- was created that can simulate a robot and its sensor and motor funcionallity.
+ was created that can simulate a robot and its sensor and motor functionality.
 \end_layout
 
 \begin_layout Standard
@@ -624,7 +624,7 @@ Sensor fusion uses the sensor data to reconstruct the surroundings to produce
  The reconstruction could be in the form of a map of the environment which
  can then be used to avoid obstacles and possibly provide for higher level
  goals.
- Therefore, sensor fusion provides higher level functionallity than motor
+ Therefore, sensor fusion provides higher level functionality than motor
  fusion.
  However, the main disadvantage of sensor fusion is due to translating the
  sensor data from various sensor sources which 
